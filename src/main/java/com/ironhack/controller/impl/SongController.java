@@ -33,7 +33,7 @@ public class SongController implements SongControllerInterface {
         return songService.saveSong(song);
     }
     @Override
-    @DeleteMapping("/artist/song/{id}")
+    @DeleteMapping("/users/artist/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteSong(@PathVariable Long id) {
         songService.deleteSong(id);
@@ -42,7 +42,6 @@ public class SongController implements SongControllerInterface {
 
     //TODO: add podcast
 
-    /*Actions available to all Users*/
     @Override
     @GetMapping("/users/song")
     @ResponseStatus(HttpStatus.OK)
