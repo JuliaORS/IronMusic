@@ -49,6 +49,4 @@ public class SongController implements SongControllerInterface {
     public List<Song> getAllSongs() {
         return songService.getAllSongs();
     }
-
-
 }
