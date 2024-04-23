@@ -18,7 +18,8 @@ public class Audio {
     private String title;
 
     private double duration;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "artist_id")
     Artist artist;
 }

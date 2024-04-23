@@ -1,8 +1,11 @@
 package com.ironhack.model;
 
+import com.ironhack.demosecurityjwt.security.models.Artist;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -12,8 +15,7 @@ import lombok.experimental.SuperBuilder;
 @Builder
 public class Song extends Audio{
 
-
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "album_id")
     private Album album;
 
