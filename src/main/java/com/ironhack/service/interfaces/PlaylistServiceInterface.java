@@ -6,4 +6,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 public interface PlaylistServiceInterface {
     void addAudioToPlaylist(Long playlistId, Long songId);
     Playlist savePlaylist(Playlist playlist, UserDetails userDetails);
+
+   void removeAudioFromPlaylist(Long playlistId, Long audioId);
 }

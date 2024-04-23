@@ -29,5 +29,12 @@ public class PlaylistController implements PlaylistControllerInterface {
         playlistService.addAudioToPlaylist(playlistId, audioId);
     }
 
+    @Override
+    @DeleteMapping("/user/playlist/{playlist_id}/audio/{audio_id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void removeAudioFromPlaylist(@PathVariable Long playlistId, @PathVariable Long audioId) {
+        playlistService.removeAudioFromPlaylist(playlistId, audioId);
+    }
+
 
 }

@@ -44,4 +44,18 @@ public class PlaylistService implements PlaylistServiceInterface {
             throw new ResourceNotFoundException("Playlist with ID " + playlistId + " not found");
         }
     }
+
+    @Override
+    public void removeAudioFromPlaylist(Long playlistId, Long audioId){
+        Optional<Playlist> playlistOptional = playlistRepository.findById(playlistId);
+        if (playlistOptional.isPresent()){
+            Playlist playlist = playlistOptional.get();
+            boolean removed = playlist.getAudios().removeIf(audio -> audio.getId().equals(audioId));
+            if (!removed) {
+                throw new ResourceNotFoundException("Audio with ID " + audioId + " not found in playlist");
+            }
+        } else {
+            throw new ResourceNotFoundException("Playlist with ID " + playlistId + " not found");
+        }
+    }
 }
