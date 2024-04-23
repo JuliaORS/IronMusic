@@ -12,17 +12,18 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Album {
+public class Playlist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
+    private String name;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "artist_id")
-    private Artist artist;
-
-    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL)
-    private List<Song> songs;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "playlist_audio", //join table name
+            joinColumns = @JoinColumn(name = "playlist_id"), // ref column this entity
+            inverseJoinColumns = @JoinColumn(name = "audio_id") // audio ref column
+    )
+    private List<Audio> audios;
 }

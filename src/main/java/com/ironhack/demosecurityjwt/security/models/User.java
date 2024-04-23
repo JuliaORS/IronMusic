@@ -1,5 +1,6 @@
 package com.ironhack.demosecurityjwt.security.models;
 
+import com.ironhack.model.Playlist;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import static jakarta.persistence.FetchType.EAGER;
 
@@ -18,34 +20,26 @@ import static jakarta.persistence.FetchType.EAGER;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
-    /**
-     * The unique identifier for the user
-     */
+
     @Id
-    /**
-     * The id field is generated automatically by the database
-     */
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    /**
-     * The name of the user
-     */
+
     private String name;
 
-    /**
-     * The username used to log in
-     */
     private String username;
 
-    /**
-     * The password used to log in
-     */
     private String password;
 
-    /**
-     * The roles that the user has
-     */
     @ManyToMany(fetch = EAGER)
     private Collection<Role> roles = new ArrayList<>();
+
+    @ManyToMany(fetch = EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "playlist_user", //join table name
+            joinColumns = @JoinColumn(name = "playlist_id"), // ref column this entity
+            inverseJoinColumns = @JoinColumn(name = "user_id") // audio ref column
+    )
+    private List<Playlist> playlists;
 
 }
