@@ -2,6 +2,7 @@ package com.ironhack.service.impl;
 
 import com.ironhack.demosecurityjwt.security.models.User;
 import com.ironhack.exceptions.ResourceNotFoundException;
+import com.ironhack.model.Album;
 import com.ironhack.model.Audio;
 import com.ironhack.model.Playlist;
 import com.ironhack.repository.AudioRepository;
@@ -27,6 +28,16 @@ public class PlaylistService implements PlaylistServiceInterface {
         Playlist playlistSaved = playlistRepository.save(playlist);
         user.getPlaylists().add(playlistSaved);
         return playlistSaved;
+    }
+
+    @Override
+    public void deletePlaylist(Long id){
+        Optional<Playlist> playlistOptional = playlistRepository.findById(id);
+        if (playlistOptional.isPresent()){
+            playlistRepository.delete(playlistOptional.get());
+        } else {
+            throw new ResourceNotFoundException("Playlist with ID " + id + " not found");
+        }
     }
 
     @Override

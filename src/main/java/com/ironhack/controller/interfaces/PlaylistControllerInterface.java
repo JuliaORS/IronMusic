@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface PlaylistControllerInterface {
 
     Playlist savePlaylist(Playlist playlist, UserDetails userDetails);
+    void deletePlaylist(Long id);
     void addAudioToPlaylist(Long playlistId, Long audioId);
     void removeAudioFromPlaylist(Long playlistId, Long audioId);
 }

@@ -22,6 +22,13 @@ public class AlbumController implements AlbumControllerInterface {
     }
 
     @Override
+    @DeleteMapping("/artist/album/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteAlbum(@PathVariable Long id) {
+        albumService.deleteAlbum(id);
+    }
+
+    @Override
     @PostMapping("/artist/album/{album_id}/song/{song_id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void addSongToAlbum(@PathVariable Long albumId, @PathVariable Long songId) {
@@ -29,10 +36,10 @@ public class AlbumController implements AlbumControllerInterface {
     }
 
     @Override
-    @DeleteMapping("/artist/album")
+    @DeleteMapping("/artist/album/{album_id}/song/{song_id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteAlbum(@PathVariable Long id) {
-        albumService.deleteAlbum(id);
+    public void removeSongFromAlbum(@PathVariable Long albumId, @PathVariable Long songId) {
+        albumService.removeSongFromAlbum(albumId, songId);
     }
 
 }

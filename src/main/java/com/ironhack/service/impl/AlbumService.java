@@ -2,6 +2,7 @@ package com.ironhack.service.impl;
 
 import com.ironhack.exceptions.ResourceNotFoundException;
 import com.ironhack.model.Album;
+import com.ironhack.model.Playlist;
 import com.ironhack.model.Song;
 import com.ironhack.repository.AlbumRepository;
 import com.ironhack.repository.SongRepository;
@@ -29,6 +30,16 @@ public class AlbumService implements AlbumServiceInterface {
     }
 
     @Override
+    public void deleteAlbum(Long id){
+        Optional<Album> albumOptional = albumRepository.findById(id);
+        if (albumOptional.isPresent()){
+            albumRepository.delete(albumOptional.get());
+        } else {
+            throw new ResourceNotFoundException("Album with ID " + id + " not found");
+        }
+    }
+
+    @Override
     public  void addSongToAlbum(Long albumId, Long songId){
         Optional<Album> albumOptional = albumRepository.findById(albumId);
         if (albumOptional.isPresent()){
@@ -45,13 +56,16 @@ public class AlbumService implements AlbumServiceInterface {
     }
 
     @Override
-    public void deleteAlbum(Long id){
-        Optional<Album> albumOptional = albumRepository.findById(id);
+    public  void removeSongFromAlbum(Long albumId, Long songId){
+        Optional<Album> albumOptional = albumRepository.findById(albumId);
         if (albumOptional.isPresent()){
-            albumRepository.delete(albumOptional.get());
+            Album album = albumOptional.get();
+            boolean removed = album.getSongs().removeIf(audio -> audio.getId().equals(songId));
+            if (!removed) {
+                throw new ResourceNotFoundException("Song with ID " + songId + " not found in album");
+            }
         } else {
-            throw new ResourceNotFoundException("Album with ID " + id + " not found");
+            throw new ResourceNotFoundException("Album with ID " + albumId + " not found");
         }
     }
-
 }

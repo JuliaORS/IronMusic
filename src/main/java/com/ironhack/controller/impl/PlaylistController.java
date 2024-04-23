@@ -22,6 +22,14 @@ public class PlaylistController implements PlaylistControllerInterface {
     public Playlist savePlaylist(@RequestBody Playlist playlist, @AuthenticationPrincipal UserDetails userDetails) {
         return playlistService.savePlaylist(playlist, userDetails);
     }
+
+    @Override
+    @DeleteMapping("/user/playlist/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletePlaylist(@PathVariable Long id) {
+        playlistService.deletePlaylist(id);
+    }
+
     @Override
     @PostMapping("/user/playlist/{playlist_id}/audio/{audio_id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
