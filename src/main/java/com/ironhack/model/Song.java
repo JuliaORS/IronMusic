@@ -11,6 +11,8 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @Builder
 public class Song extends Audio{
+
+
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "album_id")
     private Album album;

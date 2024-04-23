@@ -11,4 +11,8 @@ public interface SongControllerInterface {
     Song saveSong(Song song);
     List<Song> getAllSongs();
     void deleteSong(Long id);
+
+    List<Song> getSongByTitle(String title);
+    List<Song> getSongByArtist(String artist);
+    List<Song> getSongByGenre(String genre);
 }

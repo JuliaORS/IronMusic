@@ -1,5 +1,6 @@
 package com.ironhack.service.interfaces;
 
+import com.ironhack.exceptions.ResourceNotFoundException;
 import com.ironhack.model.Song;
 import com.ironhack.service.impl.SongService;
 import org.springframework.stereotype.Service;
@@ -12,4 +13,9 @@ public interface SongServiceInterface {
     List<Song> getAllSongs();
 
     void deleteSong(Long id);
+    List<Song> getSongByTitle(String title);
+
+    List<Song> getSongByArtist(String artist);
+
+    public List<Song> getSongByGenre(String genre);
 }

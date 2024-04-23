@@ -24,7 +24,7 @@ public class SongController implements SongControllerInterface {
     @Autowired
     private UserServiceInterface userService;
 
-    /*Actions only available to User-artists*/
+    /*Actions only available to artists-Users*/
 
     @Override
     @PostMapping("/artist/song")
@@ -42,10 +42,34 @@ public class SongController implements SongControllerInterface {
 
     //TODO: add podcast
 
+
+    /*Actions available to standard-users*/
     @Override
     @GetMapping("/users/song")
     @ResponseStatus(HttpStatus.OK)
     public List<Song> getAllSongs() {
         return songService.getAllSongs();
     }
+
+    @Override
+    @GetMapping("/users/song/{title}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Song> getSongByTitle(@PathVariable String title) {
+        return songService.getSongByTitle(title);
+    }
+
+    @Override
+    @GetMapping("/users/song/{artist}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Song> getSongByArtist(@PathVariable String artist) {
+        return songService.getSongByArtist(artist);
+    }
+
+    @Override
+    @GetMapping("/users/song/{genre}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Song> getSongByGenre(@PathVariable String genre) {
+        return songService.getSongByGenre(genre);
+    }
+
 }

@@ -31,15 +31,15 @@ public class DemoSecurityJwtApplication {
             userService.saveRole(new Role(null, "ROLE_ADMIN"));
             userService.saveRole(new Role(null, "ROLE_ARTIST"));
 
-            userService.saveUser(new User(null, "admin", "admin", "1234", new ArrayList<>()));
+            userService.saveUser(new User(null, "admin", "admin", "1234", new ArrayList<>(), null));
             userService.addRoleToUser("admin", "ROLE_ADMIN");
             userService.addRoleToUser("admin", "ROLE_USER");
 
-            userService.saveUser(new User(null, "artist", "artist", "1234", new ArrayList<>()));
+            userService.saveUser(new User(null, "artist", "artist", "1234", new ArrayList<>(), null));
             userService.addRoleToUser("artist", "ROLE_ARTIST");
             userService.addRoleToUser("artist", "ROLE_USER");
 
-            userService.saveUser(new User(null, "Julia", "ju", "1234", new ArrayList<>()));
+            userService.saveUser(new User(null, "Julia", "ju", "1234", new ArrayList<>(), null));
             userService.addRoleToUser("ju", "ROLE_USER");
 
         };

@@ -1,6 +1,6 @@
 package com.ironhack.service.impl;
 
-import com.ironhack.Exceptions.ResourceNotFoundException;
+import com.ironhack.exceptions.ResourceNotFoundException;
 import com.ironhack.model.Song;
 import com.ironhack.repository.SongRepository;
 import com.ironhack.service.interfaces.SongServiceInterface;
@@ -34,4 +34,35 @@ public class SongService  implements SongServiceInterface {
             throw new ResourceNotFoundException("Song with ID " + id + " not found");
         }
     }
+    @Override
+    public List<Song> getSongByTitle(String title) {
+        List<Song> songs = songRepository.findByTitleContaining(title);
+        if (songs.isEmpty()){
+            throw new ResourceNotFoundException("No songs found with that title.");
+        } else {
+            return songs;
+        }
+    }
+
+    @Override
+    public List<Song> getSongByArtist(String artist) {
+        List<Song> songs = songRepository.findByArtistContaining(artist);
+        if (songs.isEmpty()){
+            throw new ResourceNotFoundException("No songs found of that artist.");
+        } else {
+            return songs;
+        }
+    }
+
+    @Override
+    public List<Song> getSongByGenre(String genre) {
+        List<Song> songs = songRepository.findByGenreContaining(genre);
+        if (songs.isEmpty()){
+            throw new ResourceNotFoundException("No songs found of that genre.");
+        } else {
+            return songs;
+        }
+    }
+
+
 }
