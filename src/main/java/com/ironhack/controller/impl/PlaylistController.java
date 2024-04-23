@@ -16,12 +16,12 @@ public class PlaylistController implements PlaylistControllerInterface {
     @Autowired
     PlaylistService playlistService;
 
-    /*@Override
+    @Override
     @PostMapping("/user/playlist")
     @ResponseStatus(HttpStatus.CREATED)
     public Playlist savePlaylist(@RequestBody Playlist playlist, @AuthenticationPrincipal UserDetails userDetails) {
         return playlistService.savePlaylist(playlist, userDetails);
-    }*/
+    }
     @Override
     @PostMapping("/user/playlist/{playlist_id}/audio/{audio_id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

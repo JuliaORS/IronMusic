@@ -21,15 +21,13 @@ public class PlaylistService implements PlaylistServiceInterface {
 
     @Autowired
     private PlaylistRepository playlistRepository;
-
-   /* @Override
+    @Override
     public Playlist savePlaylist(Playlist playlist, UserDetails userDetails){
-
-        if (userDetails instanceof User) {
-            User user = (User) userDetails;
-
-
-    }*/
+        User user = (User) userDetails;
+        Playlist playlistSaved = playlistRepository.save(playlist);
+        user.getPlaylists().add(playlistSaved);
+        return playlistSaved;
+    }
 
     @Override
     public void addAudioToPlaylist(Long playlistId, Long audioId){
