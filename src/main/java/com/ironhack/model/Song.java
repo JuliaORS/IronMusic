@@ -17,13 +17,10 @@ public class Song extends Audio{
     @JoinColumn(name = "album_id")
     private Album album;
 
-    private String genre; //TODO: enum?
+    private String genre;
 
     public Song(String title, String duration, Artist artist, Album album, String genre) {
-        audioBuilder()
-                .title(title)
-                .duration(duration)
-                .artist(artist);
+        super(title, duration, artist);
         setAlbum(album);
         setGenre(genre);
     }

@@ -19,10 +19,7 @@ public class Podcast extends Audio{
     private String category;
 
     public Podcast(String title, String duration, Artist artist, int season, int chapter, String category){
-        audioBuilder()
-                .title(title)
-                .duration(duration)
-                .artist(artist);
+        super(title, duration, artist);
         setSeason(season);
         setChapter(chapter);
         setCategory(category);

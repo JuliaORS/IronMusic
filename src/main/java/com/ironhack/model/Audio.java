@@ -26,4 +26,10 @@ public class Audio {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "artist_id")
     private Artist artist;
+
+    public Audio(String title, String duration, Artist artist){
+        setTitle(title);
+        setDuration(duration);
+        setArtist(artist);
+    }
 }

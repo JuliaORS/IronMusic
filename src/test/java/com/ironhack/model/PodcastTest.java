@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class PodcastTest {
-
     @Test
     public void podcastVoidConstructorTest(){
         Podcast podcast = new Podcast();
