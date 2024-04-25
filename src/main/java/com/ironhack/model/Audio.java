@@ -19,7 +19,7 @@ public class Audio {
     @NotEmpty(message = "Bad request. Title is required.")
     private String title;
 
-    @NotEmpty(message = "Bad request. Duration is required.") //TODO: check?
+    @NotEmpty(message = "Bad request. Duration is required.")
     private String duration;
 
     @ManyToOne(fetch = FetchType.EAGER)

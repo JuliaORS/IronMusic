@@ -1,9 +1,11 @@
 package com.ironhack.controller.impl;
 
 import com.ironhack.controller.interfaces.AlbumControllerInterface;
+import com.ironhack.dto.AlbumGeneralInfoDTO;
 import com.ironhack.model.Album;
 import com.ironhack.model.Song;
 import com.ironhack.service.impl.AlbumService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +19,7 @@ public class AlbumController implements AlbumControllerInterface {
     @Override
     @PostMapping("/artist/album")
     @ResponseStatus(HttpStatus.CREATED)
-    public Album saveAlbum(@RequestBody Album album) {
+    public AlbumGeneralInfoDTO saveAlbum(@Valid @RequestBody Album album) {
         return albumService.saveAlbum(album);
     }
 

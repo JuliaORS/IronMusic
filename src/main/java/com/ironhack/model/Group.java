@@ -2,6 +2,7 @@ package com.ironhack.model;
 
 import com.ironhack.demosecurityjwt.security.models.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,7 @@ public class Group {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotEmpty(message = "Bad request. Group name is required.")
     private String name;
 
     @ManyToMany(cascade = CascadeType.ALL)

@@ -2,6 +2,7 @@ package com.ironhack.model;
 
 import com.ironhack.demosecurityjwt.security.models.Artist;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 

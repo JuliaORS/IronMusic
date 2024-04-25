@@ -26,7 +26,6 @@ public class SongController implements SongControllerInterface {
     private UserServiceInterface userService;
 
     /*Actions only available to artists-Users*/
-
     @Override
     @PostMapping("/artist/song")
     @ResponseStatus(HttpStatus.CREATED)
@@ -35,19 +34,16 @@ public class SongController implements SongControllerInterface {
     }
 
     @Override
-    @DeleteMapping("/users/artist/{id}")
+    @DeleteMapping("/artist/song/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteSong(@PathVariable Long id) {
         songService.deleteSong(id);
     }
 
 
-    //TODO: add podcast
-
-
     /*Actions available to standard-users*/
     @Override
-    @GetMapping("/users/song")
+    @GetMapping("/users/songs")
     @ResponseStatus(HttpStatus.OK)
     public List<Song> getAllSongs() {
         return songService.getAllSongs();

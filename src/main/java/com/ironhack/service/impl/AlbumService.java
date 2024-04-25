@@ -1,5 +1,9 @@
 package com.ironhack.service.impl;
 
+import com.ironhack.demosecurityjwt.security.models.Artist;
+import com.ironhack.demosecurityjwt.security.models.User;
+import com.ironhack.demosecurityjwt.security.repositories.UserRepository;
+import com.ironhack.dto.AlbumGeneralInfoDTO;
 import com.ironhack.exceptions.ResourceNotFoundException;
 import com.ironhack.model.Album;
 import com.ironhack.model.Playlist;
@@ -7,8 +11,11 @@ import com.ironhack.model.Song;
 import com.ironhack.repository.AlbumRepository;
 import com.ironhack.repository.SongRepository;
 import com.ironhack.service.interfaces.AlbumServiceInterface;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,9 +31,16 @@ public class AlbumService implements AlbumServiceInterface {
     private AlbumRepository albumRepository;
     @Autowired
     private SongRepository songRepository;
+    @Autowired
+    private UserRepository userRepository;
     @Override
-    public Album saveAlbum(Album album) {
-        return albumRepository.save(album);
+    public AlbumGeneralInfoDTO saveAlbum(@Valid Album album) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userRepository.findByUsername(username);
+        album.setArtist((Artist) user);
+        albumRepository.save(album);
+        return new AlbumGeneralInfoDTO(album);
     }
 
     @Override

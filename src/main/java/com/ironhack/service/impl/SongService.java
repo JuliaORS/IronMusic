@@ -39,11 +39,7 @@ public class SongService  implements SongServiceInterface {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user = userRepository.findByUsername(username);
-        if (user instanceof Artist) {
-            song.setArtist((Artist) user);
-        } else {
-            throw new BadRequestFormatException("bad user");
-        }
+        song.setArtist((Artist) user);
         return songRepository.save(song);
     }
 
@@ -90,6 +86,4 @@ public class SongService  implements SongServiceInterface {
             return songs;
         }
     }
-
-
 }
