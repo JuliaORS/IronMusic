@@ -4,10 +4,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 public class AlbumTest {
-    privat Album;
+    private Album album;
 
     void setUp() {
         Album album = new Album();
+
 
     }
 }

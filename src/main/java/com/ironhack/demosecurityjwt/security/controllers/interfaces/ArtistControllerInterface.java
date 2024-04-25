@@ -1,9 +1,9 @@
 package com.ironhack.demosecurityjwt.security.controllers.interfaces;
 
-import com.ironhack.model.Song;
-import org.springframework.web.bind.annotation.RequestBody;
+import com.ironhack.demosecurityjwt.security.dtos.ArtistRoleAdmissionDTO;
+import com.ironhack.demosecurityjwt.security.models.Artist;
 
 public interface ArtistControllerInterface {
 
-
+    Artist assignArtistRole(ArtistRoleAdmissionDTO artistRoleAdmission);
 }

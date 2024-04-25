@@ -6,8 +6,10 @@ import com.ironhack.demosecurityjwt.security.services.interfaces.UserServiceInte
 import com.ironhack.model.Song;
 import com.ironhack.repository.SongRepository;
 import com.ironhack.service.impl.SongService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,7 +17,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class SongController implements SongControllerInterface {
-
 
     @Autowired
     private SongService songService;
@@ -29,9 +30,10 @@ public class SongController implements SongControllerInterface {
     @Override
     @PostMapping("/artist/song")
     @ResponseStatus(HttpStatus.CREATED)
-    public Song saveSong(@RequestBody Song song) {
+    public Song saveSong(@Valid @RequestBody Song song) {
         return songService.saveSong(song);
     }
+
     @Override
     @DeleteMapping("/users/artist/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

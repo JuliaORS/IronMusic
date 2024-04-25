@@ -32,6 +32,7 @@ public class UserController {
         return userService.getUsers();
     }
 
+
     /**
      * Save a new user
      *
@@ -42,4 +43,6 @@ public class UserController {
     public void saveUser(@RequestBody User user) {
         userService.saveUser(user);
     }
+
+
 }

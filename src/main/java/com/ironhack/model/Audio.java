@@ -2,6 +2,7 @@ package com.ironhack.model;
 
 import com.ironhack.demosecurityjwt.security.models.Artist;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,11 +16,13 @@ public class Audio {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotEmpty(message = "Bad request. Title is required.")
     private String title;
 
-    private double duration;
+    @NotEmpty(message = "Bad request. Duration is required.") //TODO: check?
+    private String duration;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "artist_id")
-    Artist artist;
+    private Artist artist;
 }

@@ -22,4 +22,5 @@ public interface UserControllerInterface {
      * @return the saved user
      */
     User saveUser(User user);
+
 }

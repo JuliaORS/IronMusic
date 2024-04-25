@@ -23,4 +23,14 @@ public class Artist extends User {
 
     @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL)
     private List<Audio> audios;
+
+    public Artist(User user) {
+        setId(user.getId());
+        setName(user.getName());
+        setUsername(user.getUsername());
+        setPassword(user.getPassword());
+        setRoles(user.getRoles());
+        setPlaylists(user.getPlaylists());
+    }
+
 }

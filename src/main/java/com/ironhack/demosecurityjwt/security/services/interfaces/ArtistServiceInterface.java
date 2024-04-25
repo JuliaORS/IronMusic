@@ -1,11 +1,10 @@
 package com.ironhack.demosecurityjwt.security.services.interfaces;
 
-import com.ironhack.model.Song;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import com.ironhack.demosecurityjwt.security.dtos.ArtistRoleAdmissionDTO;
+import com.ironhack.demosecurityjwt.security.models.Artist;
 
 
 public interface ArtistServiceInterface {
+    Artist assignArtistRole(ArtistRoleAdmissionDTO artistRoleAdmission);
 
 }

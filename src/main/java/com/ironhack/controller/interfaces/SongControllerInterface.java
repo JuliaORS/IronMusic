@@ -2,6 +2,7 @@ package com.ironhack.controller.interfaces;
 
 import com.ironhack.demosecurityjwt.security.models.User;
 import com.ironhack.model.Song;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
