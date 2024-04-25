@@ -1,19 +1,30 @@
 package com.ironhack.model;
 
+import com.ironhack.demosecurityjwt.security.models.Artist;
 import jakarta.persistence.Entity;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Builder(builderMethodName = "podcastBuilder")
+@PrimaryKeyJoinColumn(name="id")
 public class Podcast extends Audio{
 
-    private String season; //TODO: String?
+    private int season;
+    private int chapter;
+    private String category;
 
-    private String category; //TODO: enum?
+    public Podcast(String title, String duration, Artist artist, int season, int chapter, String category){
+        audioBuilder()
+                .title(title)
+                .duration(duration)
+                .artist(artist);
+        setSeason(season);
+        setChapter(chapter);
+        setCategory(category);
+    }
 }

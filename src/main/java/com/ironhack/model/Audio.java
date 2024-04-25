@@ -3,17 +3,18 @@ package com.ironhack.model;
 import com.ironhack.demosecurityjwt.security.models.Artist;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder(builderMethodName = "audioBuilder")
+@Inheritance(strategy=InheritanceType.JOINED)
 public class Audio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Setter(AccessLevel.NONE)
     private Long id;
 
     @NotEmpty(message = "Bad request. Title is required.")

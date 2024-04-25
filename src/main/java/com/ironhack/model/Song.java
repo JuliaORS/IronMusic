@@ -2,18 +2,15 @@ package com.ironhack.model;
 
 import com.ironhack.demosecurityjwt.security.models.Artist;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
-
-import java.util.List;
 
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Builder(builderMethodName = "songBuilder")
+@PrimaryKeyJoinColumn(name="id")
 public class Song extends Audio{
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -21,4 +18,13 @@ public class Song extends Audio{
     private Album album;
 
     private String genre; //TODO: enum?
+
+    public Song(String title, String duration, Artist artist, Album album, String genre) {
+        audioBuilder()
+                .title(title)
+                .duration(duration)
+                .artist(artist);
+        setAlbum(album);
+        setGenre(genre);
+    }
 }
