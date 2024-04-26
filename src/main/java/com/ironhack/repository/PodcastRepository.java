@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface PodcastRepository extends JpaRepository<Podcast,Long> {
     List<Podcast> findByTitleContaining(String title);
-    List<Podcast> findByArtistContaining(String artist);
+    List<Podcast> findByArtistNameContaining(String artist);
 
 }

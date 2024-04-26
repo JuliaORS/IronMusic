@@ -8,9 +8,7 @@ import lombok.Data;
 public class AudioGeneralInfoDTO {
 
     private String title;
-
     private String duration;
-
     private String artistName;
 
     public AudioGeneralInfoDTO(Audio audio){

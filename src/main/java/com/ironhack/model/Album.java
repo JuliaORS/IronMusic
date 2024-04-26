@@ -18,11 +18,11 @@ public class Album {
     @NotEmpty(message = "Bad request. Title is required.")
     private String title;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne (fetch = FetchType.EAGER)
     @JoinColumn(name = "artist_id")
     private Artist artist;
 
-    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "album")
     private List<Song> songs;
 
     public Album(String title, Artist artist, List<Song> songs) {

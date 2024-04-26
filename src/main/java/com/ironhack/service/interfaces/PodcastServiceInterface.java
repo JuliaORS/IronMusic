@@ -1,11 +1,12 @@
 package com.ironhack.service.interfaces;
 
+import com.ironhack.dto.AudioGeneralInfoDTO;
 import com.ironhack.model.Podcast;
 
 import java.util.List;
 
 public interface PodcastServiceInterface {
-    Podcast savePodcast(Podcast podcast);
+    AudioGeneralInfoDTO savePodcast(Podcast podcast);
 
     List<Podcast> getAllPodcasts();
 

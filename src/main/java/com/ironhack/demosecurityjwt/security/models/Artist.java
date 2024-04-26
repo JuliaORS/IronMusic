@@ -1,11 +1,9 @@
 package com.ironhack.demosecurityjwt.security.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ironhack.model.Album;
 import com.ironhack.model.Audio;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -18,10 +16,12 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class Artist extends User {
-    @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "artist", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)  //cascade = CascadeType.ALL
     private List<Album> albums;
 
-    @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL)
+
+    @OneToMany(mappedBy = "artist", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)   //cascade = CascadeType.ALL
+    @JsonManagedReference // break circular reference
     private List<Audio> audios;
 
     public Artist(User user) {
@@ -32,5 +32,4 @@ public class Artist extends User {
         setRoles(user.getRoles());
         setPlaylists(user.getPlaylists());
     }
-
 }

@@ -13,10 +13,9 @@ import lombok.*;
 @PrimaryKeyJoinColumn(name="id")
 public class Song extends Audio{
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne //(fetch = FetchType.EAGER)
     @JoinColumn(name = "album_id")
     private Album album;
-
     private String genre;
 
     public Song(String title, String duration, Artist artist, Album album, String genre) {

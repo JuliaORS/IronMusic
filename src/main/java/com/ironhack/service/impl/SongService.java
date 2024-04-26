@@ -4,6 +4,7 @@ import com.ironhack.Utils.Validator;
 import com.ironhack.demosecurityjwt.security.models.Artist;
 import com.ironhack.demosecurityjwt.security.models.User;
 import com.ironhack.demosecurityjwt.security.repositories.UserRepository;
+import com.ironhack.dto.AudioGeneralInfoDTO;
 import com.ironhack.exceptions.BadRequestFormatException;
 import com.ironhack.exceptions.ResourceNotFoundException;
 import com.ironhack.model.Playlist;
@@ -32,7 +33,7 @@ public class SongService  implements SongServiceInterface {
     @Autowired
     private UserRepository userRepository;
     @Override
-    public Song saveSong(@Valid Song song) {
+    public AudioGeneralInfoDTO saveSong(@Valid Song song) {
         if (!Validator.durationAudioValidator(song.getDuration())) {
             throw new BadRequestFormatException("Bad request. Duration has not a correct format: HH:MM:SS or MM:SS or SS");
         }
@@ -40,12 +41,8 @@ public class SongService  implements SongServiceInterface {
         String username = authentication.getName();
         User user = userRepository.findByUsername(username);
         song.setArtist((Artist) user);
-        return songRepository.save(song);
-    }
-
-    @Override
-    public List<Song> getAllSongs() {
-        return songRepository.findAll();
+        songRepository.save(song);
+        return new AudioGeneralInfoDTO(song);
     }
 
     @Override
@@ -57,6 +54,13 @@ public class SongService  implements SongServiceInterface {
             throw new ResourceNotFoundException("Song with ID " + id + " not found");
         }
     }
+
+    @Override
+    public List<Song> getAllSongs() {
+        return songRepository.findAll();
+    }
+
+
     @Override
     public List<Song> getSongByTitle(String title) {
         List<Song> songs = songRepository.findByTitleContaining(title);
@@ -68,8 +72,8 @@ public class SongService  implements SongServiceInterface {
     }
 
     @Override
-    public List<Song> getSongByArtist(String artist) {
-        List<Song> songs = songRepository.findByArtistContaining(artist);
+    public List<Song> getSongByArtistName(String artist) {
+        List<Song> songs = songRepository.findByArtistNameContaining(artist);
         if (songs.isEmpty()){
             throw new ResourceNotFoundException("No songs found of that artist.");
         } else {

@@ -1,11 +1,19 @@
 package com.ironhack.repository;
 
+import com.ironhack.demosecurityjwt.security.models.Artist;
+import com.ironhack.demosecurityjwt.security.models.User;
+import com.ironhack.demosecurityjwt.security.repositories.ArtistRepository;
 import com.ironhack.model.Audio;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -13,40 +21,49 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class AudioRepositoryTest {
     @Autowired
     AudioRepository audioRepository;
+    @Autowired
+    ArtistRepository artistRepository;
     private Audio audio;
+    private Audio audio1;
     @BeforeEach
     void setUp(){
-        audio = Audio.audioBuilder()
-                .title("Title")
-                .duration("3:23")
-                .artist(null)
-                .build();
-        assertNotNull(audio);
+        Artist artist = new Artist(new User(null, "Coldplay", "co", "1234", new ArrayList<>(), null));
+        Artist artistSaved = artistRepository.save(artist);
+
+        audio = new Audio("YELLOW111", "3:34", artistSaved);
+        audio1 = new Audio("YELLOW", "3:34", artistSaved);
         audioRepository.save(audio);
+        audioRepository.save(audio1);
     }
 
     @AfterEach
     void tearsDown(){
         audioRepository.deleteAll();
+        artistRepository.deleteAll();
     }
 
     @Test
     void saveAudioTest(){
-        assertEquals(1, audioRepository.count());
+        assertEquals(2, audioRepository.count());
+        Artist artist = new Artist(new User(null, "Coldplay", "co", "1234", new ArrayList<>(), null));
+        Artist artistSaved = artistRepository.save(artist);
         Audio newAudio = Audio.audioBuilder()
                 .title("new title")
                 .duration("4:25")
-                .artist(null)
+                .artist(artistSaved)
                 .build();
         Audio audioSaved = audioRepository.save(newAudio);
         assertEquals(audioSaved.getTitle(), newAudio.getTitle());
-        assertEquals(2, audioRepository.count());
+        assertEquals(3, audioRepository.count());
     }
 
     @Test
     void deleteAudioTest(){
-        assertEquals(1, audioRepository.count());
+        assertEquals(2, audioRepository.count());
         audioRepository.delete(audio);
-        assertEquals(0, audioRepository.count());
+        assertEquals(1, audioRepository.count());
     }
 }
+
+
+

@@ -4,8 +4,10 @@ import com.ironhack.Utils.Validator;
 import com.ironhack.demosecurityjwt.security.models.Artist;
 import com.ironhack.demosecurityjwt.security.models.User;
 import com.ironhack.demosecurityjwt.security.repositories.UserRepository;
+import com.ironhack.dto.AudioGeneralInfoDTO;
 import com.ironhack.exceptions.BadRequestFormatException;
 import com.ironhack.exceptions.ResourceNotFoundException;
+import com.ironhack.model.Audio;
 import com.ironhack.model.Podcast;
 import com.ironhack.repository.PodcastRepository;
 import com.ironhack.service.interfaces.PodcastServiceInterface;
@@ -25,7 +27,7 @@ public class PodcastService implements PodcastServiceInterface {
     @Autowired
     private UserRepository userRepository;
     @Override
-    public Podcast savePodcast(@Valid Podcast podcast) {
+    public AudioGeneralInfoDTO savePodcast(@Valid Podcast podcast) {
         if (!Validator.durationAudioValidator(podcast.getDuration())) {
             throw new BadRequestFormatException("Bad request. Duration has not a correct format: HH:MM:SS or MM:SS or SS");
         }
@@ -33,7 +35,8 @@ public class PodcastService implements PodcastServiceInterface {
         String username = authentication.getName();
         User user = userRepository.findByUsername(username);
         podcast.setArtist((Artist) user);
-        return podcastRepository.save(podcast);
+        podcastRepository.save(podcast);
+        return new AudioGeneralInfoDTO(podcast);
     }
 
     @Override
@@ -62,7 +65,7 @@ public class PodcastService implements PodcastServiceInterface {
 
     @Override
     public List<Podcast> getPodcastByArtist(String artist) {
-        List<Podcast> podcasts = podcastRepository.findByArtistContaining(artist);
+        List<Podcast> podcasts = podcastRepository.findByArtistNameContaining(artist);
         if (podcasts.isEmpty()){
             throw new ResourceNotFoundException("No Podcasts found of that artist.");
         } else {

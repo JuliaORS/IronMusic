@@ -1,11 +1,17 @@
 package com.ironhack.repository;
 
+import com.ironhack.demosecurityjwt.security.models.Artist;
+import com.ironhack.demosecurityjwt.security.models.User;
+import com.ironhack.demosecurityjwt.security.repositories.ArtistRepository;
 import com.ironhack.model.Album;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
@@ -13,9 +19,16 @@ public class AlbumRepositoryTest {
     @Autowired
     AlbumRepository albumRepository;
     private Album album;
+    @Autowired
+    ArtistRepository artistRepository;
+
     @BeforeEach
     void setUp(){
-        album = new Album("title", null, null);
+        Artist artist = new Artist();
+        artist.setName("artist name");
+        Artist artistSaved = artistRepository.save(artist);
+
+        album = new Album("title", artistSaved, null);
         albumRepository.save(album);
     }
 

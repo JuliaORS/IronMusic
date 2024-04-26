@@ -2,6 +2,7 @@ package com.ironhack.controller.impl;
 
 import com.ironhack.controller.interfaces.PodcastControllerInterface;
 import com.ironhack.demosecurityjwt.security.services.interfaces.UserServiceInterface;
+import com.ironhack.dto.AudioGeneralInfoDTO;
 import com.ironhack.model.Podcast;
 import com.ironhack.repository.PodcastRepository;
 import com.ironhack.service.impl.PodcastService;
@@ -27,7 +28,7 @@ public class PodcastController implements PodcastControllerInterface {
     @Override
     @PostMapping("/artist/podcast")
     @ResponseStatus(HttpStatus.CREATED)
-    public Podcast savePodcast(@Valid @RequestBody Podcast podcast) {
+    public AudioGeneralInfoDTO savePodcast(@Valid @RequestBody Podcast podcast) {
         return podcastService.savePodcast(podcast);
     }
 
@@ -48,14 +49,14 @@ public class PodcastController implements PodcastControllerInterface {
     }
 
     @Override
-    @GetMapping("/users/podcast/{title}")
+    @GetMapping("/users/podcast/title/{title}")
     @ResponseStatus(HttpStatus.OK)
     public List<Podcast> getPodcastByTitle(@PathVariable String title) {
         return podcastService.getPodcastByTitle(title);
     }
 
     @Override
-    @GetMapping("/users/podcast/{artist}")
+    @GetMapping("/users/podcast/artist/{artist}")
     @ResponseStatus(HttpStatus.OK)
     public List<Podcast> getPodcastByArtist(@PathVariable String artist) {
         return podcastService.getPodcastByArtist(artist);

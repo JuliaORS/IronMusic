@@ -2,7 +2,6 @@ package com.ironhack.service.impl;
 
 import com.ironhack.demosecurityjwt.security.models.User;
 import com.ironhack.exceptions.ResourceNotFoundException;
-import com.ironhack.model.Album;
 import com.ironhack.model.Audio;
 import com.ironhack.model.Playlist;
 import com.ironhack.repository.AudioRepository;
