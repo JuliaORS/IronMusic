@@ -21,11 +21,16 @@ public class Playlist {
     @NotEmpty(message = "Bad request. Playlist name is required.")
     private String name;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany //(cascade = CascadeType.ALL)
     @JoinTable(
             name = "playlist_audio", //join table name
             joinColumns = @JoinColumn(name = "playlist_id"), // ref column this entity
             inverseJoinColumns = @JoinColumn(name = "audio_id") // audio ref column
     )
     private List<Audio> audios;
+
+    public Playlist(String name, List<Audio> audios){
+        setName(name);
+        setAudios(audios);
+    }
 }

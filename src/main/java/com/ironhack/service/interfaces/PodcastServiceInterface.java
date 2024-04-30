@@ -8,11 +8,11 @@ import java.util.List;
 public interface PodcastServiceInterface {
     AudioGeneralInfoDTO savePodcast(Podcast podcast);
 
-    List<Podcast> getAllPodcasts();
+    List<AudioGeneralInfoDTO> getAllPodcasts();
 
     void deletePodcast(Long id);
-    List<Podcast> getPodcastByTitle(String title);
+    List<AudioGeneralInfoDTO> getPodcastByTitle(String title);
 
-    List<Podcast> getPodcastByArtist(String artist);
+    List<AudioGeneralInfoDTO> getPodcastByArtistName(String artist);
     
 }

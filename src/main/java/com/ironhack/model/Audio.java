@@ -26,7 +26,7 @@ public class Audio {
 
     @ManyToOne //(fetch = FetchType.EAGER)
     @JoinColumn(name = "artist_id")
-    @JsonIgnore // Ignore recursive property
+    //@JsonIgnore // Ignore recursive property
     private Artist artist;
 
     public Audio(String title, String duration, Artist artist){

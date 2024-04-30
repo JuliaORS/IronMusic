@@ -44,10 +44,10 @@ public class SongServiceTest {
 
     @BeforeEach
     void setUp(){
-        Artist artist = new Artist(new User(null, "Coldplay", "co", "1234", new ArrayList<>(), null));
+        Artist artist = new Artist(new User(null, "artist", "ju", "1234", new ArrayList<>(), null));
         artistRepository.save(artist);
         song1 =  new Song("title", "5:13", artist, null, "rock");
-        song2 =  new Song("new title 2", "3:14", null, null, "pop");
+        song2 =  new Song("new title 2", "3:14", artist, null, "pop");
         songsList.add(song1);
         songsList.add(song2);
 
@@ -65,6 +65,7 @@ public class SongServiceTest {
         Song song =  new Song("new title 3", "2:15", null, null, "funk");
         Artist artist = new Artist();
         artist.setUsername("julia");
+        artist.setName("artist");
 
         Authentication authentication = mock(Authentication.class);
         when(authentication.getName()).thenReturn(artist.getUsername());
@@ -112,7 +113,11 @@ public class SongServiceTest {
 
     @Test
     public void deleteSongExistingIdTest(){
-        Song song =  new Song("title", "2:15", null, null, "funk");
+        Artist artist = new Artist();
+        artist.setName("julia");
+        artistRepository.save(artist);
+
+        Song song =  new Song("title", "2:15", artist, null, "funk");
         songRepository.save(song);
         Long id = song.getId();
 
@@ -129,7 +134,11 @@ public class SongServiceTest {
 
     @Test
     public void getAllSongsTest() throws Exception{
-        String expectedJson = objectMapper.writeValueAsString(songsList);
+        List<AudioGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
+        for(Song song : songsList){
+            audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(song));
+        }
+        String expectedJson = objectMapper.writeValueAsString(audioGeneralInfoDTOS);
         String resultJson = objectMapper.writeValueAsString(songService.getAllSongs());
         assertEquals(expectedJson, resultJson);
     }
@@ -138,7 +147,11 @@ public class SongServiceTest {
     public void getSongByTitleExistingSongTest() throws Exception{
         List<Song> songs = new ArrayList<>();
         songs.add(song2);
-        String expectedJson = objectMapper.writeValueAsString(songs);
+        List<AudioGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
+        for(Song song : songs){
+            audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(song));
+        }
+        String expectedJson = objectMapper.writeValueAsString(audioGeneralInfoDTOS);
         String resultJson = objectMapper.writeValueAsString(songService.getSongByTitle("new"));
         assertEquals(expectedJson, resultJson);
     }
@@ -153,8 +166,13 @@ public class SongServiceTest {
     public void getSongByArtistNameExistingSongTest() throws Exception{
         List<Song> songs = new ArrayList<>();
         songs.add(song1);
-        String expectedJson = objectMapper.writeValueAsString(songs);
-        String resultJson = objectMapper.writeValueAsString(songService.getSongByArtistName("Coldplay"));
+        songs.add(song2);
+        List<AudioGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
+        for(Song song : songs){
+            audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(song));
+        }
+        String expectedJson = objectMapper.writeValueAsString(audioGeneralInfoDTOS);
+        String resultJson = objectMapper.writeValueAsString(songService.getSongByArtistName("artist"));
         assertEquals(expectedJson, resultJson);
     }
 
@@ -168,7 +186,11 @@ public class SongServiceTest {
     public void getSongByGenreExistingSongTest() throws Exception{
         List<Song> songs = new ArrayList<>();
         songs.add(song2);
-        String expectedJson = objectMapper.writeValueAsString(songs);
+        List<AudioGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
+        for(Song song : songs){
+            audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(song));
+        }
+        String expectedJson = objectMapper.writeValueAsString(audioGeneralInfoDTOS);
         String resultJson = objectMapper.writeValueAsString(songService.getSongByGenre("pop"));
         assertEquals(expectedJson, resultJson);
     }

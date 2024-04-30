@@ -3,6 +3,7 @@ package com.ironhack.repository;
 import com.ironhack.demosecurityjwt.security.models.Artist;
 import com.ironhack.demosecurityjwt.security.models.User;
 import com.ironhack.demosecurityjwt.security.repositories.ArtistRepository;
+import com.ironhack.model.Album;
 import com.ironhack.model.Song;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class SongRepositoryTest {
@@ -19,14 +20,27 @@ public class SongRepositoryTest {
     SongRepository songRepository;
     @Autowired
     ArtistRepository artistRepository;
+    @Autowired
+    AlbumRepository albumRepository;
     private Song song;
 
     @BeforeEach
     void setUp(){
-        Artist artist = new Artist(new User(null, "Coldplay", "co", "1234", new ArrayList<>(), null));
+        Artist artist = new Artist(new User(null, "artist", "ju", "1234", new ArrayList<>(), null));
         Artist artistSaved = artistRepository.save(artist);
-        song = new Song("title", "5:34", artistSaved, null, "pop");
+
+        song = new Song("title1", "3:34", artistSaved, null, "pop");
         songRepository.save(song);
+
+        Album album = new Album("album", artistSaved, null);
+        albumRepository.save(album);
+
+        song.setAlbum(album);
+        songRepository.save(song);
+
+        List<Album> albumList = new ArrayList<>();
+        albumList.add(album);
+        artistSaved.setAlbums(albumList);
     }
 
     @AfterEach
@@ -46,12 +60,17 @@ public class SongRepositoryTest {
 
     @Test
     void deleteSongTest(){
-        assertEquals(1, songRepository.count());
-        List<Song> songs = songRepository.findByTitleContaining("title");
+        assertFalse(songRepository.findByTitleContaining("title1").isEmpty());
+        assertEquals(1, albumRepository.count());
+        assertTrue(artistRepository.findByUsername("ju").isPresent());
 
-        Song songToDelete = songs.get(0);
+        List<Song> songs = songRepository.findByTitleContaining("title");
         songRepository.delete(songs.get(0));
-        assertEquals(0, songRepository.count());
+
+        assertTrue(songRepository.findByTitleContaining("title1").isEmpty());
+        assertEquals(1, albumRepository.count());
+        assertTrue(artistRepository.findByUsername("ju").isPresent());
+
     }
 
     @Test
@@ -68,7 +87,7 @@ public class SongRepositoryTest {
 
     @Test
     void findByArtistNameContainingTest(){
-        List<Song> songs = songRepository.findByArtistNameContaining("Co");
+        List<Song> songs = songRepository.findByArtistNameContaining("art");
         assertEquals(1, songs.size());
         assertEquals(song.getTitle(), songs.get(0).getTitle());
     }

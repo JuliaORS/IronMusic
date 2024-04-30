@@ -22,6 +22,7 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,38 +57,55 @@ public class SongService  implements SongServiceInterface {
     }
 
     @Override
-    public List<Song> getAllSongs() {
-        return songRepository.findAll();
+    public List<AudioGeneralInfoDTO> getAllSongs() {
+        List<AudioGeneralInfoDTO> result = new ArrayList<>();
+        List<Song> songs = songRepository.findAll();
+        for(Song song : songs){
+            result.add(new AudioGeneralInfoDTO(song));
+        }
+        return result;
     }
 
 
     @Override
-    public List<Song> getSongByTitle(String title) {
+    public List<AudioGeneralInfoDTO> getSongByTitle(String title) {
         List<Song> songs = songRepository.findByTitleContaining(title);
+        List<AudioGeneralInfoDTO> result = new ArrayList<>();
         if (songs.isEmpty()){
             throw new ResourceNotFoundException("No songs found with that title.");
         } else {
-            return songs;
+            for(Song song : songs){
+                result.add(new AudioGeneralInfoDTO(song));
+            }
         }
+        return result;
     }
 
     @Override
-    public List<Song> getSongByArtistName(String artist) {
+    public List<AudioGeneralInfoDTO> getSongByArtistName(String artist) {
         List<Song> songs = songRepository.findByArtistNameContaining(artist);
+        List<AudioGeneralInfoDTO> result = new ArrayList<>();
         if (songs.isEmpty()){
             throw new ResourceNotFoundException("No songs found of that artist.");
         } else {
-            return songs;
+            for(Song song : songs){
+                result.add(new AudioGeneralInfoDTO(song));
+            }
         }
+        return result;
     }
 
     @Override
-    public List<Song> getSongByGenre(String genre) {
+    public List<AudioGeneralInfoDTO> getSongByGenre(String genre) {
         List<Song> songs = songRepository.findByGenreContaining(genre);
+        List<AudioGeneralInfoDTO> result = new ArrayList<>();
         if (songs.isEmpty()){
             throw new ResourceNotFoundException("No songs found of that genre.");
         } else {
-            return songs;
+            for(Song song : songs){
+                result.add(new AudioGeneralInfoDTO(song));
+            }
         }
+        return result;
     }
 }

@@ -4,6 +4,7 @@ import com.ironhack.demosecurityjwt.security.models.Artist;
 import com.ironhack.demosecurityjwt.security.models.User;
 import com.ironhack.demosecurityjwt.security.repositories.ArtistRepository;
 import com.ironhack.model.Audio;
+import com.ironhack.model.Song;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,8 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class AudioRepositoryTest {
@@ -62,6 +62,14 @@ public class AudioRepositoryTest {
         assertEquals(2, audioRepository.count());
         audioRepository.delete(audio);
         assertEquals(1, audioRepository.count());
+        assertTrue(artistRepository.findByUsername("co").isPresent());
+    }
+
+    @Test
+    void findByTitleContainingTest(){
+        List<Audio> audios = audioRepository.findByTitleContaining("111");
+        assertEquals(1, audios.size());
+        assertEquals(audio.getTitle(), audios.get(0).getTitle());
     }
 }
 

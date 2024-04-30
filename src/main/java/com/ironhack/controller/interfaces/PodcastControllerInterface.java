@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface PodcastControllerInterface {
     AudioGeneralInfoDTO savePodcast(Podcast podcast);
-    List<Podcast> getAllPodcasts();
+    List<AudioGeneralInfoDTO> getAllPodcasts();
     void deletePodcast(Long id);
-    List<Podcast> getPodcastByTitle(String title);
-    List<Podcast> getPodcastByArtist(String artist);
+    List<AudioGeneralInfoDTO> getPodcastByTitle(String title);
+    List<AudioGeneralInfoDTO> getPodcastByArtistName(String artist);
 }

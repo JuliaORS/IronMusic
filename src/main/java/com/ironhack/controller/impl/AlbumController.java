@@ -31,7 +31,7 @@ public class AlbumController implements AlbumControllerInterface {
     }
 
     @Override
-    @PostMapping("/artist/album/{album_id}/song/{song_id}")
+    @PostMapping("/artist/album/{albumId}/song/{songId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void addSongToAlbum(@PathVariable Long albumId, @PathVariable Long songId) {
         albumService.addSongToAlbum(albumId, songId);

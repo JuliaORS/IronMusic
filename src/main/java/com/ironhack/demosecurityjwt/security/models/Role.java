@@ -4,9 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.*;
 
 /**
  * Entity class for representing a Role in the database
@@ -16,17 +15,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Role {
-    /**
-     * The primary key for the Role table
-     */
+
     @Id
-    /**
-     * The id is generated automatically by the database
-     */
+    @Setter(AccessLevel.NONE)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    /**
-     * The name of the role
-     */
+
+    @NotEmpty(message = "Role is requires")
     private String name;
+
+    public Role(String name){
+        setName(name);
+    }
 }

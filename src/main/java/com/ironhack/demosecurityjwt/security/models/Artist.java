@@ -15,13 +15,14 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@PrimaryKeyJoinColumn(name="id")
 public class Artist extends User {
     @OneToMany(mappedBy = "artist", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)  //cascade = CascadeType.ALL
     private List<Album> albums;
 
 
     @OneToMany(mappedBy = "artist", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)   //cascade = CascadeType.ALL
-    @JsonManagedReference // break circular reference
+    //@JsonManagedReference // break circular reference
     private List<Audio> audios;
 
     public Artist(User user) {

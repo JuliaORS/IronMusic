@@ -9,6 +9,7 @@ import com.ironhack.exceptions.BadRequestFormatException;
 import com.ironhack.exceptions.ResourceNotFoundException;
 import com.ironhack.model.Audio;
 import com.ironhack.model.Podcast;
+import com.ironhack.model.Song;
 import com.ironhack.repository.PodcastRepository;
 import com.ironhack.service.interfaces.PodcastServiceInterface;
 import jakarta.validation.Valid;
@@ -17,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,11 +42,6 @@ public class PodcastService implements PodcastServiceInterface {
     }
 
     @Override
-    public List<Podcast> getAllPodcasts() {
-        return podcastRepository.findAll();
-    }
-
-    @Override
     public void deletePodcast(Long id){
         Optional<Podcast> podcastOptional = podcastRepository.findById(id);
         if (podcastOptional.isPresent()){
@@ -53,23 +50,43 @@ public class PodcastService implements PodcastServiceInterface {
             throw new ResourceNotFoundException("Podcast with ID " + id + " not found");
         }
     }
+
     @Override
-    public List<Podcast> getPodcastByTitle(String title) {
+    public List<AudioGeneralInfoDTO> getAllPodcasts() {
+        List<AudioGeneralInfoDTO> result = new ArrayList<>();
+        List<Podcast> podcasts = podcastRepository.findAll();
+        for(Podcast podcast : podcasts){
+            result.add(new AudioGeneralInfoDTO(podcast));
+        }
+        return result;
+    }
+
+
+    @Override
+    public List<AudioGeneralInfoDTO> getPodcastByTitle(String title) {
         List<Podcast> podcasts = podcastRepository.findByTitleContaining(title);
+        List<AudioGeneralInfoDTO> result = new ArrayList<>();
         if (podcasts.isEmpty()){
             throw new ResourceNotFoundException("No Podcasts found with that title.");
         } else {
-            return podcasts;
+            for(Podcast podcast : podcasts){
+                result.add(new AudioGeneralInfoDTO(podcast));
+            }
         }
+        return result;
     }
 
     @Override
-    public List<Podcast> getPodcastByArtist(String artist) {
+    public List<AudioGeneralInfoDTO> getPodcastByArtistName(String artist) {
         List<Podcast> podcasts = podcastRepository.findByArtistNameContaining(artist);
+        List<AudioGeneralInfoDTO> result = new ArrayList<>();
         if (podcasts.isEmpty()){
             throw new ResourceNotFoundException("No Podcasts found of that artist.");
         } else {
-            return podcasts;
+            for(Podcast podcast : podcasts){
+                result.add(new AudioGeneralInfoDTO(podcast));
+            }
         }
+        return result;
     }
 }
