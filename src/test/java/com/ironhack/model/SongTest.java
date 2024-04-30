@@ -24,7 +24,7 @@ public class SongTest {
 
     @Test
     public void songSetterGetterTest() {
-        Artist artist = new Artist(new User(null, "artist", "ju", "1234", new ArrayList<>(), null));
+        Artist artist = new Artist(new User(null, "artist", "ju", "1234", false, new ArrayList<>(), null));
         Album album = new Album("album title", null, null);
 
         Song song = new Song();

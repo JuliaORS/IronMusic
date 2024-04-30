@@ -50,7 +50,7 @@ public class ArtistRepositoryTest {
 
     @BeforeEach
     public void setUp(){
-        Artist artist = new Artist(new User(null, "artist", "ju", "1234", new ArrayList<>(), null));
+        Artist artist = new Artist(new User(null, "artist", "ju", "1234", false, new ArrayList<>(), null));
         Artist artistSaved = artistRepository.save(artist);
 
         Song song = new Song("title1", "3:34", artistSaved, null, "pop");
@@ -90,7 +90,7 @@ public class ArtistRepositoryTest {
     @Test
     public void saveArtistTest(){
         long initialResources = userRepository.count();
-        Artist artist = new Artist(new User(null, "userNew", "usernameNew", "1234", null, null));
+        Artist artist = new Artist(new User(null, "userNew", "usernameNew", "1234", false, null, null));
         userRepository.save(artist);
         assertEquals(initialResources + 1, userRepository.count());
     }
@@ -98,7 +98,7 @@ public class ArtistRepositoryTest {
     @Test
     public void deleteArtistTest(){
         long actualResources = userRepository.count();
-        Artist artist = new Artist(new User(null, "userNew", "usernameNew", "1234", null, null));
+        Artist artist = new Artist(new User(null, "userNew", "usernameNew", "1234", false, null, null));
         userRepository.save(artist);
         assertEquals(actualResources + 1, userRepository.count());
         userRepository.delete(artist);

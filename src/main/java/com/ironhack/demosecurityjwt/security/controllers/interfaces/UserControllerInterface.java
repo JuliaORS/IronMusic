@@ -1,26 +1,13 @@
 package com.ironhack.demosecurityjwt.security.controllers.interfaces;
 
+import com.ironhack.demosecurityjwt.security.dtos.UserGeneralInfoDTO;
 import com.ironhack.demosecurityjwt.security.models.User;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-/**
- * Interface for UserController. Contains methods for handling user related operations
- */
 public interface UserControllerInterface {
-    /**
-     * Retrieves a list of all users
-     *
-     * @return list of all users
-     */
-    List<User> getUsers();
-
-    /**
-     * Saves a new user
-     *
-     * @param user the user to be saved
-     * @return the saved user
-     */
-    User saveUser(User user);
-
+    List<UserGeneralInfoDTO> getUsers();
+    void signUpUser(User user);
+    void activeUser(Long id);
 }

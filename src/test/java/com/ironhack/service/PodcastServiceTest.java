@@ -42,7 +42,7 @@ public class PodcastServiceTest {
 
     @BeforeEach
     void setUp(){
-        Artist artist = new Artist(new User(null, "podcaster", "co", "1234", new ArrayList<>(), null));
+        Artist artist = new Artist(new User(null, "podcaster", "co", "1234", true, new ArrayList<>(), null));
         artistRepository.save(artist);
 
         podcast1 =  new Podcast("title", "5:13", artist, 1,5, "comedy");
@@ -111,7 +111,7 @@ public class PodcastServiceTest {
 
     @Test
     public void deletePodcastExistingIdTest(){
-        Artist artist = new Artist(new User(null, "artist", "ju", "1234", new ArrayList<>(), null));
+        Artist artist = new Artist(new User(null, "artist", "ju", "1234", true, new ArrayList<>(), null));
         artistRepository.save(artist);
 
         Podcast podcast =  new Podcast("title", "2:15", artist, 1,5, "culture");

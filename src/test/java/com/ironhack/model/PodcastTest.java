@@ -24,7 +24,7 @@ public class PodcastTest {
 
     @Test
     public void podcastSetterGetterTest() {
-        Artist artist = new Artist(new User(null, "artist", "ju", "1234", new ArrayList<>(), null));
+        Artist artist = new Artist(new User(null, "artist", "ju", "1234", false, new ArrayList<>(), null));
 
         Podcast podcast = new Podcast();
         podcast.setTitle("new title");

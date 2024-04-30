@@ -26,19 +26,19 @@ public class UserTest {
 
     @Test
     public void userConstructorTest(){
-        User user = new User(null, "Julia", "ju", "1234", new ArrayList<>(), null);
+        User user = new User(null, "Julia", "ju", "1234", false, new ArrayList<>(), null);
         assertNotNull(user);
     }
 
     @Test
     public void userSetterGetterTest(){
-        User user = new User(null, "name", "co", "1234", new ArrayList<>(), null);
+        User user = new User(null, "name", "co", "1234", false, new ArrayList<>(), null);
 
         Role roleUser = new Role("ROLE_USER");
         Collection<Role> roles = new ArrayList<>();
         roles.add(roleUser);
 
-        Artist artist = new Artist(new User(null, "artist", "ju", "1234", new ArrayList<>(), null));
+        Artist artist = new Artist(new User(null, "artist", "ju", "1234", false, new ArrayList<>(), null));
         Audio audio = new Audio("tile", "3:34", artist);
         List<Audio> audiosList = new ArrayList<>();
         audiosList.add(audio);

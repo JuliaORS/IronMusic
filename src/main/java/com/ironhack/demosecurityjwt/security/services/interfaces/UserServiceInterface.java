@@ -1,5 +1,6 @@
 package com.ironhack.demosecurityjwt.security.services.interfaces;
 
+import com.ironhack.demosecurityjwt.security.dtos.UserGeneralInfoDTO;
 import com.ironhack.demosecurityjwt.security.models.Role;
 import com.ironhack.demosecurityjwt.security.models.User;
 
@@ -47,5 +48,6 @@ public interface UserServiceInterface {
      *
      * @return a List of all User entities.
      */
-    List<User> getUsers();
+    List<UserGeneralInfoDTO> getUsers();
+    void activeUser(Long id);
 }

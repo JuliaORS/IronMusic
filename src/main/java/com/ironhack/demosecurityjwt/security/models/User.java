@@ -12,16 +12,12 @@ import java.util.List;
 
 import static jakarta.persistence.FetchType.EAGER;
 
-/**
- * Entity class for representing a User in the database
- */
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Inheritance(strategy=InheritanceType.JOINED)
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,6 +27,8 @@ public class User {
     private String username;
 
     private String password;
+
+    private boolean isActive;
 
     @ManyToMany(fetch = EAGER)
     private Collection<Role> roles = new ArrayList<>();
@@ -42,5 +40,4 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "user_id") // audio ref column
     )
     private List<Playlist> playlists;
-
 }

@@ -1,5 +1,7 @@
 package com.ironhack.demosecurityjwt.security.controllers.impl;
 
+import com.ironhack.demosecurityjwt.security.controllers.interfaces.UserControllerInterface;
+import com.ironhack.demosecurityjwt.security.dtos.UserGeneralInfoDTO;
 import com.ironhack.demosecurityjwt.security.models.User;
 import com.ironhack.demosecurityjwt.security.services.interfaces.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,36 +15,29 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api")
-public class UserController {
+public class UserController implements UserControllerInterface {
 
-    /**
-     * User service for accessing user data
-     */
     @Autowired
     private UserServiceInterface userService;
 
-    /**
-     * Get a list of all users
-     *
-     * @return list of all users
-     */
+    @Override
     @GetMapping("/users/users")
     @ResponseStatus(HttpStatus.OK)
-    public List<User> getUsers() {
+    public List<UserGeneralInfoDTO> getUsers() {
         return userService.getUsers();
     }
 
-
-    /**
-     * Save a new user
-     *
-     * @param user the user to be saved
-     */
-    @PostMapping("/admin/users")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void saveUser(@RequestBody User user) {
-        userService.saveUser(user);
+    @Override
+    @PatchMapping("/admin/user/{id}")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void activeUser(@PathVariable Long id) {
+        userService.activeUser(id);
     }
 
-
+    @Override
+    @PostMapping("/signup")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void signUpUser(@RequestBody User user) {
+        userService.saveUser(user);
+    }
 }

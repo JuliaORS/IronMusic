@@ -1,10 +1,12 @@
 package com.ironhack.demosecurityjwt.security.services.impl;
 
+import com.ironhack.demosecurityjwt.security.dtos.UserGeneralInfoDTO;
 import com.ironhack.demosecurityjwt.security.models.User;
 import com.ironhack.demosecurityjwt.security.models.Role;
 import com.ironhack.demosecurityjwt.security.repositories.RoleRepository;
 import com.ironhack.demosecurityjwt.security.repositories.UserRepository;
 import com.ironhack.demosecurityjwt.security.services.interfaces.UserServiceInterface;
+import com.ironhack.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,21 +20,16 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class UserService implements UserServiceInterface, UserDetailsService {
 
-    /**
-     * Autowired UserRepository for database operations.
-     */
     @Autowired
     private UserRepository userRepository;
 
-    /**
-     * Autowired RoleRepository for database operations.
-     */
     @Autowired
     private RoleRepository roleRepository;
 
@@ -81,6 +78,7 @@ public class UserService implements UserServiceInterface, UserDetailsService {
         log.info("Saving new user {} to the database", user.getName());
         // Encode the user's password for security before saving
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setActive(false);
         return userRepository.save(user);
     }
 
@@ -135,8 +133,25 @@ public class UserService implements UserServiceInterface, UserDetailsService {
      * @return a list of all users
      */
     @Override
-    public List<User> getUsers() {
+    public List<UserGeneralInfoDTO> getUsers() {
         log.info("Fetching all users");
-        return userRepository.findAll();
+        List<User> users = userRepository.findAll();
+        List<UserGeneralInfoDTO> userGeneralInfoDTOS = new ArrayList<>();
+        for(User user : users){
+            userGeneralInfoDTOS.add(new UserGeneralInfoDTO(user));
+        }
+        return userGeneralInfoDTOS;
+    }
+
+    @Override
+    public void activeUser(Long id){
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isPresent()){
+            User user = optionalUser.get();
+            user.setActive(true);
+            userRepository.save(user);
+        } else {
+            throw new ResourceNotFoundException("User with ID " + id + " not found");
+        }
     }
 }

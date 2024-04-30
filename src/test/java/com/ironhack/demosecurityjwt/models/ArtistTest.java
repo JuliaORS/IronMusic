@@ -27,7 +27,7 @@ public class ArtistTest {
 
     @Test
     public void artistConstructorByUserTest(){
-        User user = new User(null, "Coldplay", "co", "1234", new ArrayList<>(), null);
+        User user = new User(null, "Coldplay", "co", "1234", false, new ArrayList<>(), null);
         Artist artist = new Artist(user);
         assertNotNull(artist);
     }
@@ -40,7 +40,7 @@ public class ArtistTest {
         List<Album> albums = new ArrayList<>();
         albums.add(new Album());
 
-        User user = new User(null, "Coldplay", "co", "1234", new ArrayList<>(), null);
+        User user = new User(null, "Coldplay", "co", "1234", false, new ArrayList<>(), null);
         Artist artist = new Artist(user);
 
         artist.setName("julia");

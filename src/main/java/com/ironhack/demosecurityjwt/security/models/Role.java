@@ -7,9 +7,6 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
-/**
- * Entity class for representing a Role in the database
- */
 @Entity
 @Data
 @NoArgsConstructor

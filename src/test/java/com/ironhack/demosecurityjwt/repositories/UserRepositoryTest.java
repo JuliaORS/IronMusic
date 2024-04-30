@@ -44,7 +44,7 @@ public class UserRepositoryTest {
 
     @BeforeEach
     public void setUp(){
-        Artist artist = new Artist(new User(null, "artist", "ju", "1234", new ArrayList<>(), null));
+        Artist artist = new Artist(new User(null, "artist", "ju", "1234", false, new ArrayList<>(), null));
         artistRepository.save(artist);
 
         Audio audio = new Audio("tile", "3:34", artist);
@@ -65,8 +65,8 @@ public class UserRepositoryTest {
         List<Playlist> playlistList2 = new ArrayList<>();
         playlistList2.add(playlist2);
 
-        User user = new User(null, "user1", "username1", "1234", null, null);
-        User user2 = new User(null, "user2", "username2", "1234", null, null);
+        User user = new User(null, "user1", "username1", "1234", false, null, null);
+        User user2 = new User(null, "user2", "username2", "1234", false, null, null);
 
         userRepository.save(user);
         userRepository.save(user2);
@@ -87,7 +87,7 @@ public class UserRepositoryTest {
     @Test
     public void saveUserTest(){
         long actualResources = userRepository.count();
-        User user = new User(null, "userNew", "usernameNew", "1234", null, null);
+        User user = new User(null, "userNew", "usernameNew", "1234", false, null, null);
         userRepository.save(user);
         assertEquals(actualResources + 1, userRepository.count());
     }
@@ -96,7 +96,7 @@ public class UserRepositoryTest {
     public void deleteUserTest(){
         long actualResources = userRepository.count();
 
-        User user = new User(null, "userNew", "usernameNew", "1234", null, null);
+        User user = new User(null, "userNew", "usernameNew", "1234", false, null, null);
         userRepository.save(user);
         assertEquals(actualResources + 1, userRepository.count());
         userRepository.delete(user);
@@ -123,7 +123,7 @@ public class UserRepositoryTest {
         List<Playlist> playlistList = new ArrayList<>();
         playlistList.add(playlist);
 
-        User user = new User(null, "userNew", "usernameNew", "1234", null, null);
+        User user = new User(null, "userNew", "usernameNew", "1234", false, null, null);
         userRepository.save(user);
         user.setPlaylists(playlistList);
 

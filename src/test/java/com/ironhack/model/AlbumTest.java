@@ -23,7 +23,7 @@ public class AlbumTest {
 
     @Test
     public void albumSetterGetterTest() {
-        Artist artist = new Artist(new User(null, "artist", "ju", "1234", new ArrayList<>(), null));
+        Artist artist = new Artist(new User(null, "artist", "ju", "1234", false, new ArrayList<>(), null));
         List<Song> songs = new ArrayList<>();
         songs.add(new Song(null, "pop"));
 

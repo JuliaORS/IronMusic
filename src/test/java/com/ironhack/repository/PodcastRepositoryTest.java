@@ -27,7 +27,7 @@ public class PodcastRepositoryTest {
     private Podcast podcast;
     @BeforeEach
     void setUp(){
-        Artist artist = new Artist(new User(null, "Coldplay", "co", "1234", new ArrayList<>(), null));
+        Artist artist = new Artist(new User(null, "Coldplay", "co", "1234", false, new ArrayList<>(), null));
         Artist artistSaved = artistRepository.save(artist);
         podcast = new Podcast("new title", "45:42", artistSaved, 4, 2, "philosophy");
         Podcast podcast2 = new Podcast("title", "45:42", null, 4, 2, "philosophy");
