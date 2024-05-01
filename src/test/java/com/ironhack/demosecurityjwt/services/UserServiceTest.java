@@ -43,15 +43,14 @@ public class UserServiceTest {
 
     @Test
     public void activeUserTest(){
-        Long id = userRepository.findByUsername("username").getId();
-        assertFalse(userRepository.findByUsername("username").isActive());
-        userService.activeUser(id);
-        assertTrue(userRepository.findByUsername("username").isActive());
+        assertFalse(userRepository.findByUsername("username").get().isActive());
+        userService.activeUserByUsername("username");
+        assertTrue(userRepository.findByUsername("username").get().isActive());
     }
 
     @Test
     public void activeUserNotExistingTest(){
         assertThrows(ResourceNotFoundException .class, () -> {
-            userService.activeUser(45L);});
+            userService.activeUserByUsername("wrong username");});
     }
 }

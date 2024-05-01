@@ -28,10 +28,17 @@ public class UserController implements UserControllerInterface {
     }
 
     @Override
-    @PatchMapping("/admin/user/{id}")
+    @PutMapping("/admin/user/{username}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void activeUser(@PathVariable Long id) {
-        userService.activeUser(id);
+    public void activeUserByUsername(@PathVariable String username) {
+        userService.activeUserByUsername(username);
+    }
+
+    @Override
+    @PutMapping("/admin/user/active")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void activeAllUsers() {
+        userService.activeAllUsers();
     }
 
     @Override

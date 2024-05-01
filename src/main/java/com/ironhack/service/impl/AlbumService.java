@@ -37,7 +37,7 @@ public class AlbumService implements AlbumServiceInterface {
     public AlbumGeneralInfoDTO saveAlbum(@Valid Album album) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username).get();
         album.setArtist((Artist) user);
         albumRepository.save(album);
         return new AlbumGeneralInfoDTO(album);

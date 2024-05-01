@@ -32,7 +32,7 @@ public class DemoSecurityJwtApplication {
             userService.saveRole(new Role(null, "ROLE_ARTIST"));
 
             User user = userService.saveUser(new User(null, "admin", "admin", "1234", true, new ArrayList<>(), null));
-            userService.activeUser(user.getId());
+            userService.activeAllUsers();
             userService.addRoleToUser("admin", "ROLE_ADMIN");
             userService.addRoleToUser("admin", "ROLE_USER");
             userService.addRoleToUser("admin", "ROLE_ARTIST");

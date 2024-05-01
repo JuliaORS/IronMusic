@@ -25,10 +25,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static java.util.Arrays.stream;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -75,8 +72,11 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                     String username = decodedJWT.getSubject();
 
                     //check if user is active
-                   User user = userRepository.findByUsername(username);
-                   if (user == null || !user.isActive()) {
+                   Optional<User> optionalUser = userRepository.findByUsername(username);
+                   if (optionalUser.isEmpty())
+                       return;
+                   User user = optionalUser.get();
+                   if (!user.isActive()) {
                         response.setStatus(HttpStatus.FORBIDDEN.value());
                         Map<String, String> error = new HashMap<>();
                         error.put("error_message", "User is not active.");

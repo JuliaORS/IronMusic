@@ -40,7 +40,7 @@ public class SongService  implements SongServiceInterface {
         }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username).get();
         song.setArtist((Artist) user);
         songRepository.save(song);
         return new AudioGeneralInfoDTO(song);

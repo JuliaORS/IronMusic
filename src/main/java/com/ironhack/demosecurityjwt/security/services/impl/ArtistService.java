@@ -30,7 +30,7 @@ public class ArtistService implements ArtistServiceInterface {
     public Artist assignArtistRole(ArtistRoleAdmissionDTO artistRoleAdmission){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username).get();
         userService.addRoleToUser(username, "ROLE_ARTIST");
 
         Artist artist = new Artist(user);

@@ -35,7 +35,7 @@ public class PodcastService implements PodcastServiceInterface {
         }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username).get();
         podcast.setArtist((Artist) user);
         podcastRepository.save(podcast);
         return new AudioGeneralInfoDTO(podcast);

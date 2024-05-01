@@ -106,14 +106,14 @@ public class UserRepositoryTest {
 
     @Test
     public void findByUsernameTest(){
-        User user = userRepository.findByUsername("username1");
-        assertNotNull(user);
+        Optional<User> optionalUser = userRepository.findByUsername("username1");
+        assertTrue(optionalUser.isPresent());
     }
 
     @Test
     public void findByUsernameNotExistingNameTest(){
-        User user = userRepository.findByUsername("no name");
-        assertNull(user);
+        Optional<User> optionalUser = userRepository.findByUsername("no name");
+        assertTrue(optionalUser.isEmpty());
     }
 
     @Test

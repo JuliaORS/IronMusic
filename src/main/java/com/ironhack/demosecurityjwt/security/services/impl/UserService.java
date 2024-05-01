@@ -50,7 +50,7 @@ public class UserService implements UserServiceInterface, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // Retrieve user with the given username
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username).get();
         // Check if user exists
         if (user == null) {
             log.error("User not found in the database");
@@ -105,7 +105,7 @@ public class UserService implements UserServiceInterface, UserDetailsService {
         log.info("Adding role {} to user {}", roleName, username);
 
         // Retrieve the user and role objects from the repository
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username).get();
         Role role = roleRepository.findByName(roleName);
 
         // Add the role to the user's role collection
@@ -124,7 +124,11 @@ public class UserService implements UserServiceInterface, UserDetailsService {
     @Override
     public User getUser(String username) {
         log.info("Fetching user {}", username);
-        return userRepository.findByUsername(username);
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if (optionalUser.isPresent()){
+            return optionalUser.get();
+        }
+        return null;
     }
 
     /**
@@ -144,15 +148,27 @@ public class UserService implements UserServiceInterface, UserDetailsService {
     }
 
     @Override
-    public void activeUser(Long id){
-        Optional<User> optionalUser = userRepository.findById(id);
+    public void activeUserByUsername(String username){
+        Optional<User> optionalUser = userRepository.findByUsername(username);
         if (optionalUser.isPresent()){
             User user = optionalUser.get();
             user.setActive(true);
             userRepository.save(user);
             addRoleToUser(user.getUsername(), "ROLE_USER");
         } else {
-            throw new ResourceNotFoundException("User with ID " + id + " not found");
+            throw new ResourceNotFoundException("User with this username " + username + " not found");
+        }
+    }
+
+    @Override
+    public void activeAllUsers(){
+        List<User> inactiveUsers = userRepository.findByIsActiveFalse();
+        if (!inactiveUsers.isEmpty()){
+            for (User user : inactiveUsers){
+                user.setActive(true);
+                userRepository.save(user);
+                addRoleToUser(user.getUsername(), "ROLE_USER");
+            }
         }
     }
 }
