@@ -2,6 +2,8 @@ package com.ironhack.demosecurityjwt.security.config;
 
 import com.ironhack.demosecurityjwt.security.config.filters.CustomAuthenticationFilter;
 import com.ironhack.demosecurityjwt.security.config.filters.CustomAuthorizationFilter;
+import com.ironhack.demosecurityjwt.security.models.User;
+import com.ironhack.demosecurityjwt.security.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -35,6 +37,9 @@ public class SecurityConfig {
     // Autowired instance of the AuthenticationManagerBuilder
     @Autowired
     private AuthenticationManagerBuilder authManagerBuilder;
+
+    @Autowired
+    private UserRepository userRepository;
 
     /**
      * Bean definition for PasswordEncoder
@@ -89,9 +94,10 @@ public class SecurityConfig {
         // add the custom authentication filter to the http security object
         http.addFilter(customAuthenticationFilter);
         // Add the custom authorization filter before the standard authentication filter.
-        http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new CustomAuthorizationFilter(userRepository), UsernamePasswordAuthenticationFilter.class);
 
         // Build the security filter chain to be returned.
         return http.build();
+
     }
 }

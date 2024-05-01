@@ -150,6 +150,7 @@ public class UserService implements UserServiceInterface, UserDetailsService {
             User user = optionalUser.get();
             user.setActive(true);
             userRepository.save(user);
+            addRoleToUser(user.getUsername(), "ROLE_USER");
         } else {
             throw new ResourceNotFoundException("User with ID " + id + " not found");
         }

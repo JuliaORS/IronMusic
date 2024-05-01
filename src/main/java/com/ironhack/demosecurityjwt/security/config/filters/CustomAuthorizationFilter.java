@@ -13,11 +13,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -46,9 +50,13 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
      * @throws ServletException if there is a servlet related error
      * @throws IOException      if there is an Input/Output error
      */
-
-    @Autowired
     private UserRepository userRepository;
+    public CustomAuthorizationFilter(UserRepository userRepository){
+        this.userRepository = userRepository;
+    }
+
+
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // If the request is for the API Login endpoint, pass the request to the next filter in the chain
@@ -66,15 +74,16 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                     DecodedJWT decodedJWT = verifier.verify(token);
                     String username = decodedJWT.getSubject();
 
+                    //check if user is active
                    User user = userRepository.findByUsername(username);
-                    if (user == null || !user.isActive()) {
+                   if (user == null || !user.isActive()) {
                         response.setStatus(HttpStatus.FORBIDDEN.value());
                         Map<String, String> error = new HashMap<>();
                         error.put("error_message", "User is not active.");
                         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                         new ObjectMapper().writeValue(response.getOutputStream(), error);
                         return;
-                    }
+                   }
 
                     String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
                     Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
