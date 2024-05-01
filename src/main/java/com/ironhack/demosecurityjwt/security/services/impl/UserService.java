@@ -67,12 +67,6 @@ public class UserService implements UserServiceInterface, UserDetailsService {
         }
     }
 
-    /**
-     * Saves a new user to the database
-     *
-     * @param user the user to be saved
-     * @return the saved user
-     */
     @Override
     public User saveUser(User user) {
         log.info("Saving new user {} to the database", user.getName());
@@ -82,24 +76,12 @@ public class UserService implements UserServiceInterface, UserDetailsService {
         return userRepository.save(user);
     }
 
-    /**
-     * Saves a new role to the database
-     *
-     * @param role the role to be saved
-     * @return the saved role
-     */
     @Override
     public Role saveRole(Role role) {
         log.info("Saving new role {} to the database", role.getName());
         return roleRepository.save(role);
     }
 
-    /**
-     * Adds a role to the user with the given username
-     *
-     * @param username the username of the user to add the role to
-     * @param roleName the name of the role to be added
-     */
     @Override
     public void addRoleToUser(String username, String roleName) {
         log.info("Adding role {} to user {}", roleName, username);
@@ -115,27 +97,13 @@ public class UserService implements UserServiceInterface, UserDetailsService {
         userRepository.save(user);
     }
 
-    /**
-     * Retrieves the user with the given username
-     *
-     * @param username the username to search for
-     * @return the user with the given username
-     */
     @Override
     public User getUser(String username) {
         log.info("Fetching user {}", username);
         Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (optionalUser.isPresent()){
-            return optionalUser.get();
-        }
-        return null;
+        return optionalUser.orElse(null);
     }
 
-    /**
-     * Retrieves all users from the database
-     *
-     * @return a list of all users
-     */
     @Override
     public List<UserGeneralInfoDTO> getUsers() {
         log.info("Fetching all users");

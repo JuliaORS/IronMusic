@@ -21,7 +21,4 @@ public class ArtistController implements ArtistControllerInterface {
         return artistService.assignArtistRole(artistRoleAdmission);
     }
 
-
-
-
 }

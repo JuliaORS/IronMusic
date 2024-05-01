@@ -66,7 +66,7 @@ public class UserRepositoryTest {
         playlistList2.add(playlist2);
 
         User user = new User(null, "user1", "username1", "1234", false, null, null);
-        User user2 = new User(null, "user2", "username2", "1234", false, null, null);
+        User user2 = new User(null, "user2", "username2", "1234", true, null, null);
 
         userRepository.save(user);
         userRepository.save(user2);
@@ -101,19 +101,6 @@ public class UserRepositoryTest {
         assertEquals(actualResources + 1, userRepository.count());
         userRepository.delete(user);
         assertEquals(actualResources, userRepository.count());
-
-    }
-
-    @Test
-    public void findByUsernameTest(){
-        Optional<User> optionalUser = userRepository.findByUsername("username1");
-        assertTrue(optionalUser.isPresent());
-    }
-
-    @Test
-    public void findByUsernameNotExistingNameTest(){
-        Optional<User> optionalUser = userRepository.findByUsername("no name");
-        assertTrue(optionalUser.isEmpty());
     }
 
     @Test
@@ -132,4 +119,21 @@ public class UserRepositoryTest {
         assertTrue(playlistRepository.findByName("90's").isEmpty());
     }
 
+    @Test
+    public void findByUsernameTest(){
+        Optional<User> optionalUser = userRepository.findByUsername("username1");
+        assertTrue(optionalUser.isPresent());
+    }
+
+    @Test
+    public void findByUsernameNotExistingNameTest(){
+        Optional<User> optionalUser = userRepository.findByUsername("no name");
+        assertTrue(optionalUser.isEmpty());
+    }
+
+    @Test
+    public void findByIsActiveFalseTest(){
+        List<User> userList = userRepository.findByIsActiveFalse();
+        assertEquals(2, userList.size());
+    }
 }

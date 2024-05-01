@@ -20,15 +20,14 @@ public class Group {
     @NotEmpty(message = "Bad request. Group name is required.")
     private String name;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(
             name = "groups_users", //join table name
             joinColumns = @JoinColumn(name = "group_id"), // ref column this entity
             inverseJoinColumns = @JoinColumn(name = "user_id") // audio ref column
     )
-    private List<User> users; //TODO: pending to add groups to USER
+    private List<User> users;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Playlist> playlists;
-
 }

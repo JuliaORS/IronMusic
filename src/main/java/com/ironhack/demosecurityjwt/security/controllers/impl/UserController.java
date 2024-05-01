@@ -16,15 +16,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class UserController implements UserControllerInterface {
-
     @Autowired
     private UserServiceInterface userService;
 
     @Override
-    @GetMapping("/users/users")
-    @ResponseStatus(HttpStatus.OK)
-    public List<UserGeneralInfoDTO> getUsers() {
-        return userService.getUsers();
+    @PostMapping("/signup")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void signUpUser(@RequestBody User user) {
+        userService.saveUser(user);
     }
 
     @Override
@@ -42,9 +41,9 @@ public class UserController implements UserControllerInterface {
     }
 
     @Override
-    @PostMapping("/signup")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void signUpUser(@RequestBody User user) {
-        userService.saveUser(user);
+    @GetMapping("/users/users")
+    @ResponseStatus(HttpStatus.OK)
+    public List<UserGeneralInfoDTO> getUsers() {
+        return userService.getUsers();
     }
 }
