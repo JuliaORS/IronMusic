@@ -25,10 +25,10 @@ public class PlaylistController implements PlaylistControllerInterface {
     }
 
     @Override
-    @DeleteMapping("/user/playlist/{id}")
+    @DeleteMapping("/user/playlist/{title}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletePlaylist(@PathVariable Long id) {
-        playlistService.deletePlaylist(id);
+    public void deletePlaylistByTitle(@PathVariable String title) {
+        playlistService.deletePlaylistByTitle(title);
     }
 
     @Override

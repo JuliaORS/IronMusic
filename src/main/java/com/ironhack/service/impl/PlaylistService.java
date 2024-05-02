@@ -8,6 +8,8 @@ import com.ironhack.repository.AudioRepository;
 import com.ironhack.repository.PlaylistRepository;
 import com.ironhack.service.interfaces.PlaylistServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +32,10 @@ public class PlaylistService implements PlaylistServiceInterface {
     }
 
     @Override
-    public void deletePlaylist(Long id){
-        Optional<Playlist> playlistOptional = playlistRepository.findById(id);
+    public void deletePlaylistByTitle(String title){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Optional<Playlist> playlistOptional = playlistRepository.findByTitle(title);
         if (playlistOptional.isPresent()){
             playlistRepository.delete(playlistOptional.get());
         } else {

@@ -4,6 +4,8 @@ import com.ironhack.demosecurityjwt.security.models.Artist;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,12 +24,16 @@ public class Album {
     @JoinColumn(name = "artist_id")
     private Artist artist;
 
-    @OneToMany(mappedBy = "album", cascade = CascadeType.REMOVE) //fetch = FetchType.EAGER, orphanRemoval = true
-    private List<Song> songs;
+    @OneToMany(mappedBy = "album", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER, orphanRemoval = true) //fetch = FetchType.EAGER, orphanRemoval = true
+    private List<Song> songs = new ArrayList<>();
 
     public Album(String title, Artist artist, List<Song> songs) {
         setTitle(title);
         setArtist(artist);
-        setSongs(songs);
+        if (songs == null){
+            setSongs(new ArrayList<>());
+        } else {
+            setSongs(songs);
+        }
     }
 }

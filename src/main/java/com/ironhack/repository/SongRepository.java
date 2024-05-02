@@ -9,10 +9,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface SongRepository extends JpaRepository<Song,Long> {
     List<Song> findByTitleContaining(String title);
+    Song findByTitle(String title);
     List<Song> findByTitleAndAlbumTitleAndAlbumArtistUsername(String songTitle, String albumTitle, String artistUsername);
     List<Song> findByTitleAndArtistUsername(String songTitle, String artistUsername);
     List<Song> findByArtistNameContaining(String artist);

@@ -57,19 +57,23 @@ public class AlbumService implements AlbumServiceInterface {
     }
 
     @Override
-    public  void addSongToAlbum(String titleAlbum, String titleSong){
+    public  void addSongToAlbumByTitleSong(String albumTitle, String songTitle){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        List<Album> albumList = albumRepository.findByTitleAndArtistUsername(titleAlbum, username);
+
+        List<Album> albumList = albumRepository.findByTitleAndArtistUsername(albumTitle, username);
         if (albumList.size() == 1) {
-            List<Song> songList = songRepository.findByTitleAndArtistUsername(titleSong, username);
+            List<Song> songList = songRepository.findByTitleAndArtistUsername(songTitle, username);
             if (songList.size() == 1){
+                songList.get(0).setAlbum(albumList.get(0));
+                songRepository.save(songList.get(0));
                 albumList.get(0).getSongs().add(songList.get(0));
+                albumRepository.save(albumList.get(0));
             } else {
-                throw new ResourceNotFoundException("Song with title " + titleSong + " not found");
+                throw new ResourceNotFoundException("Song with title " + songTitle + " not found");
             }
         } else {
-            throw new ResourceNotFoundException("Album with ID " + titleAlbum + " not found");
+            throw new ResourceNotFoundException("Album with ID " + albumTitle + " not found");
         }
     }
 
@@ -82,6 +86,9 @@ public class AlbumService implements AlbumServiceInterface {
             List<Song> songList = songRepository.findByTitleAndAlbumTitleAndAlbumArtistUsername(titleSong, titleAlbum, username);
             if (songList.size() == 1){
                 albumList.get(0).getSongs().remove(songList.get(0));
+                albumRepository.save(albumList.get(0));
+                songList.get(0).setAlbum(null);
+                songRepository.save(songList.get(0));
             } else {
                 throw new ResourceNotFoundException("Song with title " + titleSong + " not found");
             }

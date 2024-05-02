@@ -9,6 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface PlaylistRepository extends JpaRepository<Playlist,Long> {
-
     List<Playlist> findByName(String name);
+
 }
