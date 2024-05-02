@@ -62,7 +62,7 @@ public class AlbumService implements AlbumServiceInterface {
         String username = authentication.getName();
         List<Album> albumList = albumRepository.findByTitleAndArtistUsername(titleAlbum, username);
         if (albumList.size() == 1) {
-            List<Song> songList = songRepository.findByTitleAndAlbumTitleAndAlbumArtistUsername(titleSong, titleAlbum, username);
+            List<Song> songList = songRepository.findByTitleAndArtistUsername(titleSong, username);
             if (songList.size() == 1){
                 albumList.get(0).getSongs().add(songList.get(0));
             } else {
