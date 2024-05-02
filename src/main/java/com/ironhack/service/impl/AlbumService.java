@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -44,42 +45,48 @@ public class AlbumService implements AlbumServiceInterface {
     }
 
     @Override
-    public void deleteAlbum(Long id){
-        Optional<Album> albumOptional = albumRepository.findById(id);
-        if (albumOptional.isPresent()){
-            albumRepository.delete(albumOptional.get());
+    public void deleteAlbumByTitle(String title){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        List<Album> albumList = albumRepository.findByTitleAndArtistUsername(title, username);
+        if (albumList.size() == 1){
+            albumRepository.delete(albumList.get(0));
         } else {
-            throw new ResourceNotFoundException("Album with ID " + id + " not found");
+            throw new ResourceNotFoundException("Album with this title " + title + " not found");
         }
     }
 
     @Override
-    public  void addSongToAlbum(Long albumId, Long songId){
-        Optional<Album> albumOptional = albumRepository.findById(albumId);
-        if (albumOptional.isPresent()){
-            Optional<Song> songOptional = songRepository.findById(songId);
-            if (songOptional.isPresent()) {
-                Album album = albumOptional.get();
-                album.getSongs().add(songOptional.get());
+    public  void addSongToAlbum(String titleAlbum, String titleSong){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        List<Album> albumList = albumRepository.findByTitleAndArtistUsername(titleAlbum, username);
+        if (albumList.size() == 1) {
+            List<Song> songList = songRepository.findByTitleAndAlbumTitleAndAlbumArtistUsername(titleSong, titleAlbum, username);
+            if (songList.size() == 1){
+                albumList.get(0).getSongs().add(songList.get(0));
             } else {
-                throw new ResourceNotFoundException("Song with ID " + songId + " not found");
+                throw new ResourceNotFoundException("Song with title " + titleSong + " not found");
             }
         } else {
-            throw new ResourceNotFoundException("Album with ID " + albumId + " not found");
+            throw new ResourceNotFoundException("Album with ID " + titleAlbum + " not found");
         }
     }
 
     @Override
-    public  void removeSongFromAlbum(Long albumId, Long songId){
-        Optional<Album> albumOptional = albumRepository.findById(albumId);
-        if (albumOptional.isPresent()){
-            Album album = albumOptional.get();
-            boolean removed = album.getSongs().removeIf(audio -> audio.getId().equals(songId));
-            if (!removed) {
-                throw new ResourceNotFoundException("Song with ID " + songId + " not found in album");
+    public  void removeSongFromAlbum(String titleAlbum, String titleSong){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        List<Album> albumList = albumRepository.findByTitleAndArtistUsername(titleAlbum, username);
+        if (albumList.size() == 1) {
+            List<Song> songList = songRepository.findByTitleAndAlbumTitleAndAlbumArtistUsername(titleSong, titleAlbum, username);
+            if (songList.size() == 1){
+                albumList.get(0).getSongs().remove(songList.get(0));
+            } else {
+                throw new ResourceNotFoundException("Song with title " + titleSong + " not found");
             }
         } else {
-            throw new ResourceNotFoundException("Album with ID " + albumId + " not found");
+            throw new ResourceNotFoundException("Album with title " + titleAlbum + " not found");
         }
     }
 }

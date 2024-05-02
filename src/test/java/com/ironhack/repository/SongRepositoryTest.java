@@ -108,4 +108,63 @@ public class SongRepositoryTest {
     void findByGenreContainingAnySongTest(){
         assertEquals(0, songRepository.findByGenreContaining("rock").size());
     }
+
+    @Test
+    void findByTitleAndAlbumTitleAndAlbumArtistUsernameTest(){
+        List<Song> songs = songRepository.findByTitleAndAlbumTitleAndAlbumArtistUsername("title1",
+                "album", "ju");
+        assertEquals(1, songs.size());
+        assertEquals(song.getTitle(), songs.get(0).getTitle());
+    }
+
+    @Test
+    void findByTitleAndAlbumTitleAndArtistUsernameNotExistingTitleTest(){
+        List<Song> songs = songRepository.findByTitleAndAlbumTitleAndAlbumArtistUsername("title",
+                "album", "ju");
+        assertEquals(0, songs.size());
+    }
+    @Test
+    void findByTitleAndAlbumTitleAndArtistUsernameNotExistingAlbumTest(){
+        List<Song> songs = songRepository.findByTitleAndAlbumTitleAndAlbumArtistUsername("title1",
+                "wrong album", "ju");
+        assertEquals(0, songs.size());
+    }
+    @Test
+    void findByTitleAndAlbumTitleAndArtistUsernameNotExistingUsernameTest(){
+        List<Song> songs = songRepository.findByTitleAndAlbumTitleAndAlbumArtistUsername("title1",
+                "album", "julia");
+        assertEquals(0, songs.size());
+    }
+
+    @Test
+    void findByTitleAndAlbumTitleAndArtistUsernameNotExistingAllParamsTest(){
+        List<Song> songs = songRepository.findByTitleAndAlbumTitleAndAlbumArtistUsername("title",
+                "wrong album", "wrong username");
+        assertEquals(0, songs.size());
+    }
+
+    @Test
+    void findByTitleAndArtistUsernameTest(){
+        List<Song> songs = songRepository.findByTitleAndArtistUsername("title1","ju");
+        assertEquals(1, songs.size());
+        assertEquals(song.getTitle(), songs.get(0).getTitle());
+    }
+
+    @Test
+    void findByTitleAndArtistUsernameNotExistingTitleTest(){
+        List<Song> songs = songRepository.findByTitleAndArtistUsername("wrong title","ju");
+        assertEquals(0, songs.size());
+    }
+
+    @Test
+    void findByTitleAndArtistUsernameNotExistingUsernameTest(){
+        List<Song> songs = songRepository.findByTitleAndArtistUsername("title1","wrong username");
+        assertEquals(0, songs.size());
+    }
+
+    @Test
+    void findByTitleAndArtistUsernameNotExistingTitleAndUsernameTest(){
+        List<Song> songs = songRepository.findByTitleAndArtistUsername("wrong title","wrong username");
+        assertEquals(0, songs.size());
+    }
 }

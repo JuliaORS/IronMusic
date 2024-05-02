@@ -106,27 +106,32 @@ public class AlbumServiceTest {
     }
 
     @Test
-    public void deleteAlbumExistingIdTest(){
+    public void deleteAlbumExistingTitleTest(){
         Artist artist = new Artist();
         artist.setName("julia");
+        artist.setUsername("julia");
+
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.getName()).thenReturn(artist.getUsername());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
         artistRepository.save(artist);
 
         Song song =  new Song("hello", "3:14", artist, null, "pop");
         List<Song> songList = new ArrayList<>();
         songRepository.save(song);
 
-        Album album =  new Album("album title", null, songList);
+        Album album =  new Album("album title", artist, songList);
         album.getSongs().add(song);
         albumRepository.save(album);
-        Long id = album.getId();
+        String title = album.getTitle();
 
-        assertTrue(albumRepository.findById(id).isPresent());
+        assertFalse(albumRepository.findByTitleAndArtistUsername(title, artist.getUsername()).isEmpty());
         assertEquals(2, albumRepository.count());
         assertFalse(songRepository.findByTitleContaining("hello").isEmpty());
 
         assertEquals(1, songRepository.findByTitleContaining("hello").size());
-        albumService.deleteAlbum(id);
-        assertFalse(albumRepository.findById(id).isPresent());
+        albumService.deleteAlbumByTitle(title);
+        assertFalse(albumRepository.findById(album.getId()).isPresent());
         assertEquals(1, albumRepository.count());
         assertEquals(1, songRepository.findByTitleContaining("hello").size());
 
@@ -134,8 +139,15 @@ public class AlbumServiceTest {
 
     @Test
     public void deleteAlbumNotExistingIdTest(){
-        assertThrows(ResourceNotFoundException.class, () -> {
-            albumService.deleteAlbum(45L);});
-    }
+        Artist artist = new Artist();
+        artist.setName("julia");
+        artist.setUsername("julia");
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.getName()).thenReturn(artist.getUsername());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        artistRepository.save(artist);
 
+        assertThrows(ResourceNotFoundException.class, () -> {
+            albumService.deleteAlbumByTitle("wrong title");});
+    }
 }

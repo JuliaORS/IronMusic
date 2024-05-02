@@ -78,4 +78,35 @@ public class AlbumRepositoryTest {
         assertTrue(songRepository.findByTitleContaining("title1").isEmpty()); //check delete song
         assertTrue(artistRepository.findByUsername("ju").isPresent()); //check artist is still present
     }
+
+    @Test
+    void findByTitleTest(){
+        List<Album> albumList = albumRepository.findByTitle("album");
+        assertEquals(1, albumList.size());
+        assertEquals("album", albumList.get(0).getTitle());
+    }
+
+    @Test
+    void findByTitleNotExistingTest(){
+        assertEquals(0, albumRepository.findByTitle("albu").size());
+    }
+
+    @Test
+    void findByTitleAndArtistUsernameTest(){
+        List<Album> albumList = albumRepository.findByTitleAndArtistUsername("album", "ju");
+        assertEquals(1, albumList.size());
+        assertEquals("album", albumList.get(0).getTitle());
+    }
+
+    @Test
+    void findByTitleAndArtistUsernameWrongTitleTest(){
+        List<Album> albumList = albumRepository.findByTitleAndArtistUsername("albu", "ju");
+        assertEquals(0, albumList.size());
+    }
+
+    @Test
+    void findByTitleAndArtistUsernameWrongUsernameTest(){
+        List<Album> albumList = albumRepository.findByTitleAndArtistUsername("album", "julia");
+        assertEquals(0, albumList.size());
+    }
 }

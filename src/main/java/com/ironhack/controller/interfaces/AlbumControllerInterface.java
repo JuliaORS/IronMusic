@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 public interface AlbumControllerInterface {
     AlbumGeneralInfoDTO saveAlbum(Album album);
-    void deleteAlbum(Long id);
-    void addSongToAlbum(Long albumId, Long songId);
-    void removeSongFromAlbum(Long albumId, Long songId);
+    void deleteAlbumByTitle(String title);
+    void addSongToAlbum(String albumTitle, String songTitle);
+    void removeSongFromAlbum(String albumTitle, String songTitle);
 }

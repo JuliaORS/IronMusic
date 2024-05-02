@@ -24,24 +24,24 @@ public class AlbumController implements AlbumControllerInterface {
     }
 
     @Override
-    @DeleteMapping("/artist/album/{id}")
+    @DeleteMapping("/artist/album/{title}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteAlbum(@PathVariable Long id) {
-        albumService.deleteAlbum(id);
+    public void deleteAlbumByTitle(@PathVariable String title) {
+        albumService.deleteAlbumByTitle(title);
     }
 
     @Override
-    @PostMapping("/artist/album/{albumId}/song/{songId}")
+    @PostMapping("/artist/album/{album_title}/song/{song_title}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void addSongToAlbum(@PathVariable Long albumId, @PathVariable Long songId) {
-        albumService.addSongToAlbum(albumId, songId);
+    public void addSongToAlbum(@PathVariable String albumTitle, @PathVariable String songTitle) {
+        albumService.addSongToAlbum(albumTitle, songTitle);
     }
 
     @Override
-    @DeleteMapping("/artist/album/{album_id}/song/{song_id}")
+    @DeleteMapping("/artist/album/{album_title}/song/{song_title}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void removeSongFromAlbum(@PathVariable Long albumId, @PathVariable Long songId) {
-        albumService.removeSongFromAlbum(albumId, songId);
+    public void removeSongFromAlbum(@PathVariable String albumTitle, @PathVariable String songTitle)  {
+        albumService.removeSongFromAlbum(albumTitle, songTitle);
     }
 
 }
