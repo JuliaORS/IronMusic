@@ -40,9 +40,8 @@ public class SongControllerTest {
     public void setUp(){
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         Artist artist = new Artist(new User(null, "Coldplay", "co", "1234", false, new ArrayList<>(), null));
-        Artist artistSaved = artistRepository.save(artist);
+        artistRepository.save(artist);
         Song newSong =  new Song("title", "5:13", artist, null, "rock");
-
         Song newSong2 =  new Song("new title 2", "3:14", artist, null, "pop");
         songRepository.saveAll(List.of(newSong, newSong2));
     }

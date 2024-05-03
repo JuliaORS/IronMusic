@@ -17,19 +17,19 @@ public class PlaylistController implements PlaylistControllerInterface {
     @Autowired
     PlaylistService playlistService;
 
-    @Override
+    /*@Override
     @PostMapping("/user/playlist")
     @ResponseStatus(HttpStatus.CREATED)
     public Playlist savePlaylist(@Valid @RequestBody Playlist playlist, @AuthenticationPrincipal UserDetails userDetails) {
         return playlistService.savePlaylist(playlist, userDetails);
-    }
+    }*/
 
-    @Override
+   /* @Override
     @DeleteMapping("/user/playlist/{title}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePlaylistByTitle(@PathVariable String title) {
         playlistService.deletePlaylistByTitle(title);
-    }
+    }*/
 
     @Override
     @PostMapping("/user/playlist/{playlist_id}/audio/{audio_id}")

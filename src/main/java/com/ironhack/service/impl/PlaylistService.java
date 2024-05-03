@@ -23,25 +23,25 @@ public class PlaylistService implements PlaylistServiceInterface {
 
     @Autowired
     private PlaylistRepository playlistRepository;
-    @Override
+    /*@Override
     public Playlist savePlaylist(Playlist playlist, UserDetails userDetails){
         User user = (User) userDetails;
         Playlist playlistSaved = playlistRepository.save(playlist);
         user.getPlaylists().add(playlistSaved);
         return playlistSaved;
-    }
+    }*/
 
-    @Override
+   /* @Override
     public void deletePlaylistByTitle(String title){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        Optional<Playlist> playlistOptional = playlistRepository.findByTitle(title);
+        Optional<Playlist> playlistOptional = playlistRepository.findByTitleAndUsersUsername(title, username);
         if (playlistOptional.isPresent()){
             playlistRepository.delete(playlistOptional.get());
         } else {
-            throw new ResourceNotFoundException("Playlist with ID " + id + " not found");
+            throw new ResourceNotFoundException("Playlist with title " + title + " not found");
         }
-    }
+    }*/
 
     @Override
     public void addAudioToPlaylist(Long playlistId, Long audioId){
@@ -59,7 +59,7 @@ public class PlaylistService implements PlaylistServiceInterface {
         }
     }
 
-    @Override
+   @Override
     public void removeAudioFromPlaylist(Long playlistId, Long audioId){
         Optional<Playlist> playlistOptional = playlistRepository.findById(playlistId);
         if (playlistOptional.isPresent()){

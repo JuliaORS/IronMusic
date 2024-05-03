@@ -133,10 +133,12 @@ public class AlbumServiceTest {
     public void addSongToAlbumTest(){
         Song song3 =  new Song("song title 3", "2:14", artist, null, "pop");
         songRepository.save(song3);
+        Long id = song3.getId();
         assertEquals(3, songRepository.count());
         assertEquals(2, albumRepository.findByTitle("album title").get(0).getSongs().size());
         albumService.addSongToAlbumByTitleSong("album title", "song title 3");
         assertEquals(3, albumRepository.findByTitle("album title").get(0).getSongs().size());
+        assertEquals("album title", songRepository.findById(id).get().getAlbum().getTitle());
     }
 
     @Test

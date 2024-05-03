@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface AlbumServiceInterface {
     AlbumGeneralInfoDTO saveAlbum(Album album);
     void deleteAlbumByTitle(String title);
-    void addSongToAlbumByTitleSong(String titleAlbum, String titleSong);
-    void removeSongFromAlbum(String titleAlbum, String titleSong);
+    void addSongToAlbumByTitleSong(String albumTitle, String songTitle);
+    void removeSongFromAlbum(String albumTitle, String songTitle);
 }

@@ -25,21 +25,21 @@ public class AlbumController implements AlbumControllerInterface {
 
     @Override
     @DeleteMapping("/artist/album/{title}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     public void deleteAlbumByTitle(@PathVariable String title) {
         albumService.deleteAlbumByTitle(title);
     }
 
     @Override
-    @PostMapping("/artist/album/{album_title}/song/{song_title}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping("/artist/album/{albumTitle}/song/{songTitle}")
+    @ResponseStatus(HttpStatus.OK)
     public void addSongToAlbumByTitleSong(@PathVariable String albumTitle, @PathVariable String songTitle) {
         albumService.addSongToAlbumByTitleSong(albumTitle, songTitle);
     }
 
     @Override
-    @DeleteMapping("/artist/album/{album_title}/song/{song_title}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/artist/album/{albumTitle}/song/{songTitle}")
+    @ResponseStatus(HttpStatus.OK)
     public void removeSongFromAlbum(@PathVariable String albumTitle, @PathVariable String songTitle)  {
         albumService.removeSongFromAlbum(albumTitle, songTitle);
     }
