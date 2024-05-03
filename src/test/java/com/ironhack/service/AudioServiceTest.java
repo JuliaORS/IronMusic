@@ -8,6 +8,7 @@ import com.ironhack.dto.AudioGeneralInfoDTO;
 import com.ironhack.exceptions.BadRequestFormatException;
 import com.ironhack.exceptions.ResourceNotFoundException;
 import com.ironhack.model.Audio;
+import com.ironhack.model.Audio;
 import com.ironhack.repository.AudioRepository;
 import com.ironhack.service.impl.AudioService;
 import jakarta.validation.ConstraintViolationException;
@@ -36,16 +37,19 @@ public class AudioServiceTest {
     private ArtistRepository artistRepository;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private Artist artist;
     private Audio audio;
 
     @BeforeEach
     void setUp(){
-        Artist artist = new Artist();
-        artist.setName("julia");
+        artist = new Artist(new User(null, "artist", "julia", "1234", true, new ArrayList<>(), null));
         artistRepository.save(artist);
 
-        audio =  new Audio("title", "2:15", artist);
+        audio =  new Audio("audio title", "2:15", artist);
         audioRepository.save(audio);
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.getName()).thenReturn(artist.getUsername());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
     @AfterEach
@@ -55,18 +59,35 @@ public class AudioServiceTest {
     }
 
     @Test
-    public void deleteAudioExistingIdTest(){
-        Long id = audio.getId();
-
-        assertTrue(audioRepository.findById(id).isPresent());
-        audioService.deleteAudio(id);
-        assertFalse(audioRepository.findById(id).isPresent());
+    public void deleteAudioExistingTitleTest(){
+        assertFalse(audioRepository.findByTitle("audio title").isEmpty());
+        audioService.deleteAudioByTitle("audio title");
+        assertTrue(audioRepository.findByTitle("audio title").isEmpty());
     }
 
     @Test
     public void deleteAudioNotExistingIdTest(){
         assertThrows(ResourceNotFoundException.class, () -> {
-            audioService.deleteAudio(45L);});
+            audioService.deleteAudioByTitle("wrong title");});
+    }
+
+    @Test
+    public void getAudioByAllInfoExistingInfoTest() throws Exception{
+        List<Audio> audios = new ArrayList<>();
+        audios.add(audio);
+        List<AudioGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
+        for(Audio audio : audios){
+            audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(audio));
+        }
+        String expectedJson = objectMapper.writeValueAsString(audioGeneralInfoDTOS);
+        String resultJson = objectMapper.writeValueAsString(audioService.getAudioByAllInfo("title"));
+        assertEquals(expectedJson, resultJson);
+    }
+
+    @Test
+    public void getAudioByAllInfoNotExistingInfoTest() throws Exception{
+        assertThrows(ResourceNotFoundException.class, () -> {
+            audioService.getAudioByAllInfo("wrong");});
     }
 
 }

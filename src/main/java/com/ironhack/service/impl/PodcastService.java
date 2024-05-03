@@ -43,9 +43,11 @@ public class PodcastService implements PodcastServiceInterface {
 
     @Override
     public void deletePodcastByTitle(String title){
-        Optional<Podcast> podcastOptional = podcastRepository.findByTitle(title);
-        if (podcastOptional.isPresent()){
-            podcastRepository.delete(podcastOptional.get());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        List<Podcast> podcastList = podcastRepository.findByTitleAndArtistUsername(title, username);
+        if (podcastList.size() == 1){
+            podcastRepository.delete(podcastList.get(0));
         } else {
             throw new ResourceNotFoundException("Podcast with title \"" + title + "\" not found");
         }

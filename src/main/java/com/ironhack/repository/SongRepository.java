@@ -14,7 +14,7 @@ import java.util.Optional;
 @Repository
 public interface SongRepository extends JpaRepository<Song,Long> {
     List<Song> findByTitleContaining(String title);
-    Optional<Song> findByTitle(String title);
+    List<Song> findByTitle(String title);
     List<Song> findByTitleAndAlbumTitleAndAlbumArtistUsername(String songTitle, String albumTitle, String artistUsername);
     List<Song> findByTitleAndArtistUsername(String songTitle, String artistUsername);
     List<Song> findByArtistNameContaining(String artist);
@@ -23,4 +23,5 @@ public interface SongRepository extends JpaRepository<Song,Long> {
     List<Song> findByGenreContaining(String genre);
     List<Song> findByAlbumTitle(String albumTitle);
     List<Song> findByAlbumTitleAndTitle(String albumTitle, String songTitle);
+
 }

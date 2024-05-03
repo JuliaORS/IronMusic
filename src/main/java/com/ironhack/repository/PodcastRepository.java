@@ -10,8 +10,9 @@ import java.util.Optional;
 
 @Repository
 public interface PodcastRepository extends JpaRepository<Podcast,Long> {
-    Optional<Podcast> findByTitle(String title);
+    List<Podcast> findByTitle(String title);
     List<Podcast> findByTitleContaining(String title);
     List<Podcast> findByArtistNameContaining(String artist);
     List<Podcast> findByArtistNameContainingOrTitleContaining(String artistName, String title);
+    List<Podcast> findByTitleAndArtistUsername(String podcastTitle, String artistUsername);
 }

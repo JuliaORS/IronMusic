@@ -49,9 +49,11 @@ public class SongService  implements SongServiceInterface {
 
     @Override
     public void deleteSongByTitle(String title){
-        Optional<Song> songOptional = songRepository.findByTitle(title);
-        if (songOptional.isPresent()){
-            songRepository.delete(songOptional.get());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        List<Song> songList = songRepository.findByTitleAndArtistUsername(title, username);
+        if (songList.size() == 1){
+            songRepository.delete(songList.get(0));
         } else {
             throw new ResourceNotFoundException("Song with title \"" + title + "\" not found");
         }
