@@ -45,8 +45,8 @@ public class PodcastServiceTest {
         Artist artist = new Artist(new User(null, "podcaster", "co", "1234", true, new ArrayList<>(), null));
         artistRepository.save(artist);
 
-        podcast1 =  new Podcast("title", "5:13", artist, 1,5, "comedy");
-        podcast2 =  new Podcast("new title 2", "3:14", artist, 2, 6, "philosophy");
+        podcast1 =  new Podcast("podcast title 1", "5:13", artist, 1,5, "comedy");
+        podcast2 =  new Podcast("podcast title 2", "3:14", artist, 2, 6, "philosophy");
         podcastsList.add(podcast1);
         podcastsList.add(podcast2);
 
@@ -110,23 +110,16 @@ public class PodcastServiceTest {
     }
 
     @Test
-    public void deletePodcastExistingIdTest(){
-        Artist artist = new Artist(new User(null, "artist", "ju", "1234", true, new ArrayList<>(), null));
-        artistRepository.save(artist);
-
-        Podcast podcast =  new Podcast("title", "2:15", artist, 1,5, "culture");
-        podcastRepository.save(podcast);
-        Long id = podcast.getId();
-
-        assertTrue(podcastRepository.findById(id).isPresent());
-        podcastService.deletePodcast(id);
-        assertFalse(podcastRepository.findById(id).isPresent());
+    public void deletePodcastExistingTitleTest(){
+        assertTrue(podcastRepository.findByTitle("podcast title 1").isPresent());
+        podcastService.deletePodcastByTitle("podcast title 1");
+        assertFalse(podcastRepository.findByTitle("podcast title 1").isPresent());
     }
 
     @Test
     public void deletePodcastNotExistingIdTest(){
         assertThrows(ResourceNotFoundException.class, () -> {
-            podcastService.deletePodcast(45L);});
+            podcastService.deletePodcastByTitle("wrong title");});
     }
 
     @Test

@@ -42,12 +42,12 @@ public class PodcastService implements PodcastServiceInterface {
     }
 
     @Override
-    public void deletePodcast(Long id){
-        Optional<Podcast> podcastOptional = podcastRepository.findById(id);
+    public void deletePodcastByTitle(String title){
+        Optional<Podcast> podcastOptional = podcastRepository.findByTitle(title);
         if (podcastOptional.isPresent()){
             podcastRepository.delete(podcastOptional.get());
         } else {
-            throw new ResourceNotFoundException("Podcast with ID " + id + " not found");
+            throw new ResourceNotFoundException("Podcast with title \"" + title + "\" not found");
         }
     }
 
@@ -67,7 +67,7 @@ public class PodcastService implements PodcastServiceInterface {
         List<Podcast> podcasts = podcastRepository.findByTitleContaining(title);
         List<AudioGeneralInfoDTO> result = new ArrayList<>();
         if (podcasts.isEmpty()){
-            throw new ResourceNotFoundException("No Podcasts found with that title.");
+            throw new ResourceNotFoundException("No podcasts found with that title.");
         } else {
             for(Podcast podcast : podcasts){
                 result.add(new AudioGeneralInfoDTO(podcast));
@@ -81,7 +81,21 @@ public class PodcastService implements PodcastServiceInterface {
         List<Podcast> podcasts = podcastRepository.findByArtistNameContaining(artist);
         List<AudioGeneralInfoDTO> result = new ArrayList<>();
         if (podcasts.isEmpty()){
-            throw new ResourceNotFoundException("No Podcasts found of that artist.");
+            throw new ResourceNotFoundException("No podcasts found with that artist name.");
+        } else {
+            for(Podcast podcast : podcasts){
+                result.add(new AudioGeneralInfoDTO(podcast));
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public List<AudioGeneralInfoDTO> getPodcastByAllInfo(String info) {
+        List<Podcast> podcasts = podcastRepository.findByArtistNameContainingOrTitleContaining(info, info);
+        List<AudioGeneralInfoDTO> result = new ArrayList<>();
+        if (podcasts.isEmpty()){
+            throw new ResourceNotFoundException("No podcasts found with that info.");
         } else {
             for(Podcast podcast : podcasts){
                 result.add(new AudioGeneralInfoDTO(podcast));

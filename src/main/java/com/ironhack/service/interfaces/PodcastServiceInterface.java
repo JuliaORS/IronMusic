@@ -10,9 +10,10 @@ public interface PodcastServiceInterface {
 
     List<AudioGeneralInfoDTO> getAllPodcasts();
 
-    void deletePodcast(Long id);
+    void deletePodcastByTitle(String title);
     List<AudioGeneralInfoDTO> getPodcastByTitle(String title);
 
     List<AudioGeneralInfoDTO> getPodcastByArtistName(String artist);
+    public List<AudioGeneralInfoDTO> getPodcastByAllInfo(String info);
     
 }

@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,12 +48,12 @@ public class SongService  implements SongServiceInterface {
     }
 
     @Override
-    public void deleteSong(Long id){
-        Optional<Song> songOptional = songRepository.findById(id);
+    public void deleteSongByTitle(String title){
+        Optional<Song> songOptional = songRepository.findByTitle(title);
         if (songOptional.isPresent()){
             songRepository.delete(songOptional.get());
         } else {
-            throw new ResourceNotFoundException("Song with ID " + id + " not found");
+            throw new ResourceNotFoundException("Song with title \"" + title + "\" not found");
         }
     }
 
@@ -86,7 +87,7 @@ public class SongService  implements SongServiceInterface {
         List<Song> songs = songRepository.findByArtistNameContaining(artist);
         List<AudioGeneralInfoDTO> result = new ArrayList<>();
         if (songs.isEmpty()){
-            throw new ResourceNotFoundException("No songs found of that artist.");
+            throw new ResourceNotFoundException("No songs found with that artist name.");
         } else {
             for(Song song : songs){
                 result.add(new AudioGeneralInfoDTO(song));
@@ -100,7 +101,21 @@ public class SongService  implements SongServiceInterface {
         List<Song> songs = songRepository.findByGenreContaining(genre);
         List<AudioGeneralInfoDTO> result = new ArrayList<>();
         if (songs.isEmpty()){
-            throw new ResourceNotFoundException("No songs found of that genre.");
+            throw new ResourceNotFoundException("No songs found with that genre.");
+        } else {
+            for(Song song : songs){
+                result.add(new AudioGeneralInfoDTO(song));
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public List<AudioGeneralInfoDTO> getSongByAllInfo(String info) {
+        List<Song> songs = songRepository.findByArtistNameContainingOrTitleContainingOrAlbumTitleContaining(info, info, info);
+        List<AudioGeneralInfoDTO> result = new ArrayList<>();
+        if (songs.isEmpty()){
+            throw new ResourceNotFoundException("No songs found with that info.");
         } else {
             for(Song song : songs){
                 result.add(new AudioGeneralInfoDTO(song));

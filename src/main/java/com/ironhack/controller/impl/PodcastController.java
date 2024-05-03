@@ -33,16 +33,16 @@ public class PodcastController implements PodcastControllerInterface {
     }
 
     @Override
-    @DeleteMapping("/artist/podcast/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletePodcast(@PathVariable Long id) {
-        podcastService.deletePodcast(id);
+    @DeleteMapping("/artist/podcast/{title}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deletePodcastByTitle(@PathVariable String title) {
+        podcastService.deletePodcastByTitle(title);
     }
 
 
     /*Actions available to standard-users*/
     @Override
-    @GetMapping("/users/podcast")
+    @GetMapping("/users/podcasts")
     @ResponseStatus(HttpStatus.OK)
     public List<AudioGeneralInfoDTO> getAllPodcasts() {
         return podcastService.getAllPodcasts();
@@ -56,10 +56,16 @@ public class PodcastController implements PodcastControllerInterface {
     }
 
     @Override
-    @GetMapping("/users/podcast/artist/{artist}")
+    @GetMapping("/users/podcast/artist_name/{artistName}")
     @ResponseStatus(HttpStatus.OK)
-    public List<AudioGeneralInfoDTO> getPodcastByArtistName(@PathVariable String artist) {
-        return podcastService.getPodcastByArtistName(artist);
+    public List<AudioGeneralInfoDTO> getPodcastByArtistName(@PathVariable String artistName) {
+        return podcastService.getPodcastByArtistName(artistName);
     }
 
+    @Override
+    @GetMapping("/users/podcast/{info}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<AudioGeneralInfoDTO> getPodcastByAll(@PathVariable String info) {
+     return podcastService.getPodcastByAllInfo(info);
+    }
 }

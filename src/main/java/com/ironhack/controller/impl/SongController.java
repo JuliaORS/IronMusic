@@ -35,12 +35,11 @@ public class SongController implements SongControllerInterface {
     }
 
     @Override
-    @DeleteMapping("/artist/song/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteSong(@PathVariable Long id) {
-        songService.deleteSong(id);
+    @DeleteMapping("/artist/song/{title}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteSongByTitle(@PathVariable String title) {
+        songService.deleteSongByTitle(title);
     }
-
 
     /*Actions available to standard-users*/
     @Override
@@ -71,4 +70,10 @@ public class SongController implements SongControllerInterface {
         return songService.getSongByGenre(genre);
     }
 
+    @Override
+    @GetMapping("/users/song/{info}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<AudioGeneralInfoDTO> getSongByAll(@PathVariable String info) {
+        return songService.getSongByAllInfo(info);
+    }
 }

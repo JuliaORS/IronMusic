@@ -12,9 +12,10 @@ import java.util.List;
 public interface SongControllerInterface {
     AudioGeneralInfoDTO saveSong(Song song);
     List<AudioGeneralInfoDTO> getAllSongs();
-    void deleteSong(Long id);
+    void deleteSongByTitle(String title);
 
     List<AudioGeneralInfoDTO> getSongByTitle(String title);
     List<AudioGeneralInfoDTO> getSongByArtistName(String artist);
     List<AudioGeneralInfoDTO> getSongByGenre(String genre);
+    public List<AudioGeneralInfoDTO> getSongByAll(String info);
 }

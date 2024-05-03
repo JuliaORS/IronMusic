@@ -121,15 +121,15 @@ public class SongServiceTest {
         songRepository.save(song);
         Long id = song.getId();
 
-        assertTrue(songRepository.findById(id).isPresent());
-        songService.deleteSong(id);
-        assertFalse(songRepository.findById(id).isPresent());
+        assertTrue(songRepository.findByTitle("new title 2").isPresent());
+        songService.deleteSongByTitle("new title 2");
+        assertFalse(songRepository.findByTitle("new title 2").isPresent());
     }
 
     @Test
     public void deleteSongNotExistingIdTest(){
         assertThrows(ResourceNotFoundException.class, () -> {
-            songService.deleteSong(45L);});
+            songService.deleteSongByTitle("wrong title");});
     }
 
     @Test

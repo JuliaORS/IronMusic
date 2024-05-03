@@ -14,10 +14,11 @@ public interface SongServiceInterface {
 
     List<AudioGeneralInfoDTO> getAllSongs();
 
-    void deleteSong(Long id);
+    void deleteSongByTitle(String title);
     List<AudioGeneralInfoDTO> getSongByTitle(String title);
 
     List<AudioGeneralInfoDTO> getSongByArtistName(String artist);
 
-    public List<AudioGeneralInfoDTO> getSongByGenre(String genre);
+    List<AudioGeneralInfoDTO> getSongByGenre(String genre);
+    List<AudioGeneralInfoDTO> getSongByAllInfo(String info);
 }

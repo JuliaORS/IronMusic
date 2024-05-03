@@ -7,6 +7,7 @@ import com.ironhack.demosecurityjwt.security.models.User;
 import com.ironhack.demosecurityjwt.security.repositories.ArtistRepository;
 import com.ironhack.demosecurityjwt.security.repositories.RoleRepository;
 import com.ironhack.dto.AlbumGeneralInfoDTO;
+import com.ironhack.dto.AudioGeneralInfoDTO;
 import com.ironhack.model.Album;
 import com.ironhack.model.Song;
 import com.ironhack.repository.AlbumRepository;
@@ -36,7 +37,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 public class AlbumControllerTest {
-
     @Autowired
     private WebApplicationContext webApplicationContext;
     @Autowired
@@ -113,6 +113,33 @@ public class AlbumControllerTest {
                         .content(albumJson))
                 .andExpect(status().isCreated())
                 .andExpect(content().json(expectedJson));
+    }
+
+    @Test
+    public void saveAlbumEmptyTitleTest() throws Exception{
+        Artist newArtist = new Artist(new User(null, "julia", "ju",
+                "1234", true, new ArrayList<>(), null));
+        Collection<Role> roles = new ArrayList<>();
+        roles.add(roleRepository.findByName("ROLE_USER"));
+        roles.add(roleRepository.findByName("ROLE_ARTIST"));
+        newArtist.setRoles(roles);
+        artistRepository.save(newArtist);
+
+        Album newAlbum =  new Album("", null, null);
+        String albumJson = objectMapper.writeValueAsString(newAlbum);
+
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.getName()).thenReturn(newArtist.getUsername());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        newAlbum.setArtist(newArtist);
+
+        String expectedJson = objectMapper.writeValueAsString(new AlbumGeneralInfoDTO(newAlbum));
+
+        mockMvc.perform(post("/api/artist/album")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(albumJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(Matchers.containsString("Bad request. Title is required.")));
     }
 
     @Test
