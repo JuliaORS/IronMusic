@@ -14,7 +14,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class RoleTest {
-
     @Test
     public void roleConstructorVoidTest(){
         Role role = new Role();

@@ -19,6 +19,7 @@ public class UserController implements UserControllerInterface {
     @Autowired
     private UserServiceInterface userService;
 
+    /*Actions available for all(before being registered)*/
     @Override
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
@@ -26,6 +27,7 @@ public class UserController implements UserControllerInterface {
         userService.saveUser(user);
     }
 
+    /*Actions only available for admin-User*/
     @Override
     @PutMapping("/admin/user/{username}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
@@ -40,6 +42,7 @@ public class UserController implements UserControllerInterface {
         userService.activeAllUsers();
     }
 
+    /*Actions available for standard-users*/
     @Override
     @GetMapping("/users/users")
     @ResponseStatus(HttpStatus.OK)

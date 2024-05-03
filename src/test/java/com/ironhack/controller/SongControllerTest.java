@@ -60,10 +60,10 @@ public class SongControllerTest {
     @BeforeEach
     public void setUp(){
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-        artist = new Artist(new User(null, "artist", "artist", "1234", true, new ArrayList<>(), null));
+        artist = new Artist(new User(null, "artist", "artist", "1234", true, true, new ArrayList<>(), null));
         Collection<Role> roles = new ArrayList<>();
-        roles.add(roleRepository.findByName("ROLE_USER"));
-        roles.add(roleRepository.findByName("ROLE_ARTIST"));
+        roles.add(roleRepository.findByName("ROLE_USER").get());
+        roles.add(roleRepository.findByName("ROLE_ARTIST").get());
         artist.setRoles(roles);
         artistRepository.save(artist);
 

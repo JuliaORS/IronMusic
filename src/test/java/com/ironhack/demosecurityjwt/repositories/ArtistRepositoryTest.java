@@ -50,7 +50,7 @@ public class ArtistRepositoryTest {
 
     @BeforeEach
     public void setUp(){
-        Artist artist = new Artist(new User(null, "artist", "ju", "1234", false, new ArrayList<>(), null));
+        Artist artist = new Artist(new User(null, "artist", "ju", "1234", true, true, new ArrayList<>(), null));
         Artist artistSaved = artistRepository.save(artist);
 
         Song song = new Song("title1", "3:34", artistSaved, null, "pop");
@@ -70,8 +70,8 @@ public class ArtistRepositoryTest {
         artistSaved.setAlbums(albumList);
 
         Collection<Role> roles = new ArrayList<>();
-        roles.add(roleRepository.findByName("ROLE_USER"));
-        roles.add(roleRepository.findByName("ROLE_ARTIST"));
+        roles.add(roleRepository.findByName("ROLE_USER").get());
+        roles.add(roleRepository.findByName("ROLE_ARTIST").get());
         artistSaved.setRoles(roles);
         List<Audio> audiosList = new ArrayList<>();
         audiosList.add(audio);
@@ -84,13 +84,12 @@ public class ArtistRepositoryTest {
         audioRepository.deleteAll();
         songRepository.deleteAll();
         userRepository.deleteAll();
-        roleRepository.deleteAll();
     }
 
     @Test
     public void saveArtistTest(){
         long initialResources = userRepository.count();
-        Artist artist = new Artist(new User(null, "userNew", "usernameNew", "1234", false, null, null));
+        Artist artist = new Artist(new User(null, "userNew", "usernameNew", "1234", true, true, null, null));
         userRepository.save(artist);
         assertEquals(initialResources + 1, userRepository.count());
     }
@@ -98,7 +97,7 @@ public class ArtistRepositoryTest {
     @Test
     public void deleteArtistTest(){
         long actualResources = userRepository.count();
-        Artist artist = new Artist(new User(null, "userNew", "usernameNew", "1234", false, null, null));
+        Artist artist = new Artist(new User(null, "userNew", "usernameNew", "1234", true, true, null, null));
         userRepository.save(artist);
         assertEquals(actualResources + 1, userRepository.count());
         userRepository.delete(artist);
@@ -116,5 +115,17 @@ public class ArtistRepositoryTest {
             assertEquals(0, audioRepository.count());
             assertEquals(0, albumRepository.count());
         }
+    }
+
+    @Test
+    public void findByUsernameTest(){
+        Optional<User> optionalUser = userRepository.findByUsername("ju");
+        assertTrue(optionalUser.isPresent());
+    }
+
+    @Test
+    public void findByUsernameNotExistingNameTest(){
+        Optional<User> optionalUser = userRepository.findByUsername("no name");
+        assertTrue(optionalUser.isEmpty());
     }
 }

@@ -18,5 +18,5 @@ public interface UserServiceInterface {
 
     List<UserGeneralInfoDTO> getUsers();
     void activeUserByUsername(String username);
-    public void activeAllUsers();
+    List<String> activeAllUsers();
 }

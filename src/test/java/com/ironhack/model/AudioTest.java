@@ -26,7 +26,7 @@ public class AudioTest {
 
     @Test
     public void audioSetterGetterTest() {
-        Artist artist = new Artist(new User(null, "artist", "ju", "1234", false, new ArrayList<>(), null));
+        Artist artist = new Artist(new User(null, "artist", "ju", "1234", false, false, new ArrayList<>(), null));
 
         Audio audio = new Audio();
         audio.setTitle("title");

@@ -35,8 +35,6 @@ public class ArtistService implements ArtistServiceInterface {
 
         Artist artist = new Artist(user);
         userRepository.delete(user);
-        return artistRepository. save(artist);
-        //return new Artist(user);
+        return artistRepository.save(artist);
     }
-
 }

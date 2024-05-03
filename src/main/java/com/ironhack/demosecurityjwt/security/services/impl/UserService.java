@@ -50,12 +50,13 @@ public class UserService implements UserServiceInterface, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // Retrieve user with the given username
-        User user = userRepository.findByUsername(username).get();
+        Optional<User> optionalUser = userRepository.findByUsername(username);
         // Check if user exists
-        if (user == null) {
+        if (optionalUser.isEmpty()) {
             log.error("User not found in the database");
-            throw new UsernameNotFoundException("User not found in the database");
+            throw new UsernameNotFoundException("User with username \"" + username + "\" not found");
         } else {
+            User user = optionalUser.get();
             log.info("User found in the database: {}", username);
             // Create a collection of SimpleGrantedAuthority objects from the user's roles
             Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
@@ -85,16 +86,18 @@ public class UserService implements UserServiceInterface, UserDetailsService {
     @Override
     public void addRoleToUser(String username, String roleName) {
         log.info("Adding role {} to user {}", roleName, username);
-
-        // Retrieve the user and role objects from the repository
-        User user = userRepository.findByUsername(username).get();
-        Role role = roleRepository.findByName(roleName);
-
-        // Add the role to the user's role collection
-        user.getRoles().add(role);
-
-        // Save the user to persist the changes
-        userRepository.save(user);
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if (optionalUser.isPresent()){
+            User user = optionalUser.get();
+            Optional<Role> optionalRole = roleRepository.findByName(roleName);
+            if (optionalRole.isPresent()){
+                Role role = optionalRole.get();
+                user.getRoles().add(role);
+                userRepository.save(user);
+            }
+        } else {
+            throw new UsernameNotFoundException("User with username \"" + username + "\" not found");
+        }
     }
 
     @Override
@@ -124,19 +127,23 @@ public class UserService implements UserServiceInterface, UserDetailsService {
             userRepository.save(user);
             addRoleToUser(user.getUsername(), "ROLE_USER");
         } else {
-            throw new ResourceNotFoundException("User with this username " + username + " not found");
+            throw new UsernameNotFoundException("User with username \"" + username + "\" not found");
         }
     }
 
     @Override
-    public void activeAllUsers(){
+    public List<String> activeAllUsers(){
         List<User> inactiveUsers = userRepository.findByIsActiveFalse();
         if (!inactiveUsers.isEmpty()){
+            List<String> usernamesModified = new ArrayList<>();
             for (User user : inactiveUsers){
                 user.setActive(true);
                 userRepository.save(user);
                 addRoleToUser(user.getUsername(), "ROLE_USER");
+                usernamesModified.add(user.getUsername());
             }
+            return usernamesModified;
         }
+        return null;
     }
 }

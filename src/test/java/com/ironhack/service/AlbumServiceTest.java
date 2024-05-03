@@ -46,7 +46,7 @@ public class AlbumServiceTest {
 
     @BeforeEach
     void setUp(){
-        artist = new Artist(new User(null, "artist", "artist", "1234", true, new ArrayList<>(), null));
+        artist = new Artist(new User(null, "artist", "artist", "1234", true, true, new ArrayList<>(), null));
         artistRepository.save(artist);
         Song song1 =  new Song("song title 1", "5:13", artist, null, "rock");
         Song song2 =  new Song("song title 2", "3:14", artist, null, "pop");

@@ -26,7 +26,7 @@ public class SongController implements SongControllerInterface {
     @Autowired
     private UserServiceInterface userService;
 
-    /*Actions only available to artists-Users*/
+    /*Actions only available for artists-Users*/
     @Override
     @PostMapping("/artist/song")
     @ResponseStatus(HttpStatus.CREATED)
@@ -41,7 +41,7 @@ public class SongController implements SongControllerInterface {
         songService.deleteSongByTitle(title);
     }
 
-    /*Actions available to standard-users*/
+    /*Actions available for standard-users*/
     @Override
     @GetMapping("/users/songs")
     @ResponseStatus(HttpStatus.OK)

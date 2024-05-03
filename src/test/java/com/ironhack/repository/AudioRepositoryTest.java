@@ -27,7 +27,7 @@ public class AudioRepositoryTest {
     private Audio audio1;
     @BeforeEach
     void setUp(){
-        Artist artist = new Artist(new User(null, "Coldplay", "co", "1234",false, new ArrayList<>(), null));
+        Artist artist = new Artist(new User(null, "Coldplay", "co", "1234",false, false, new ArrayList<>(), null));
         Artist artistSaved = artistRepository.save(artist);
 
         audio = new Audio("YELLOW111", "3:34", artistSaved);
@@ -45,7 +45,7 @@ public class AudioRepositoryTest {
     @Test
     void saveAudioTest(){
         assertEquals(2, audioRepository.count());
-        Artist artist = new Artist(new User(null, "Coldplay", "co", "1234", true, new ArrayList<>(), null));
+        Artist artist = new Artist(new User(null, "Coldplay", "co", "1234", true, true,  new ArrayList<>(), null));
         Artist artistSaved = artistRepository.save(artist);
         Audio newAudio = Audio.audioBuilder()
                 .title("new title")

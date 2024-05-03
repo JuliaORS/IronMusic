@@ -29,6 +29,7 @@ public class User {
     private String password;
 
     private boolean isActive;
+    private boolean artistActive;
 
     @ManyToMany(fetch = EAGER)
     private Collection<Role> roles = new ArrayList<>();

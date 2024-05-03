@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.ironhack.demosecurityjwt.security.models.Role;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -19,14 +21,21 @@ public class RoleRepositoryTest {
         Role newRole = new Role("ROLE_NEW");
         roleRepository.save(newRole);
         assertEquals(initialResources + 1, roleRepository.count());
-        Role roleToDelete = roleRepository.findByName("ROLE_NEW");
-        roleRepository.delete(roleToDelete);
-        assertEquals(initialResources, roleRepository.count());
+        Optional<Role> optionalRoleToDelete = roleRepository.findByName("ROLE_NEW");
+        if (optionalRoleToDelete.isPresent()){
+            roleRepository.delete(optionalRoleToDelete.get());
+            assertEquals(initialResources, roleRepository.count());
+        }
     }
 
     @Test
+    public void findByNameExistingNameTest(){
+        Optional<Role> newRole = roleRepository.findByName("ROLE_USER");
+        assertTrue(newRole.isPresent());
+    }
+    @Test
     public void findByNameNotExistingNameTest(){
-        Role newRole = roleRepository.findByName("hi");
-        assertNull(newRole);
+        Optional<Role> newRole = roleRepository.findByName("hi");
+        assertTrue(newRole.isEmpty());
     }
 }

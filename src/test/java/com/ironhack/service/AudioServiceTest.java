@@ -42,7 +42,7 @@ public class AudioServiceTest {
 
     @BeforeEach
     void setUp(){
-        artist = new Artist(new User(null, "artist", "julia", "1234", true, new ArrayList<>(), null));
+        artist = new Artist(new User(null, "artist", "julia", "1234", true, true, new ArrayList<>(), null));
         artistRepository.save(artist);
 
         audio =  new Audio("audio title", "2:15", artist);
