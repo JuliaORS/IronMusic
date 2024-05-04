@@ -1,5 +1,6 @@
 package com.ironhack.demosecurityjwt.repositories;
 
+import com.ironhack.demosecurityjwt.security.Utils.ArtistStatus;
 import com.ironhack.demosecurityjwt.security.models.Artist;
 import com.ironhack.demosecurityjwt.security.models.Role;
 import com.ironhack.demosecurityjwt.security.models.User;
@@ -50,7 +51,8 @@ public class ArtistRepositoryTest {
 
     @BeforeEach
     public void setUp(){
-        Artist artist = new Artist(new User(null, "artist", "ju", "1234", true, true, new ArrayList<>(), null));
+        Artist artist = new Artist(new User(null, "artist", "ju", "1234",
+                true, ArtistStatus.ACTIVE, new ArrayList<>(), null));
         Artist artistSaved = artistRepository.save(artist);
 
         Song song = new Song("title1", "3:34", artistSaved, null, "pop");
@@ -89,7 +91,8 @@ public class ArtistRepositoryTest {
     @Test
     public void saveArtistTest(){
         long initialResources = userRepository.count();
-        Artist artist = new Artist(new User(null, "userNew", "usernameNew", "1234", true, true, null, null));
+        Artist artist = new Artist(new User(null, "userNew", "usernameNew", "1234",
+                true, ArtistStatus.ACTIVE, null, null));
         userRepository.save(artist);
         assertEquals(initialResources + 1, userRepository.count());
     }
@@ -97,7 +100,8 @@ public class ArtistRepositoryTest {
     @Test
     public void deleteArtistTest(){
         long actualResources = userRepository.count();
-        Artist artist = new Artist(new User(null, "userNew", "usernameNew", "1234", true, true, null, null));
+        Artist artist = new Artist(new User(null, "userNew", "usernameNew", "1234",
+                true, ArtistStatus.ACTIVE, null, null));
         userRepository.save(artist);
         assertEquals(actualResources + 1, userRepository.count());
         userRepository.delete(artist);

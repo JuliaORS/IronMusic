@@ -1,5 +1,6 @@
 package com.ironhack.demosecurityjwt.security.models;
 
+import com.ironhack.demosecurityjwt.security.Utils.ArtistStatus;
 import com.ironhack.model.Playlist;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -29,7 +30,9 @@ public class User {
     private String password;
 
     private boolean isActive;
-    private boolean artistActive;
+
+    @Enumerated
+    private ArtistStatus artistStatus;
 
     @ManyToMany(fetch = EAGER)
     private Collection<Role> roles = new ArrayList<>();

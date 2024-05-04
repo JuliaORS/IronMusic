@@ -1,7 +1,9 @@
 package com.ironhack.demosecurityjwt.security.controllers.impl;
 
 import com.ironhack.demosecurityjwt.security.controllers.interfaces.UserControllerInterface;
+import com.ironhack.demosecurityjwt.security.dtos.ArtistRoleAdmissionDTO;
 import com.ironhack.demosecurityjwt.security.dtos.UserGeneralInfoDTO;
+import com.ironhack.demosecurityjwt.security.models.Artist;
 import com.ironhack.demosecurityjwt.security.models.User;
 import com.ironhack.demosecurityjwt.security.services.interfaces.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,16 +32,30 @@ public class UserController implements UserControllerInterface {
     /*Actions only available for admin-User*/
     @Override
     @PutMapping("/admin/user/{username}")
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    @ResponseStatus(value = HttpStatus.OK)
     public void activeUserByUsername(@PathVariable String username) {
         userService.activeUserByUsername(username);
     }
 
     @Override
     @PutMapping("/admin/user/active")
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    @ResponseStatus(value = HttpStatus.OK)
     public void activeAllUsers() {
         userService.activeAllUsers();
+    }
+
+    @Override
+    @PutMapping("/admin/artist/{username}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void activeArtistByUsername(@PathVariable String username) {
+        userService.activeArtistByUsername(username);
+    }
+
+    @Override
+    @PutMapping("/admin/artist/active")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void activeAllArtists() {
+        userService.activeAllArtists();
     }
 
     /*Actions available for standard-users*/
@@ -48,5 +64,11 @@ public class UserController implements UserControllerInterface {
     @ResponseStatus(HttpStatus.OK)
     public List<UserGeneralInfoDTO> getUsers() {
         return userService.getUsers();
+    }
+
+    @PutMapping("/users/artist")
+    @ResponseStatus(HttpStatus.OK)
+    public void requestToBeAnArtist(){
+        userService.requestToBeAnArtist();
     }
 }

@@ -1,5 +1,6 @@
 package com.ironhack.repository;
 
+import com.ironhack.demosecurityjwt.security.Utils.ArtistStatus;
 import com.ironhack.demosecurityjwt.security.models.Artist;
 import com.ironhack.demosecurityjwt.security.models.User;
 import com.ironhack.demosecurityjwt.security.repositories.ArtistRepository;
@@ -27,7 +28,8 @@ public class AudioRepositoryTest {
     private Audio audio1;
     @BeforeEach
     void setUp(){
-        Artist artist = new Artist(new User(null, "Coldplay", "co", "1234",false, false, new ArrayList<>(), null));
+        Artist artist = new Artist(new User(null, "artist", "artist", "1234",
+                false, ArtistStatus.ACTIVE, new ArrayList<>(), null));
         Artist artistSaved = artistRepository.save(artist);
 
         audio = new Audio("YELLOW111", "3:34", artistSaved);
@@ -45,7 +47,8 @@ public class AudioRepositoryTest {
     @Test
     void saveAudioTest(){
         assertEquals(2, audioRepository.count());
-        Artist artist = new Artist(new User(null, "Coldplay", "co", "1234", true, true,  new ArrayList<>(), null));
+        Artist artist = new Artist(new User(null, "artist2", "artist2", "1234",
+                true, ArtistStatus.ACTIVE,  new ArrayList<>(), null));
         Artist artistSaved = artistRepository.save(artist);
         Audio newAudio = Audio.audioBuilder()
                 .title("new title")
@@ -62,7 +65,7 @@ public class AudioRepositoryTest {
         assertEquals(2, audioRepository.count());
         audioRepository.delete(audio);
         assertEquals(1, audioRepository.count());
-        assertTrue(artistRepository.findByUsername("co").isPresent());
+        assertTrue(artistRepository.findByUsername("artist").isPresent());
     }
 
     @Test

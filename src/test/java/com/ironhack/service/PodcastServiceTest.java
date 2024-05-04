@@ -1,6 +1,7 @@
 package com.ironhack.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ironhack.demosecurityjwt.security.Utils.ArtistStatus;
 import com.ironhack.demosecurityjwt.security.models.Artist;
 import com.ironhack.demosecurityjwt.security.models.Role;
 import com.ironhack.demosecurityjwt.security.models.User;
@@ -49,7 +50,8 @@ public class PodcastServiceTest {
 
     @BeforeEach
     void setUp(){
-        artist = new Artist(new User(null, "podcaster", "julia", "1234", true, true, new ArrayList<>(), null));
+        artist = new Artist(new User(null, "podcaster", "julia", "1234",
+                true, ArtistStatus.ACTIVE, new ArrayList<>(), null));
         artistRepository.save(artist);
 
         podcast1 =  new Podcast("podcast title 1", "5:13", artist, 1,5, "comedy");
@@ -74,7 +76,8 @@ public class PodcastServiceTest {
     @Test
     public void savePodcastCorrectInfoTest() throws Exception {
         Podcast podcast =  new Podcast("new title 3", "2:15", null, 1, 4, "comedy");
-        Artist newArtist = new Artist(new User(null, "podcaster1", "ju", "1234", true, true, new ArrayList<>(), null));
+        Artist newArtist = new Artist(new User(null, "podcaster1", "ju", "1234",
+                true, ArtistStatus.ACTIVE, new ArrayList<>(), null));
         Collection<Role> roles = new ArrayList<>();
         roles.add(roleRepository.findByName("ROLE_USER").get());
         roles.add(roleRepository.findByName("ROLE_ARTIST").get());
@@ -97,7 +100,8 @@ public class PodcastServiceTest {
     @Test
     public void savePodcastWrongDurationFormatTest() throws Exception {
         Podcast podcast =  new Podcast("title", "2a15", null, 3, 5, "comedy");
-        Artist newArtist = new Artist(new User(null, "podcaster1", "ju", "1234", true, true,  new ArrayList<>(), null));
+        Artist newArtist = new Artist(new User(null, "podcaster1", "ju", "1234",
+                true, ArtistStatus.ACTIVE,  new ArrayList<>(), null));
         Collection<Role> roles = new ArrayList<>();
         roles.add(roleRepository.findByName("ROLE_USER").get());
         roles.add(roleRepository.findByName("ROLE_ARTIST").get());
@@ -115,7 +119,8 @@ public class PodcastServiceTest {
     @Test
     public void savePodcastEmptyTitleTest() throws Exception {
         Podcast podcast =  new Podcast("", "2:15", null, 3, 5, "comedy");
-        Artist newArtist = new Artist(new User(null, "podcaster1", "ju", "1234", true, true, new ArrayList<>(), null));
+        Artist newArtist = new Artist(new User(null, "podcaster1", "ju", "1234",
+                true, ArtistStatus.ACTIVE, new ArrayList<>(), null));
         Collection<Role> roles = new ArrayList<>();
         roles.add(roleRepository.findByName("ROLE_USER").get());
         roles.add(roleRepository.findByName("ROLE_ARTIST").get());

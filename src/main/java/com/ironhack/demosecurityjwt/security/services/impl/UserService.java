@@ -1,16 +1,22 @@
 package com.ironhack.demosecurityjwt.security.services.impl;
 
+import com.ironhack.demosecurityjwt.security.Utils.ArtistStatus;
 import com.ironhack.demosecurityjwt.security.dtos.UserGeneralInfoDTO;
+import com.ironhack.demosecurityjwt.security.models.Artist;
 import com.ironhack.demosecurityjwt.security.models.User;
 import com.ironhack.demosecurityjwt.security.models.Role;
+import com.ironhack.demosecurityjwt.security.repositories.ArtistRepository;
 import com.ironhack.demosecurityjwt.security.repositories.RoleRepository;
 import com.ironhack.demosecurityjwt.security.repositories.UserRepository;
 import com.ironhack.demosecurityjwt.security.services.interfaces.UserServiceInterface;
 import com.ironhack.exceptions.ResourceNotFoundException;
+import com.ironhack.demosecurityjwt.security.exceptions.ArtistActivationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -32,6 +38,9 @@ public class UserService implements UserServiceInterface, UserDetailsService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private ArtistRepository artistRepository;
 
     /**
      * Injects a bean of type PasswordEncoder into this class.
@@ -145,5 +154,52 @@ public class UserService implements UserServiceInterface, UserDetailsService {
             return usernamesModified;
         }
         return null;
+    }
+
+    @Override
+    public void activeArtistByUsername(String username){
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if (optionalUser.isPresent()){
+            User user = optionalUser.get();
+            if (user.getArtistStatus() == ArtistStatus.PENDING_ACTIVATION){
+                user.setArtistStatus(ArtistStatus.ACTIVE);
+                addRoleToUser(user.getUsername(), "ROLE_ARTIST");
+                Artist artist = new Artist(user);
+                artistRepository.save(artist);
+                userRepository.delete(user);
+            } else if (user.getArtistStatus() == ArtistStatus.ACTIVE) {
+                throw new ArtistActivationException("Artist is ACTIVE");
+            } else {
+                throw new ArtistActivationException("Artist is not pending to active");
+            }
+        } else {
+            throw new UsernameNotFoundException("User with username \"" + username + "\" not found");
+        }
+    }
+
+    @Override
+    public List<String> activeAllArtists(){
+        List<User> pendingArtistList = userRepository.findByArtistStatus(ArtistStatus.PENDING_ACTIVATION);
+        if (!pendingArtistList.isEmpty()){
+            List<String> usernamesModified = new ArrayList<>();
+            for (User user : pendingArtistList){
+                user.setArtistStatus(ArtistStatus.ACTIVE);
+                addRoleToUser(user.getUsername(), "ROLE_ARTIST");
+                Artist artist = new Artist(user);
+                artistRepository.save(artist);
+                userRepository.delete(user);
+                usernamesModified.add(artist.getUsername());
+            }
+            return usernamesModified;
+        }
+        return null;
+    }
+
+    @Override
+    public void requestToBeAnArtist(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userRepository.findByUsername(username).get();
+        user.setArtistStatus(ArtistStatus.PENDING_ACTIVATION);
     }
 }

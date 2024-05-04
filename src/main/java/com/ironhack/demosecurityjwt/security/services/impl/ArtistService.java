@@ -2,6 +2,7 @@ package com.ironhack.demosecurityjwt.security.services.impl;
 
 import com.ironhack.demosecurityjwt.security.dtos.ArtistRoleAdmissionDTO;
 import com.ironhack.demosecurityjwt.security.models.Artist;
+import com.ironhack.demosecurityjwt.security.Utils.ArtistStatus;
 import com.ironhack.demosecurityjwt.security.models.User;
 import com.ironhack.demosecurityjwt.security.repositories.ArtistRepository;
 import com.ironhack.demosecurityjwt.security.repositories.RoleRepository;
@@ -10,7 +11,14 @@ import com.ironhack.demosecurityjwt.security.services.interfaces.ArtistServiceIn
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+
 
 @Service
 public class ArtistService implements ArtistServiceInterface {
@@ -25,7 +33,6 @@ public class ArtistService implements ArtistServiceInterface {
 
     @Autowired
     private ArtistRepository artistRepository;
-
     @Override
     public Artist assignArtistRole(ArtistRoleAdmissionDTO artistRoleAdmission){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

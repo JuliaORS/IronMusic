@@ -5,5 +5,4 @@ import com.ironhack.demosecurityjwt.security.models.Artist;
 
 public interface ArtistControllerInterface {
 
-    Artist assignArtistRole(ArtistRoleAdmissionDTO artistRoleAdmission);
 }

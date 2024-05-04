@@ -11,14 +11,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api")
 public class ArtistController implements ArtistControllerInterface {
-
     @Autowired
     ArtistService artistService;
 
-    @PostMapping("/users/artist")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Artist assignArtistRole(@RequestBody ArtistRoleAdmissionDTO artistRoleAdmission){
-        return artistService.assignArtistRole(artistRoleAdmission);
-    }
+
 
 }

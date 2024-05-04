@@ -1,6 +1,7 @@
 package com.ironhack.repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ironhack.demosecurityjwt.security.Utils.ArtistStatus;
 import com.ironhack.demosecurityjwt.security.models.Artist;
 import com.ironhack.demosecurityjwt.security.models.User;
 import com.ironhack.demosecurityjwt.security.repositories.ArtistRepository;
@@ -27,7 +28,8 @@ public class PodcastRepositoryTest {
     private Podcast podcast;
     @BeforeEach
     void setUp(){
-        Artist artist = new Artist(new User(null, "Coldplay", "co", "1234", false, false, new ArrayList<>(), null));
+        Artist artist = new Artist(new User(null, "artist", "artist", "1234",
+                false, ArtistStatus.ACTIVE, new ArrayList<>(), null));
         Artist artistSaved = artistRepository.save(artist);
         podcast = new Podcast("new title", "45:42", artistSaved, 4, 2, "philosophy");
         Podcast podcast2 = new Podcast("title", "45:42", null, 4, 2, "philosophy");
@@ -71,7 +73,7 @@ public class PodcastRepositoryTest {
 
     @Test
     void findByArtistNameContainingTest(){
-        List<Podcast> podcasts = podcastRepository.findByArtistNameContaining("Co");
+        List<Podcast> podcasts = podcastRepository.findByArtistNameContaining("art");
         assertEquals(1, podcasts.size());
         assertEquals(podcast.getTitle(), podcasts.get(0).getTitle());
     }

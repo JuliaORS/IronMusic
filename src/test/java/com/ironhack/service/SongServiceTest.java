@@ -1,6 +1,7 @@
 package com.ironhack.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ironhack.demosecurityjwt.security.Utils.ArtistStatus;
 import com.ironhack.demosecurityjwt.security.models.Artist;
 import com.ironhack.demosecurityjwt.security.models.Role;
 import com.ironhack.demosecurityjwt.security.models.User;
@@ -51,7 +52,8 @@ public class SongServiceTest {
 
     @BeforeEach
     void setUp(){
-        artist = new Artist(new User(null, "artist", "julia", "1234", true, true, new ArrayList<>(), null));
+        artist = new Artist(new User(null, "artist", "artist", "1234",
+                true, ArtistStatus.ACTIVE, new ArrayList<>(), null));
         artistRepository.save(artist);
         song1 =  new Song("song title 1", "5:13", artist, null, "rock");
         song2 =  new Song("song title 2", "3:14", artist, null, "pop");
@@ -73,7 +75,8 @@ public class SongServiceTest {
     @Test
     public void saveSongCorrectInfoTest() throws Exception {
         Song song =  new Song("song title 3", "2:15", null, null, "funk");
-        Artist newArtist = new Artist(new User(null, "artist1", "ju", "1234", true, true, new ArrayList<>(), null));
+        Artist newArtist = new Artist(new User(null, "artist1", "artist_1", "1234",
+                true, ArtistStatus.ACTIVE, new ArrayList<>(), null));
         Collection<Role> roles = new ArrayList<>();
         roles.add(roleRepository.findByName("ROLE_USER").get());
         roles.add(roleRepository.findByName("ROLE_ARTIST").get());
@@ -96,7 +99,8 @@ public class SongServiceTest {
     @Test
     public void saveSongWrongDurationFormatTest() throws Exception {
         Song song =  new Song("title", "2a15", null, null, "funk");
-        Artist newArtist = new Artist(new User(null, "artist1", "ju", "1234", true, true, new ArrayList<>(), null));
+        Artist newArtist = new Artist(new User(null, "artist1", "artist_1", "1234",
+                true, ArtistStatus.ACTIVE, new ArrayList<>(), null));
         Collection<Role> roles = new ArrayList<>();
         roles.add(roleRepository.findByName("ROLE_USER").get());
         roles.add(roleRepository.findByName("ROLE_ARTIST").get());
@@ -115,7 +119,7 @@ public class SongServiceTest {
     public void saveSongEmptyTitleTest() throws Exception {
         Song Song =  new Song("", "2:15", null,  null,"pop");
         Artist newArtist = new Artist(new User(null, "singer1", "ju", "1234",
-                true, true, new ArrayList<>(), null));
+                true, ArtistStatus.ACTIVE, new ArrayList<>(), null));
         Collection<Role> roles = new ArrayList<>();
         roles.add(roleRepository.findByName("ROLE_USER").get());
         roles.add(roleRepository.findByName("ROLE_ARTIST").get());

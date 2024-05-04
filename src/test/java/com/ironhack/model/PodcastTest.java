@@ -1,5 +1,6 @@
 package com.ironhack.model;
 
+import com.ironhack.demosecurityjwt.security.Utils.ArtistStatus;
 import com.ironhack.demosecurityjwt.security.models.Artist;
 import com.ironhack.demosecurityjwt.security.models.User;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,8 @@ public class PodcastTest {
 
     @Test
     public void podcastSetterGetterTest() {
-        Artist artist = new Artist(new User(null, "artist", "ju", "1234", false, false, new ArrayList<>(), null));
+        Artist artist = new Artist(new User(null, "artist", "ju", "1234",
+                false, ArtistStatus.ACTIVE, new ArrayList<>(), null));
 
         Podcast podcast = new Podcast();
         podcast.setTitle("new title");

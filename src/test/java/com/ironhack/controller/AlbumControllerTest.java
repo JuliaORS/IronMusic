@@ -1,6 +1,7 @@
 package com.ironhack.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ironhack.demosecurityjwt.security.Utils.ArtistStatus;
 import com.ironhack.demosecurityjwt.security.models.Artist;
 import com.ironhack.demosecurityjwt.security.models.Role;
 import com.ironhack.demosecurityjwt.security.models.User;
@@ -55,7 +56,8 @@ public class AlbumControllerTest {
     @BeforeEach
     public void setUp(){
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-        artist = new Artist(new User(null, "artist", "artist", "1234", true, true, new ArrayList<>(), null));
+        artist = new Artist(new User(null, "artist", "artist", "1234",
+                true, ArtistStatus.ACTIVE, new ArrayList<>(), null));
         Collection<Role> roles = new ArrayList<>();
         roles.add(roleRepository.findByName("ROLE_USER").get());
         roles.add(roleRepository.findByName("ROLE_ARTIST").get());
@@ -91,7 +93,7 @@ public class AlbumControllerTest {
     @Test
     public void saveAlbumCorrectInfoTest () throws Exception {
         Artist newArtist = new Artist(new User(null, "julia", "ju",
-                "1234", true, true, new ArrayList<>(), null));
+                "1234", true, ArtistStatus.ACTIVE, new ArrayList<>(), null));
         Collection<Role> roles = new ArrayList<>();
         roles.add(roleRepository.findByName("ROLE_USER").get());
         roles.add(roleRepository.findByName("ROLE_ARTIST").get());
@@ -118,7 +120,7 @@ public class AlbumControllerTest {
     @Test
     public void saveAlbumEmptyTitleTest() throws Exception{
         Artist newArtist = new Artist(new User(null, "julia", "ju",
-                "1234", true, true, new ArrayList<>(), null));
+                "1234", true, ArtistStatus.ACTIVE, new ArrayList<>(), null));
         Collection<Role> roles = new ArrayList<>();
         roles.add(roleRepository.findByName("ROLE_USER").get());
         roles.add(roleRepository.findByName("ROLE_ARTIST").get());

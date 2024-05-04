@@ -1,4 +1,4 @@
-package com.ironhack.demosecurityjwt.security.controllers.impl;
+package com.ironhack.demosecurityjwt.security.exceptions;
 
 import com.ironhack.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;

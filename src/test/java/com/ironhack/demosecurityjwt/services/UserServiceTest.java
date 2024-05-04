@@ -1,6 +1,7 @@
 package com.ironhack.demosecurityjwt.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ironhack.demosecurityjwt.security.Utils.ArtistStatus;
 import com.ironhack.demosecurityjwt.security.dtos.UserGeneralInfoDTO;
 import com.ironhack.demosecurityjwt.security.models.Role;
 import com.ironhack.demosecurityjwt.security.models.User;
@@ -33,7 +34,7 @@ public class UserServiceTest {
     @BeforeEach
     public void setUp(){
         user = new User(null, "user", "username", "1234",
-                true, true,  null, null);
+                true, ArtistStatus.INACTIVE,  null, null);
         Collection<Role> roles = new ArrayList<>();
         roles.add(roleRepository.findByName("ROLE_USER").get());
         user.setRoles(roles);
@@ -62,7 +63,7 @@ public class UserServiceTest {
     public void saveUserTest(){
         long currentUsers = userRepository.count();
         User newUser = new User(null, "userNew", "usernameNew", "1234",
-                false, false, null, null);
+                false, ArtistStatus.INACTIVE, null, null);
         userService.saveUser(newUser);
         assertEquals(currentUsers + 1, userRepository.count());
     }

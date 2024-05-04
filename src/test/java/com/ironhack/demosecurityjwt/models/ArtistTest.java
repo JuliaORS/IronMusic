@@ -1,5 +1,6 @@
 package com.ironhack.demosecurityjwt.models;
 
+import com.ironhack.demosecurityjwt.security.Utils.ArtistStatus;
 import com.ironhack.demosecurityjwt.security.models.Artist;
 import com.ironhack.demosecurityjwt.security.models.User;
 import com.ironhack.demosecurityjwt.security.repositories.ArtistRepository;
@@ -27,7 +28,8 @@ public class ArtistTest {
 
     @Test
     public void artistConstructorByUserTest(){
-        User user = new User(null, "Coldplay", "co", "1234", true, true, new ArrayList<>(), null);
+        User user = new User(null, "artist", "artist", "1234",
+                true, ArtistStatus.ACTIVE, new ArrayList<>(), null);
         Artist artist = new Artist(user);
         assertNotNull(artist);
     }
@@ -40,7 +42,8 @@ public class ArtistTest {
         List<Album> albums = new ArrayList<>();
         albums.add(new Album());
 
-        User user = new User(null, "Coldplay", "co", "1234", true, true, new ArrayList<>(), null);
+        User user = new User(null, "artist", "artist", "1234",
+                true, ArtistStatus.ACTIVE, new ArrayList<>(), null);
         Artist artist = new Artist(user);
 
         artist.setName("julia");

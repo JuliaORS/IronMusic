@@ -12,4 +12,8 @@ public interface UserControllerInterface {
     void signUpUser(User user);
     void activeUserByUsername(String username);
     void activeAllUsers();
+    void activeArtistByUsername(String username);
+    void activeAllArtists();
+
+    void requestToBeAnArtist();
 }

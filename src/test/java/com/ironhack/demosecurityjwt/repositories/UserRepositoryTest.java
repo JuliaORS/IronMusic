@@ -1,5 +1,6 @@
 package com.ironhack.demosecurityjwt.repositories;
 
+import com.ironhack.demosecurityjwt.security.Utils.ArtistStatus;
 import com.ironhack.demosecurityjwt.security.models.Artist;
 import com.ironhack.demosecurityjwt.security.models.Role;
 import com.ironhack.demosecurityjwt.security.models.User;
@@ -45,7 +46,7 @@ public class UserRepositoryTest {
     @BeforeEach
     public void setUp(){
         Artist artist = new Artist(new User(null, "artist", "ju", "1234",
-                false, false,  new ArrayList<>(), null));
+                false, ArtistStatus.ACTIVE,  new ArrayList<>(), null));
         artistRepository.save(artist);
 
         Audio audio = new Audio("tile", "3:34", artist);
@@ -67,9 +68,9 @@ public class UserRepositoryTest {
         playlistList2.add(playlist2);
 
         User user = new User(null, "user1", "username1", "1234",
-                true, true, null, null);
+                true, ArtistStatus.INACTIVE, null, null);
         User user2 = new User(null, "user2", "username2", "1234",
-                true, true, null, null);
+                true, ArtistStatus.INACTIVE, null, null);
 
         userRepository.save(user);
         userRepository.save(user2);
@@ -90,7 +91,7 @@ public class UserRepositoryTest {
     public void saveUserTest(){
         long actualResources = userRepository.count();
         User user = new User(null, "userNew", "usernameNew", "1234",
-                true, true, null, null);
+                true, ArtistStatus.INACTIVE, null, null);
         userRepository.save(user);
         assertEquals(actualResources + 1, userRepository.count());
     }
@@ -100,7 +101,7 @@ public class UserRepositoryTest {
         long actualResources = userRepository.count();
 
         User user = new User(null, "userNew", "usernameNew", "1234",
-                true, true, null, null);
+                true, ArtistStatus.INACTIVE, null, null);
         userRepository.save(user);
         assertEquals(actualResources + 1, userRepository.count());
         userRepository.delete(user);
@@ -115,7 +116,7 @@ public class UserRepositoryTest {
         playlistList.add(playlist);
 
         User user = new User(null, "userNew", "usernameNew", "1234",
-                true, true, null, null);
+                true, ArtistStatus.INACTIVE, null, null);
         userRepository.save(user);
         user.setPlaylists(playlistList);
 

@@ -1,5 +1,6 @@
 package com.ironhack;
 
+import com.ironhack.demosecurityjwt.security.Utils.ArtistStatus;
 import com.ironhack.demosecurityjwt.security.models.Role;
 import com.ironhack.demosecurityjwt.security.models.User;
 import com.ironhack.demosecurityjwt.security.services.impl.UserService;
@@ -31,7 +32,8 @@ public class DemoSecurityJwtApplication {
             userService.saveRole(new Role(null, "ROLE_ADMIN"));
             userService.saveRole(new Role(null, "ROLE_ARTIST"));
 
-            User user = userService.saveUser(new User(null, "admin", "admin", "1234", true, true, new ArrayList<>(), null));
+            User user = userService.saveUser(new User(null, "admin", "admin", "1234",
+                    true, ArtistStatus.ACTIVE, new ArrayList<>(), null));
             userService.activeAllUsers();
             userService.addRoleToUser("admin", "ROLE_ADMIN");
             userService.addRoleToUser("admin", "ROLE_USER");

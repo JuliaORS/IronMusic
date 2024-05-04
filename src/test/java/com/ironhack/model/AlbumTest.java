@@ -1,5 +1,6 @@
 package com.ironhack.model;
 
+import com.ironhack.demosecurityjwt.security.Utils.ArtistStatus;
 import com.ironhack.demosecurityjwt.security.models.Artist;
 import com.ironhack.demosecurityjwt.security.models.User;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,8 @@ public class AlbumTest {
 
     @Test
     public void albumSetterGetterTest() {
-        Artist artist = new Artist(new User(null, "artist", "ju", "1234", false, false, new ArrayList<>(), null));
+        Artist artist = new Artist(new User(null, "artist", "ju", "1234",
+                false, ArtistStatus.ACTIVE, new ArrayList<>(), null));
         List<Song> songs = new ArrayList<>();
         songs.add(new Song(null, "pop"));
 

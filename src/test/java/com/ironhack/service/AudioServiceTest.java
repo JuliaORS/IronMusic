@@ -1,6 +1,7 @@
 package com.ironhack.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ironhack.demosecurityjwt.security.Utils.ArtistStatus;
 import com.ironhack.demosecurityjwt.security.models.Artist;
 import com.ironhack.demosecurityjwt.security.models.User;
 import com.ironhack.demosecurityjwt.security.repositories.ArtistRepository;
@@ -42,7 +43,8 @@ public class AudioServiceTest {
 
     @BeforeEach
     void setUp(){
-        artist = new Artist(new User(null, "artist", "julia", "1234", true, true, new ArrayList<>(), null));
+        artist = new Artist(new User(null, "artist", "julia", "1234",
+                true, ArtistStatus.ACTIVE, new ArrayList<>(), null));
         artistRepository.save(artist);
 
         audio =  new Audio("audio title", "2:15", artist);

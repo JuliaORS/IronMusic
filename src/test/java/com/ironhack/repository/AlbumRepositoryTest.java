@@ -1,5 +1,6 @@
 package com.ironhack.repository;
 
+import com.ironhack.demosecurityjwt.security.Utils.ArtistStatus;
 import com.ironhack.demosecurityjwt.security.models.Artist;
 import com.ironhack.demosecurityjwt.security.models.Role;
 import com.ironhack.demosecurityjwt.security.models.User;
@@ -32,7 +33,8 @@ public class AlbumRepositoryTest {
 
     @BeforeEach
     void setUp(){
-        Artist artist = new Artist(new User(null, "artist", "ju", "1234", false, false,  new ArrayList<>(), null));
+        Artist artist = new Artist(new User(null, "artist", "ju", "1234",
+                false, ArtistStatus.ACTIVE,  new ArrayList<>(), null));
         Artist artistSaved = artistRepository.save(artist);
 
         Song song = new Song("title1", "3:34", artistSaved, null, "pop");

@@ -37,7 +37,7 @@ public class RoleController implements RoleControllerInterface {
      * @param roleToUserDTO DTO containing the username and role name
      */
     @PostMapping("/roles/addtouser")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     public void addRoleToUser(@RequestBody RoleToUserDTO roleToUserDTO) {
         userService.addRoleToUser(roleToUserDTO.getUsername(), roleToUserDTO.getRoleName());
     }
