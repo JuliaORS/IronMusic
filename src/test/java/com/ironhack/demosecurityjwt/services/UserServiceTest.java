@@ -180,32 +180,33 @@ public class UserServiceTest {
     }
 
     @Test
-    public void getUserExistingUserTest() throws Exception{
-        Optional<User> optionalUser = userRepository.findByUsername("username");
-        if (optionalUser.isPresent()){
-            User user = optionalUser.get();
-            String expectedJson = objectMapper.writeValueAsString(new UserGeneralInfoDTO(user));
-            assertEquals(user.getName(), userService.getUser("username").getName());
-            String resultJson = objectMapper.writeValueAsString(userService.getUser("username"));
-            assertEquals(expectedJson, resultJson);
-        }
-    }
-
-    @Test
-    public void getUserNotExistingUserTest(){
-        assertNull(userService.getUser("wrong"));
-    }
-
-    @Test
-    public void getUsersTest() throws Exception{
+    public void getAllUsersTest() throws Exception{
         List<User> userList = userRepository.findAll();
         List<UserGeneralInfoDTO> userGeneralInfoDTOS = new ArrayList<>();
         for(User user : userList){
             userGeneralInfoDTOS.add(new UserGeneralInfoDTO(user));
         }
         String expectedJson = objectMapper.writeValueAsString(userGeneralInfoDTOS);
-        String resultJson = objectMapper.writeValueAsString(userService.getUsers());
+        String resultJson = objectMapper.writeValueAsString(userService.getAllUsers());
         assertEquals(expectedJson, resultJson);
+    }
+
+    @Test
+    public void getUserByUsernameExistingUserTest() throws Exception{
+        Optional<User> optionalUser = userRepository.findByUsername("username");
+        if (optionalUser.isPresent()){
+            User user = optionalUser.get();
+            String expectedJson = objectMapper.writeValueAsString(new UserGeneralInfoDTO(user));
+            assertEquals(user.getName(), userService.getUserByUsername("username").getName());
+            String resultJson = objectMapper.writeValueAsString(userService.getUserByUsername("username"));
+            assertEquals(expectedJson, resultJson);
+        }
+    }
+
+    @Test
+    public void getUserByUsernameNotExistingUserTest(){
+        assertThrows(UserNotFoundException.class, () -> {
+            userService.getUserByUsername("wrong username");});
     }
 
 }

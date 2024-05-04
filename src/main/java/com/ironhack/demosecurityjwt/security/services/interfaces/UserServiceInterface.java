@@ -18,8 +18,9 @@ public interface UserServiceInterface {
     void activeArtistByUsername(String username);
     List<String> activeAllArtists();
     void requestToBeAnArtist();
-    UserGeneralInfoDTO getUser(String username);
-    List<UserGeneralInfoDTO> getUsers();
+    List<UserGeneralInfoDTO> getAllUsers();
+    UserGeneralInfoDTO getUserByUsername(String username);
+
 
 
 }

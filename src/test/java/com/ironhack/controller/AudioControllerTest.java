@@ -101,7 +101,7 @@ public class AudioControllerTest {
             audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(audio));
         }
         String expectedJson = objectMapper.writeValueAsString(audioGeneralInfoDTOS);
-        mockMvc.perform(get("/api/users/audio/{info}", "audio")
+        mockMvc.perform(get("/api/user/audio/{info}", "audio")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -110,7 +110,7 @@ public class AudioControllerTest {
 
     @Test
     void getAudiosByAllInfoWrongInfoTest() throws Exception {
-        mockMvc.perform(get("/api/users/audio/{info}", "wrong info")
+        mockMvc.perform(get("/api/user/audio/{info}", "wrong info")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(content().string(Matchers.containsString("No audios found with that info.")));

@@ -13,7 +13,9 @@ import com.ironhack.demosecurityjwt.security.repositories.RoleRepository;
 import com.ironhack.demosecurityjwt.security.repositories.UserRepository;
 import com.ironhack.demosecurityjwt.security.services.impl.UserService;
 import com.ironhack.dto.AlbumGeneralInfoDTO;
+import com.ironhack.dto.AudioGeneralInfoDTO;
 import com.ironhack.model.Album;
+import com.ironhack.model.Podcast;
 import com.ironhack.model.Song;
 import com.ironhack.repository.AlbumRepository;
 import com.ironhack.repository.SongRepository;
@@ -43,8 +45,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -177,7 +178,7 @@ public class UserControllerTest {
         Authentication authentication = mock(Authentication.class);
         when(authentication.getName()).thenReturn(user.getUsername());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        mockMvc.perform(put("/api/users/artist")
+        mockMvc.perform(put("/api/user/artist")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
         assertEquals(ArtistStatus.PENDING_ACTIVATION, userRepository.findByUsername("username").get().getArtistStatus());
@@ -191,7 +192,7 @@ public class UserControllerTest {
         Authentication authentication = mock(Authentication.class);
         when(authentication.getName()).thenReturn(user.getUsername());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        mockMvc.perform(put("/api/users/artist")
+        mockMvc.perform(put("/api/user/artist")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string(Matchers.containsString("Artist is already ACTIVE")));
@@ -205,68 +206,43 @@ public class UserControllerTest {
         Authentication authentication = mock(Authentication.class);
         when(authentication.getName()).thenReturn(user.getUsername());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        mockMvc.perform(put("/api/users/artist")
+        mockMvc.perform(put("/api/user/artist")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string(Matchers.containsString("Artist is already pending to active")));
     }
 
     @Test
-    public void getUserExistingUserTest() throws Exception{
-
-        Authentication authentication = mock(Authentication.class);
-        when(authentication.getName()).thenReturn(user.getUsername());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        mockMvc.perform(put("/api/user/users")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string(Matchers.containsString("Artist is already pending to active")));
-
-
-        Optional<User> optionalUser = userRepository.findByUsername("username");
-        if (optionalUser.isPresent()){
-            User user = optionalUser.get();
-            String expectedJson = objectMapper.writeValueAsString(new UserGeneralInfoDTO(user));
-            assertEquals(user.getName(), userService.getUser("username").getName());
-            String resultJson = objectMapper.writeValueAsString(userService.getUser("username"));
-            assertEquals(expectedJson, resultJson);
-        }
-    }
-
-    @Test
-    public void getUserNotExistingUserTest(){
-        assertNull(userService.getUser("wrong"));
-    }
-
-    @Test
-    public void getUsersTest() throws Exception{
-        List<User> userList = userRepository.findAll();
+    public void getAllUsersTest() throws Exception{
         List<UserGeneralInfoDTO> userGeneralInfoDTOS = new ArrayList<>();
-        for(User user : userList){
+        List<User> userList = userRepository.findAll();
+        for (User user : userList){
             userGeneralInfoDTOS.add(new UserGeneralInfoDTO(user));
         }
         String expectedJson = objectMapper.writeValueAsString(userGeneralInfoDTOS);
-        String resultJson = objectMapper.writeValueAsString(userService.getUsers());
-        assertEquals(expectedJson, resultJson);
+
+        mockMvc.perform(get("/api/user/users")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(expectedJson));
     }
 
-
-/*
-
-
-
-    @Override
-    @GetMapping("/users/users")
-    @ResponseStatus(HttpStatus.OK)
-    public List<UserGeneralInfoDTO> getUsers() {
-        return userService.getUsers();
+    @Test
+    public void getUserByUsernameExistingUserTest() throws Exception{
+        String expectedJson = objectMapper.writeValueAsString(new UserGeneralInfoDTO(user));
+        mockMvc.perform(get("/api/user/user/{username}", "username")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(expectedJson));
     }
 
-    @Override
-    @GetMapping("/users/user/{username}")
-    @ResponseStatus(HttpStatus.OK)
-    public UserGeneralInfoDTO getUser(@PathVariable String username) {
-        return userService.getUser(username);
-    }*/
-
+    @Test
+    public void getUserNotExistingUserTest() throws Exception{
+        mockMvc.perform(get("/api/user/user/{username}", "wrong")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(Matchers.containsString("User with username \"wrong\" not found")));
+    }
 }

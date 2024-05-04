@@ -191,17 +191,7 @@ public class UserService implements UserServiceInterface, UserDetailsService {
     }
 
     @Override
-    public UserGeneralInfoDTO getUser(String username) {
-        log.info("Fetching user {}", username);
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (optionalUser.isPresent()){
-            return new UserGeneralInfoDTO(optionalUser.get());
-        }
-        return null;
-    }
-
-    @Override
-    public List<UserGeneralInfoDTO> getUsers() {
+    public List<UserGeneralInfoDTO> getAllUsers() {
         log.info("Fetching all users");
         List<User> users = userRepository.findAll();
         List<UserGeneralInfoDTO> userGeneralInfoDTOS = new ArrayList<>();
@@ -209,5 +199,16 @@ public class UserService implements UserServiceInterface, UserDetailsService {
             userGeneralInfoDTOS.add(new UserGeneralInfoDTO(user));
         }
         return userGeneralInfoDTOS;
+    }
+
+    @Override
+    public UserGeneralInfoDTO getUserByUsername(String username) {
+        log.info("Fetching user {}", username);
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if (optionalUser.isPresent()){
+            return new UserGeneralInfoDTO(optionalUser.get());
+        } else {
+            throw new UserNotFoundException("User with username \"" + username + "\" not found");
+        }
     }
 }

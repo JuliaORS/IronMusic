@@ -16,6 +16,6 @@ public interface UserControllerInterface {
     List<String> activeAllArtists();
 
     void requestToBeAnArtist();
-    List<UserGeneralInfoDTO> getUsers();
-    UserGeneralInfoDTO getUser(String username);
+    List<UserGeneralInfoDTO> getAllUsers();
+    UserGeneralInfoDTO getUserByUsername(String username);
 }

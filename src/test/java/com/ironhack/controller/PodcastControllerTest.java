@@ -141,7 +141,7 @@ public class PodcastControllerTest {
         }
         String expectedJson = objectMapper.writeValueAsString(audioGeneralInfoDTOS);
 
-        mockMvc.perform(get("/api/users/podcasts").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/api/user/podcasts").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(expectedJson));
@@ -154,7 +154,7 @@ public class PodcastControllerTest {
             audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(podcast));
         }
         String expectedJson = objectMapper.writeValueAsString(audioGeneralInfoDTOS);
-        mockMvc.perform(get("/api/users/podcast/title/{title}", "title")
+        mockMvc.perform(get("/api/user/podcast/title/{title}", "title")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -162,7 +162,7 @@ public class PodcastControllerTest {
     }
 
     void getPodcastsByTitleNotExistingTitleTest() throws Exception {
-        mockMvc.perform(get("/api/users/podcast/title/{title}", "wrong")
+        mockMvc.perform(get("/api/user/podcast/title/{title}", "wrong")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(content().string(Matchers.containsString("No podcasts found with that title.")));
@@ -176,7 +176,7 @@ public class PodcastControllerTest {
             audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(podcast));
         }
         String expectedJson = objectMapper.writeValueAsString(audioGeneralInfoDTOS);
-        mockMvc.perform(get("/api/users/podcast/artist_name/{artistName}", "artist")
+        mockMvc.perform(get("/api/user/podcast/artist_name/{artistName}", "artist")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -185,7 +185,7 @@ public class PodcastControllerTest {
 
     @Test
     void getPodcastsByArtistNameNotExistingArtistTest() throws Exception {
-        mockMvc.perform(get("/api/users/podcast/artist_name/{artistName}", "wrong")
+        mockMvc.perform(get("/api/user/podcast/artist_name/{artistName}", "wrong")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(content().string(Matchers.containsString("No podcasts found with that artist name.")));
@@ -199,7 +199,7 @@ public class PodcastControllerTest {
             audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(podcast));
         }
         String expectedJson = objectMapper.writeValueAsString(audioGeneralInfoDTOS);
-        mockMvc.perform(get("/api/users/podcast/{info}", "pod")
+        mockMvc.perform(get("/api/user/podcast/{info}", "pod")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -208,7 +208,7 @@ public class PodcastControllerTest {
 
     @Test
     void getPodcastsByAllInfoWrongInfoTest() throws Exception {
-        mockMvc.perform(get("/api/users/podcast/{info}", "wrong info")
+        mockMvc.perform(get("/api/user/podcast/{info}", "wrong info")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(content().string(Matchers.containsString("No podcasts found with that info.")));

@@ -64,15 +64,15 @@ public class UserController implements UserControllerInterface {
     @Override
     @GetMapping("/user/users")
     @ResponseStatus(HttpStatus.OK)
-    public List<UserGeneralInfoDTO> getUsers() {
-        return userService.getUsers();
+    public List<UserGeneralInfoDTO> getAllUsers() {
+        return userService.getAllUsers();
     }
 
     @Override
     @GetMapping("/user/user/{username}")
     @ResponseStatus(HttpStatus.OK)
-    public UserGeneralInfoDTO getUser(@PathVariable String username) {
-        return userService.getUser(username);
+    public UserGeneralInfoDTO getUserByUsername(@PathVariable String username) {
+        return userService.getUserByUsername(username);
     }
 
 }

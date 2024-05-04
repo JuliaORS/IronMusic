@@ -86,7 +86,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/signup").permitAll()
                 .requestMatchers("/api/admin/**").hasAnyAuthority("ROLE_ADMIN")
                 .requestMatchers("/api/artist/**").hasAnyAuthority("ROLE_ARTIST", "ROLE_ADMIN")
-                .requestMatchers( "/api/users/**").hasAnyAuthority("ROLE_USER", "ROLE_ARTIST", "ROLE_ADMIN")
+                .requestMatchers( "/api/user/**").hasAnyAuthority("ROLE_USER", "ROLE_ARTIST", "ROLE_ADMIN")
 
                 //.requestMatchers( "/api/users").hasAnyAuthority("ROLE_ADMIN")
 
