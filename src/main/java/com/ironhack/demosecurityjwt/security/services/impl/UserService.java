@@ -19,7 +19,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import com.ironhack.demosecurityjwt.security.exceptions.UserNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -54,16 +54,16 @@ public class UserService implements UserServiceInterface, UserDetailsService {
      *
      * @param username the username to search for
      * @return the UserDetails object that matches the given username
-     * @throws UsernameNotFoundException if the user with the given username is not found
+     * @throws UserNotFoundException if the user with the given username is not found
      */
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UserNotFoundException {
         // Retrieve user with the given username
         Optional<User> optionalUser = userRepository.findByUsername(username);
         // Check if user exists
         if (optionalUser.isEmpty()) {
             log.error("User not found in the database");
-            throw new UsernameNotFoundException("User with username \"" + username + "\" not found");
+            throw new UserNotFoundException("User with username \"" + username + "\" not found");
         } else {
             User user = optionalUser.get();
             log.info("User found in the database: {}", username);
@@ -105,26 +105,8 @@ public class UserService implements UserServiceInterface, UserDetailsService {
                 userRepository.save(user);
             }
         } else {
-            throw new UsernameNotFoundException("User with username \"" + username + "\" not found");
+            throw new UserNotFoundException("User with username \"" + username + "\" not found");
         }
-    }
-
-    @Override
-    public User getUser(String username) {
-        log.info("Fetching user {}", username);
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-        return optionalUser.orElse(null);
-    }
-
-    @Override
-    public List<UserGeneralInfoDTO> getUsers() {
-        log.info("Fetching all users");
-        List<User> users = userRepository.findAll();
-        List<UserGeneralInfoDTO> userGeneralInfoDTOS = new ArrayList<>();
-        for(User user : users){
-            userGeneralInfoDTOS.add(new UserGeneralInfoDTO(user));
-        }
-        return userGeneralInfoDTOS;
     }
 
     @Override
@@ -136,7 +118,7 @@ public class UserService implements UserServiceInterface, UserDetailsService {
             userRepository.save(user);
             addRoleToUser(user.getUsername(), "ROLE_USER");
         } else {
-            throw new UsernameNotFoundException("User with username \"" + username + "\" not found");
+            throw new UserNotFoundException("User with username \"" + username + "\" not found");
         }
     }
 
@@ -162,18 +144,17 @@ public class UserService implements UserServiceInterface, UserDetailsService {
         if (optionalUser.isPresent()){
             User user = optionalUser.get();
             if (user.getArtistStatus() == ArtistStatus.PENDING_ACTIVATION){
-                user.setArtistStatus(ArtistStatus.ACTIVE);
                 addRoleToUser(user.getUsername(), "ROLE_ARTIST");
                 Artist artist = new Artist(user);
-                artistRepository.save(artist);
                 userRepository.delete(user);
+                artistRepository.save(artist);
             } else if (user.getArtistStatus() == ArtistStatus.ACTIVE) {
-                throw new ArtistActivationException("Artist is ACTIVE");
+                throw new ArtistActivationException("Artist is already ACTIVE");
             } else {
                 throw new ArtistActivationException("Artist is not pending to active");
             }
         } else {
-            throw new UsernameNotFoundException("User with username \"" + username + "\" not found");
+            throw new UserNotFoundException("User with username \"" + username + "\" not found");
         }
     }
 
@@ -183,7 +164,6 @@ public class UserService implements UserServiceInterface, UserDetailsService {
         if (!pendingArtistList.isEmpty()){
             List<String> usernamesModified = new ArrayList<>();
             for (User user : pendingArtistList){
-                user.setArtistStatus(ArtistStatus.ACTIVE);
                 addRoleToUser(user.getUsername(), "ROLE_ARTIST");
                 Artist artist = new Artist(user);
                 artistRepository.save(artist);
@@ -200,6 +180,34 @@ public class UserService implements UserServiceInterface, UserDetailsService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user = userRepository.findByUsername(username).get();
-        user.setArtistStatus(ArtistStatus.PENDING_ACTIVATION);
+        if (user.getArtistStatus() == ArtistStatus.INACTIVE){
+            user.setArtistStatus(ArtistStatus.PENDING_ACTIVATION);
+            userRepository.save(user);
+        } else if (user.getArtistStatus() == ArtistStatus.ACTIVE) {
+            throw new ArtistActivationException("Artist is already ACTIVE");
+        } else {
+            throw new ArtistActivationException("Artist is already pending to active");
+        }
+    }
+
+    @Override
+    public UserGeneralInfoDTO getUser(String username) {
+        log.info("Fetching user {}", username);
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if (optionalUser.isPresent()){
+            return new UserGeneralInfoDTO(optionalUser.get());
+        }
+        return null;
+    }
+
+    @Override
+    public List<UserGeneralInfoDTO> getUsers() {
+        log.info("Fetching all users");
+        List<User> users = userRepository.findAll();
+        List<UserGeneralInfoDTO> userGeneralInfoDTOS = new ArrayList<>();
+        for(User user : users){
+            userGeneralInfoDTOS.add(new UserGeneralInfoDTO(user));
+        }
+        return userGeneralInfoDTOS;
     }
 }

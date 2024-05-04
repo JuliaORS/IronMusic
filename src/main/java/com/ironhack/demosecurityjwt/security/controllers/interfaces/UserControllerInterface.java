@@ -8,12 +8,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 
 public interface UserControllerInterface {
-    List<UserGeneralInfoDTO> getUsers();
+
     void signUpUser(User user);
     void activeUserByUsername(String username);
-    void activeAllUsers();
+    List<String> activeAllUsers();
     void activeArtistByUsername(String username);
-    void activeAllArtists();
+    List<String> activeAllArtists();
 
     void requestToBeAnArtist();
+    List<UserGeneralInfoDTO> getUsers();
+    UserGeneralInfoDTO getUser(String username);
 }

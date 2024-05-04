@@ -1,6 +1,7 @@
 package com.ironhack.demosecurityjwt.security.models;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.ironhack.demosecurityjwt.security.Utils.ArtistStatus;
 import com.ironhack.model.Album;
 import com.ironhack.model.Audio;
 import jakarta.persistence.*;
@@ -26,11 +27,10 @@ public class Artist extends User {
     private List<Audio> audios;
 
     public Artist(User user) {
-        setId(user.getId());
         setName(user.getName());
         setUsername(user.getUsername());
         setPassword(user.getPassword());
-        setRoles(user.getRoles());
-        setPlaylists(user.getPlaylists());
+        setActive(true);
+        setArtistStatus(ArtistStatus.ACTIVE);
     }
 }

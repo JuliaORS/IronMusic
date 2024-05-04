@@ -43,35 +43,35 @@ public class SongController implements SongControllerInterface {
 
     /*Actions available for standard-users*/
     @Override
-    @GetMapping("/users/songs")
+    @GetMapping("/user/songs")
     @ResponseStatus(HttpStatus.OK)
     public List<AudioGeneralInfoDTO> getAllSongs() {
         return songService.getAllSongs();
     }
 
     @Override
-    @GetMapping("/users/song/title/{title}")
+    @GetMapping("/user/song/title/{title}")
     @ResponseStatus(HttpStatus.OK)
     public List<AudioGeneralInfoDTO> getSongByTitle(@PathVariable String title) {
         return songService.getSongByTitle(title);
     }
 
     @Override
-    @GetMapping("/users/song/artist_name/{artistName}")
+    @GetMapping("/user/song/artist_name/{artistName}")
     @ResponseStatus(HttpStatus.OK)
     public List<AudioGeneralInfoDTO> getSongByArtistName(@PathVariable String artistName) {
         return songService.getSongByArtistName(artistName);
     }
 
     @Override
-    @GetMapping("/users/song/genre/{genre}")
+    @GetMapping("/user/song/genre/{genre}")
     @ResponseStatus(HttpStatus.OK)
     public List<AudioGeneralInfoDTO> getSongByGenre(@PathVariable String genre) {
         return songService.getSongByGenre(genre);
     }
 
     @Override
-    @GetMapping("/users/song/{info}")
+    @GetMapping("/user/song/{info}")
     @ResponseStatus(HttpStatus.OK)
     public List<AudioGeneralInfoDTO> getSongByAll(@PathVariable String info) {
         return songService.getSongByAllInfo(info);

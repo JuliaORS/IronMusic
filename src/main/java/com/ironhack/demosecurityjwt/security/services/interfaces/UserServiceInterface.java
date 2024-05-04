@@ -13,11 +13,13 @@ public interface UserServiceInterface {
     User saveUser(User user);
     Role saveRole(Role role);
     void addRoleToUser(String username, String roleName);
-    User getUser(String username);
-    List<UserGeneralInfoDTO> getUsers();
     void activeUserByUsername(String username);
     List<String> activeAllUsers();
     void activeArtistByUsername(String username);
     List<String> activeAllArtists();
     void requestToBeAnArtist();
+    UserGeneralInfoDTO getUser(String username);
+    List<UserGeneralInfoDTO> getUsers();
+
+
 }

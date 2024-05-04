@@ -140,6 +140,6 @@ public class UserRepositoryTest {
     @Test
     public void findByIsActiveFalseTest(){
         List<User> userList = userRepository.findByIsActiveFalse();
-        assertEquals(1, userList.size());
+        assertEquals(0, userList.size());
     }
 }

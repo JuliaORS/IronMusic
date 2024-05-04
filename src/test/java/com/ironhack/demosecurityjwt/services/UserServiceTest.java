@@ -3,8 +3,11 @@ package com.ironhack.demosecurityjwt.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ironhack.demosecurityjwt.security.Utils.ArtistStatus;
 import com.ironhack.demosecurityjwt.security.dtos.UserGeneralInfoDTO;
+import com.ironhack.demosecurityjwt.security.exceptions.ArtistActivationException;
+import com.ironhack.demosecurityjwt.security.exceptions.UserNotFoundException;
 import com.ironhack.demosecurityjwt.security.models.Role;
 import com.ironhack.demosecurityjwt.security.models.User;
+import com.ironhack.demosecurityjwt.security.repositories.ArtistRepository;
 import com.ironhack.demosecurityjwt.security.repositories.RoleRepository;
 import com.ironhack.demosecurityjwt.security.repositories.UserRepository;
 import com.ironhack.demosecurityjwt.security.services.impl.UserService;
@@ -14,6 +17,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,6 +34,8 @@ public class UserServiceTest {
     private UserRepository userRepository;
     @Autowired
     private UserService userService;
+    @Autowired
+    private ArtistRepository artistRepository;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -56,7 +66,7 @@ public class UserServiceTest {
 
     @Test
     void loadUserByUsernameNotExistingUserTest() {
-        assertThrows(UsernameNotFoundException.class, () -> userService.loadUserByUsername("wrong"));
+        assertThrows(UserNotFoundException.class, () -> userService.loadUserByUsername("wrong"));
     }
 
     @Test
@@ -84,8 +94,89 @@ public class UserServiceTest {
 
     @Test
     public void addRoleToUserNotExistingUserTest(){
-        assertThrows(UsernameNotFoundException.class, () ->
+        assertThrows(UserNotFoundException.class, () ->
                 userService.addRoleToUser("wrong", "ROLE_ARTIST"));
+    }
+
+    @Test
+    public void activeUserTest(){
+        assertFalse(userRepository.findByUsername("username").get().isActive());
+        userService.activeUserByUsername("username");
+        assertTrue(userRepository.findByUsername("username").get().isActive());
+    }
+
+    @Test
+    public void activeUserNotExistingTest(){
+        assertThrows(UserNotFoundException.class, () -> {
+            userService.activeUserByUsername("wrong username");});
+    }
+
+    @Test
+    public void activeAllUsersTest() throws Exception {
+        User user = userRepository.findByUsername("username").get();
+        List<String> usernames = new ArrayList<>();
+        usernames.add(user.getUsername());
+        String expectedJson = objectMapper.writeValueAsString(usernames);
+        String resultJson = objectMapper.writeValueAsString(userService.activeAllUsers());
+        assertEquals(expectedJson, resultJson);
+        assertTrue(userRepository.findByUsername("username").get().isActive());
+    }
+
+    @Test
+    public void activeArtistByUsernameTest(){
+        User user = userRepository.findByUsername("username").get();
+        user.setArtistStatus(ArtistStatus.PENDING_ACTIVATION);
+        userRepository.save(user);
+        assertEquals(ArtistStatus.PENDING_ACTIVATION, userRepository.findByUsername("username").get().getArtistStatus());
+        userService.activeArtistByUsername("username");
+        assertEquals(ArtistStatus.ACTIVE, userRepository.findByUsername("username").get().getArtistStatus());
+    }
+
+    @Test
+    public void activeArtistNotExistingTest(){
+        assertThrows(UserNotFoundException.class, () -> {
+            userService.activeArtistByUsername("wrong username");});
+    }
+
+    @Test
+    public void activeArtistAlreadyActiveTest(){
+        User user = userRepository.findByUsername("username").get();
+        user.setArtistStatus(ArtistStatus.ACTIVE);
+        userRepository.save(user);
+        assertThrows(ArtistActivationException.class, () -> {
+            userService.activeArtistByUsername("username");});
+    }
+
+    @Test
+    public void activeArtistNotPendingToActiveTest(){
+        User user = userRepository.findByUsername("username").get();
+        user.setArtistStatus(ArtistStatus.INACTIVE);
+        userRepository.save(user);
+        assertThrows(ArtistActivationException.class, () -> {
+            userService.activeArtistByUsername("username");});
+    }
+
+    @Test
+    public void activeAllArtistTest() throws Exception {
+        User user = userRepository.findByUsername("username").get();
+        user.setArtistStatus(ArtistStatus.PENDING_ACTIVATION);
+        userRepository.save(user);
+        List<String> usernames = new ArrayList<>();
+        usernames.add(user.getUsername());
+        String expectedJson = objectMapper.writeValueAsString(usernames);
+        String resultJson = objectMapper.writeValueAsString(userService.activeAllArtists());
+        assertEquals(expectedJson, resultJson);
+        assertEquals(ArtistStatus.ACTIVE, userRepository.findByUsername("username").get().getArtistStatus());
+    }
+
+    @Test
+    public void requestToBeAnArtistTest(){
+        assertEquals(ArtistStatus.INACTIVE, userRepository.findByUsername("username").get().getArtistStatus());
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.getName()).thenReturn(user.getUsername());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        userService.requestToBeAnArtist();
+        assertEquals(ArtistStatus.PENDING_ACTIVATION, userRepository.findByUsername("username").get().getArtistStatus());
     }
 
     @Test
@@ -93,7 +184,7 @@ public class UserServiceTest {
         Optional<User> optionalUser = userRepository.findByUsername("username");
         if (optionalUser.isPresent()){
             User user = optionalUser.get();
-            String expectedJson = objectMapper.writeValueAsString(user);
+            String expectedJson = objectMapper.writeValueAsString(new UserGeneralInfoDTO(user));
             assertEquals(user.getName(), userService.getUser("username").getName());
             String resultJson = objectMapper.writeValueAsString(userService.getUser("username"));
             assertEquals(expectedJson, resultJson);
@@ -117,27 +208,4 @@ public class UserServiceTest {
         assertEquals(expectedJson, resultJson);
     }
 
-    @Test
-    public void activeUserTest(){
-        assertFalse(userRepository.findByUsername("username").get().isActive());
-        userService.activeUserByUsername("username");
-        assertTrue(userRepository.findByUsername("username").get().isActive());
-    }
-
-    @Test
-    public void activeUserNotExistingTest(){
-        assertThrows(UsernameNotFoundException.class, () -> {
-            userService.activeUserByUsername("wrong username");});
-    }
-
-    @Test
-    public void activeAllUsersTest() throws Exception {
-        User user = userRepository.findByUsername("username").get();
-        List<String> usernames = new ArrayList<>();
-        usernames.add(user.getUsername());
-        String expectedJson = objectMapper.writeValueAsString(usernames);
-        String resultJson = objectMapper.writeValueAsString(userService.activeAllUsers());
-        assertEquals(expectedJson, resultJson);
-        assertTrue(userRepository.findByUsername("username").get().isActive());
-    }
 }

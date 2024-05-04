@@ -18,14 +18,14 @@ public class AudioController implements AudioControllerInterface {
     AudioService audioService;
 
     @Override
-    @DeleteMapping("/users/artist/audio/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/artist/audio/{title}")
+    @ResponseStatus(HttpStatus.OK)
     public void deleteAudioByTitle(@PathVariable String title) {
         audioService.deleteAudioByTitle(title);
     }
 
     @Override
-    @GetMapping("/users/audio/{info}")
+    @GetMapping("/user/audio/{info}")
     @ResponseStatus(HttpStatus.OK)
     public List<AudioGeneralInfoDTO> getAudioByAll(@PathVariable String info) {
         return audioService.getAudioByAllInfo(info);

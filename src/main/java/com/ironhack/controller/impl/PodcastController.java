@@ -42,28 +42,28 @@ public class PodcastController implements PodcastControllerInterface {
 
     /*Actions available to standard-users*/
     @Override
-    @GetMapping("/users/podcasts")
+    @GetMapping("/user/podcasts")
     @ResponseStatus(HttpStatus.OK)
     public List<AudioGeneralInfoDTO> getAllPodcasts() {
         return podcastService.getAllPodcasts();
     }
 
     @Override
-    @GetMapping("/users/podcast/title/{title}")
+    @GetMapping("/user/podcast/title/{title}")
     @ResponseStatus(HttpStatus.OK)
     public List<AudioGeneralInfoDTO> getPodcastByTitle(@PathVariable String title) {
         return podcastService.getPodcastByTitle(title);
     }
 
     @Override
-    @GetMapping("/users/podcast/artist_name/{artistName}")
+    @GetMapping("/user/podcast/artist_name/{artistName}")
     @ResponseStatus(HttpStatus.OK)
     public List<AudioGeneralInfoDTO> getPodcastByArtistName(@PathVariable String artistName) {
         return podcastService.getPodcastByArtistName(artistName);
     }
 
     @Override
-    @GetMapping("/users/podcast/{info}")
+    @GetMapping("/user/podcast/{info}")
     @ResponseStatus(HttpStatus.OK)
     public List<AudioGeneralInfoDTO> getPodcastByAll(@PathVariable String info) {
      return podcastService.getPodcastByAllInfo(info);

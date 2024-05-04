@@ -1,9 +1,7 @@
 package com.ironhack.demosecurityjwt.security.controllers.impl;
 
 import com.ironhack.demosecurityjwt.security.controllers.interfaces.UserControllerInterface;
-import com.ironhack.demosecurityjwt.security.dtos.ArtistRoleAdmissionDTO;
 import com.ironhack.demosecurityjwt.security.dtos.UserGeneralInfoDTO;
-import com.ironhack.demosecurityjwt.security.models.Artist;
 import com.ironhack.demosecurityjwt.security.models.User;
 import com.ironhack.demosecurityjwt.security.services.interfaces.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * RESTful API for User management
- */
 @RestController
 @RequestMapping("/api")
 public class UserController implements UserControllerInterface {
@@ -40,8 +35,8 @@ public class UserController implements UserControllerInterface {
     @Override
     @PutMapping("/admin/user/active")
     @ResponseStatus(value = HttpStatus.OK)
-    public void activeAllUsers() {
-        userService.activeAllUsers();
+    public List<String> activeAllUsers() {
+        return userService.activeAllUsers();
     }
 
     @Override
@@ -54,21 +49,30 @@ public class UserController implements UserControllerInterface {
     @Override
     @PutMapping("/admin/artist/active")
     @ResponseStatus(value = HttpStatus.OK)
-    public void activeAllArtists() {
-        userService.activeAllArtists();
+    public List<String> activeAllArtists() {
+        return userService.activeAllArtists();
     }
 
     /*Actions available for standard-users*/
+
+    @PutMapping("/user/artist")
+    @ResponseStatus(HttpStatus.OK)
+    public void requestToBeAnArtist(){
+        userService.requestToBeAnArtist();
+    }
+
     @Override
-    @GetMapping("/users/users")
+    @GetMapping("/user/users")
     @ResponseStatus(HttpStatus.OK)
     public List<UserGeneralInfoDTO> getUsers() {
         return userService.getUsers();
     }
 
-    @PutMapping("/users/artist")
+    @Override
+    @GetMapping("/user/user/{username}")
     @ResponseStatus(HttpStatus.OK)
-    public void requestToBeAnArtist(){
-        userService.requestToBeAnArtist();
+    public UserGeneralInfoDTO getUser(@PathVariable String username) {
+        return userService.getUser(username);
     }
+
 }
