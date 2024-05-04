@@ -7,36 +7,24 @@ import com.ironhack.demosecurityjwt.security.models.Role;
 import com.ironhack.demosecurityjwt.security.models.User;
 import com.ironhack.demosecurityjwt.security.repositories.ArtistRepository;
 import com.ironhack.demosecurityjwt.security.repositories.RoleRepository;
-import com.ironhack.dto.AlbumGeneralInfoDTO;
 import com.ironhack.dto.AudioGeneralInfoDTO;
-import com.ironhack.model.Album;
-import com.ironhack.model.Podcast;
 import com.ironhack.model.Song;
-import com.ironhack.repository.AlbumRepository;
-import com.ironhack.repository.PodcastRepository;
 import com.ironhack.repository.SongRepository;
-import jakarta.validation.Valid;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.WebApplicationContext;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -48,7 +36,7 @@ public class SongControllerTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
     @Autowired
-    private PodcastRepository podcastRepository;
+    private SongRepository songRepository;
     @Autowired
     private ArtistRepository artistRepository;
 
@@ -69,10 +57,10 @@ public class SongControllerTest {
         artist.setRoles(roles);
         artistRepository.save(artist);
 
-        Podcast podcast1 =  new Podcast("podcast title 1", "34:14", artist, 3, 5, "pop");
-        Podcast podcast2 =  new Podcast("podcast title 2", "45:14", artist, 2, 4, "pop");
-        podcastRepository.save(podcast1);
-        podcastRepository.save(podcast2);
+        Song song1 =  new Song("Song title 1", "34:14", artist, null, "pop");
+        Song song2 =  new Song("Song title 2", "45:14", artist, null, "pop");
+        songRepository.save(song1);
+        songRepository.save(song2);
 
         Authentication authentication = mock(Authentication.class);
         when(authentication.getName()).thenReturn(artist.getUsername());
@@ -81,108 +69,88 @@ public class SongControllerTest {
 
     @AfterEach
     void tearDown() {
-        podcastRepository.deleteAll();
+        songRepository.deleteAll();
         artistRepository.deleteAll();
     }
 
     @Test
-    public void savePodcastCorrectInfoTest() throws Exception{
-        Podcast podcast3 =  new Podcast("Podcast title 3", "3:14", artist, 4, 6, "culture");
-        String albumJson = objectMapper.writeValueAsString(podcast3);
-        String expectedJson = objectMapper.writeValueAsString(new AudioGeneralInfoDTO(podcast3));
+    public void saveSongCorrectInfoTest() throws Exception{
+        Song song3 =  new Song("song title 3", "3:14", artist, null, "culture");
+        String songJson = objectMapper.writeValueAsString(song3);
+        String expectedJson = objectMapper.writeValueAsString(new AudioGeneralInfoDTO(song3));
 
-        mockMvc.perform(post("/api/artist/podcast")
+        mockMvc.perform(post("/api/artist/song")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(albumJson))
+                        .content(songJson))
                 .andExpect(status().isCreated())
                 .andExpect(content().json(expectedJson));
     }
 
     @Test
-    public void savePodcastWrongDurationFormatTest() throws Exception{
-        Podcast Podcast3 =  new Podcast("Podcast title 3", "3:::14", artist, 4, 5, "culture");
-        String albumJson = objectMapper.writeValueAsString(Podcast3);
-        String expectedJson = objectMapper.writeValueAsString(new AudioGeneralInfoDTO(Podcast3));
+    public void saveSongWrongDurationFormatTest() throws Exception{
+        Song song3 =  new Song("song title 3", "3:::14", artist, null, "culture");
+        String songJson = objectMapper.writeValueAsString(song3);
+        String expectedJson = objectMapper.writeValueAsString(new AudioGeneralInfoDTO(song3));
 
-        mockMvc.perform(post("/api/artist/podcast")
+        mockMvc.perform(post("/api/artist/song")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(albumJson))
+                        .content(songJson))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string(Matchers.containsString("Bad request. Duration has not a correct format: HH:MM:SS or MM:SS or SS")));
+                .andExpect(content().string(Matchers.containsString(
+                        "Bad request. Duration has not a correct format: HH:MM:SS or MM:SS or SS")));
     }
 
     @Test
-    public void savePodcastEmptyTitleTest() throws Exception{
-        Podcast Podcast3 =  new Podcast("", "3:14", artist, 3, 5, "comedy");
-        String albumJson = objectMapper.writeValueAsString(Podcast3);
-        String expectedJson = objectMapper.writeValueAsString(new AudioGeneralInfoDTO(Podcast3));
+    public void saveSongEmptyTitleTest() throws Exception{
+        Song Song3 =  new Song("", "3:14", artist, null, "comedy");
+        String songJson = objectMapper.writeValueAsString(Song3);
+        String expectedJson = objectMapper.writeValueAsString(new AudioGeneralInfoDTO(Song3));
 
-        mockMvc.perform(post("/api/artist/podcast")
+        mockMvc.perform(post("/api/artist/song")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(albumJson))
+                        .content(songJson))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string(Matchers.containsString("Bad request. Title is required.")));
     }
 
     @Test
-    public void deletePodcastByTitleTest() throws Exception{
-        mockMvc.perform(delete("/api/artist/podcast/{title}", "podcast title 1")
+    public void deleteSongByTitleTest() throws Exception{
+        mockMvc.perform(delete("/api/artist/song/{title}", "song title 1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void deletePodcastByTitleWrongTitleTest() throws Exception{
-        mockMvc.perform(delete("/api/artist/podcast/{title}", "wrong title")
+    public void deleteSongByTitleWrongTitleTest() throws Exception{
+        mockMvc.perform(delete("/api/artist/song/{title}", "wrong title")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string(Matchers.containsString("Podcast with title \"wrong title\" not found")));
+                .andExpect(content().string(Matchers.containsString(
+                        "Song with title \"wrong title\" not found")));
     }
     @Test
-    void getAllPodcastsTest() throws Exception {
-        List<Podcast> podcasts= podcastRepository.findAll();
+    void getAllSongsTest() throws Exception {
+        List<Song> Songs = songRepository.findAll();
         List<AudioGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
-        for(Podcast podcast : podcasts){
-            audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(podcast));
+        for(Song song : Songs){
+            audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(song));
         }
         String expectedJson = objectMapper.writeValueAsString(audioGeneralInfoDTOS);
 
-        mockMvc.perform(get("/api/user/podcasts").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/api/user/songs").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(expectedJson));
     }
     @Test
-    void getPodcastsByTitleTest() throws Exception {
-        List<Podcast> podcasts = podcastRepository.findByTitleContaining("title");
+    void getSongsByTitleTest() throws Exception {
+        List<Song> songs = songRepository.findByTitleContaining("title");
         List<AudioGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
-        for(Podcast podcast : podcasts){
-            audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(podcast));
+        for(Song song : songs){
+            audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(song));
         }
         String expectedJson = objectMapper.writeValueAsString(audioGeneralInfoDTOS);
-        mockMvc.perform(get("/api/user/podcast/title/{title}", "title")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(expectedJson));
-    }
-
-    void getPodcastsByTitleNotExistingTitleTest() throws Exception {
-        mockMvc.perform(get("/api/user/podcast/title/{title}", "wrong")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound())
-                .andExpect(content().string(Matchers.containsString("No podcasts found with that title.")));
-    }
-
-    @Test
-    void getPodcastsByArtistNameTest() throws Exception {
-        List<Podcast> podcasts= podcastRepository.findByArtistNameContaining("artist");
-        List<AudioGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
-        for(Podcast podcast : podcasts){
-            audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(podcast));
-        }
-        String expectedJson = objectMapper.writeValueAsString(audioGeneralInfoDTOS);
-        mockMvc.perform(get("/api/user/podcast/artist_name/{artistName}", "artist")
+        mockMvc.perform(get("/api/user/song/title/{title}", "title")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -190,22 +158,22 @@ public class SongControllerTest {
     }
 
     @Test
-    void getPodcastsByArtistNameNotExistingArtistTest() throws Exception {
-        mockMvc.perform(get("/api/user/podcast/artist_name/{artistName}", "wrong")
+    void getSongsByTitleNotExistingTitleTest() throws Exception {
+        mockMvc.perform(get("/api/user/song/title/{title}", "wrong")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string(Matchers.containsString("No podcasts found with that artist name.")));
+                .andExpect(content().string(Matchers.containsString("No songs found with that title.")));
     }
 
     @Test
-    void getPodcastsByAllInfoTest() throws Exception {
+    void getSongsByArtistNameTest() throws Exception {
+        List<Song> songs = songRepository.findByArtistNameContaining("artist");
         List<AudioGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
-        List<Podcast> podcasts = podcastRepository.findAll();
-        for(Podcast podcast : podcasts){
-            audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(podcast));
+        for(Song song : songs){
+            audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(song));
         }
         String expectedJson = objectMapper.writeValueAsString(audioGeneralInfoDTOS);
-        mockMvc.perform(get("/api/user/podcast/{info}", "pod")
+        mockMvc.perform(get("/api/user/song/artist_name/{artistName}", "artist")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -213,10 +181,56 @@ public class SongControllerTest {
     }
 
     @Test
-    void getPodcastsByAllInfoWrongInfoTest() throws Exception {
-        mockMvc.perform(get("/api/user/podcast/{info}", "wrong info")
+    void getSongsByArtistNameNotExistingArtistTest() throws Exception {
+        mockMvc.perform(get("/api/user/song/artist_name/{artistName}", "wrong")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string(Matchers.containsString("No podcasts found with that info.")));
+                .andExpect(content().string(Matchers.containsString("No songs found with that artist name.")));
+    }
+
+    @Test
+    void getSongsByGenreTest() throws Exception {
+        List<Song> songs = songRepository.findByGenreContaining("pop");
+        List<AudioGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
+        for(Song song : songs){
+            audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(song));
+        }
+        String expectedJson = objectMapper.writeValueAsString(audioGeneralInfoDTOS);
+        mockMvc.perform(get("/api/user/song/genre/{genre}", "pop")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(expectedJson));
+    }
+
+    @Test
+    void getSongsByGenreNotExistingGenreTest() throws Exception {
+        mockMvc.perform(get("/api/user/song/genre/{genre}", "wrong")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(Matchers.containsString("No songs found with that genre.")));
+    }
+
+    @Test
+    void getSongsByAllInfoTest() throws Exception {
+        List<AudioGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
+        List<Song> songs = songRepository.findAll();
+        for(Song song : songs){
+            audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(song));
+        }
+        String expectedJson = objectMapper.writeValueAsString(audioGeneralInfoDTOS);
+        mockMvc.perform(get("/api/user/song/{info}", "song")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(expectedJson));
+    }
+
+    @Test
+    void getSongsByAllInfoWrongInfoTest() throws Exception {
+        mockMvc.perform(get("/api/user/song/{info}", "wrong info")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(Matchers.containsString("No songs found with that info.")));
     }
 }

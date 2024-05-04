@@ -82,38 +82,38 @@ public class PodcastControllerTest {
     @Test
     public void savePodcastCorrectInfoTest() throws Exception{
         Podcast podcast3 =  new Podcast("Podcast title 3", "3:14", artist, 4, 6, "culture");
-        String albumJson = objectMapper.writeValueAsString(podcast3);
+        String podcastJson = objectMapper.writeValueAsString(podcast3);
         String expectedJson = objectMapper.writeValueAsString(new AudioGeneralInfoDTO(podcast3));
 
         mockMvc.perform(post("/api/artist/podcast")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(albumJson))
+                        .content(podcastJson))
                 .andExpect(status().isCreated())
                 .andExpect(content().json(expectedJson));
     }
 
     @Test
     public void savePodcastWrongDurationFormatTest() throws Exception{
-        Podcast Podcast3 =  new Podcast("Podcast title 3", "3:::14", artist, 4, 5, "culture");
-        String albumJson = objectMapper.writeValueAsString(Podcast3);
-        String expectedJson = objectMapper.writeValueAsString(new AudioGeneralInfoDTO(Podcast3));
+        Podcast podcast3 =  new Podcast("podcast title 3", "3:::14", artist, 4, 5, "culture");
+        String podcastJson = objectMapper.writeValueAsString(podcast3);
+        String expectedJson = objectMapper.writeValueAsString(new AudioGeneralInfoDTO(podcast3));
 
         mockMvc.perform(post("/api/artist/podcast")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(albumJson))
+                        .content(podcastJson))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string(Matchers.containsString("Bad request. Duration has not a correct format: HH:MM:SS or MM:SS or SS")));
     }
 
     @Test
     public void savePodcastEmptyTitleTest() throws Exception{
-        Podcast Podcast3 =  new Podcast("", "3:14", artist, 3, 5, "comedy");
-        String albumJson = objectMapper.writeValueAsString(Podcast3);
-        String expectedJson = objectMapper.writeValueAsString(new AudioGeneralInfoDTO(Podcast3));
+        Podcast podcast3 =  new Podcast("", "3:14", artist, 3, 5, "comedy");
+        String podcastJson = objectMapper.writeValueAsString(podcast3);
+        String expectedJson = objectMapper.writeValueAsString(new AudioGeneralInfoDTO(podcast3));
 
         mockMvc.perform(post("/api/artist/podcast")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(albumJson))
+                        .content(podcastJson))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string(Matchers.containsString("Bad request. Title is required.")));
     }
@@ -134,7 +134,7 @@ public class PodcastControllerTest {
     }
     @Test
     void getAllPodcastsTest() throws Exception {
-        List<Podcast> podcasts= podcastRepository.findAll();
+        List<Podcast> podcasts = podcastRepository.findAll();
         List<AudioGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
         for(Podcast podcast : podcasts){
             audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(podcast));
@@ -161,6 +161,7 @@ public class PodcastControllerTest {
                 .andExpect(content().json(expectedJson));
     }
 
+    @Test
     void getPodcastsByTitleNotExistingTitleTest() throws Exception {
         mockMvc.perform(get("/api/user/podcast/title/{title}", "wrong")
                         .contentType(MediaType.APPLICATION_JSON))
