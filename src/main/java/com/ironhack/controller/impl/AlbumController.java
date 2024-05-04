@@ -2,6 +2,7 @@ package com.ironhack.controller.impl;
 
 import com.ironhack.controller.interfaces.AlbumControllerInterface;
 import com.ironhack.dto.AlbumGeneralInfoDTO;
+import com.ironhack.dto.AudioGeneralInfoDTO;
 import com.ironhack.model.Album;
 import com.ironhack.model.Song;
 import com.ironhack.service.impl.AlbumService;
@@ -10,12 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api")
 public class AlbumController implements AlbumControllerInterface {
 
     @Autowired
     AlbumService albumService;
+
+    /*Actions only available for artists-Users*/
     @Override
     @PostMapping("/artist/album")
     @ResponseStatus(HttpStatus.CREATED)
@@ -42,6 +47,35 @@ public class AlbumController implements AlbumControllerInterface {
     @ResponseStatus(HttpStatus.OK)
     public void removeSongFromAlbum(@PathVariable String albumTitle, @PathVariable String songTitle)  {
         albumService.removeSongFromAlbum(albumTitle, songTitle);
+    }
+
+    /*Actions available for standard-users*/
+    @Override
+    @GetMapping("/user/albums")
+    @ResponseStatus(HttpStatus.OK)
+    public List<AlbumGeneralInfoDTO> getAllAlbums() {
+        return albumService.getAllAlbums();
+    }
+
+    @Override
+    @GetMapping("/user/album/title/{title}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<AlbumGeneralInfoDTO> getAlbumByTitle(@PathVariable String title) {
+        return albumService.getAlbumByTitle(title);
+    }
+
+    @Override
+    @GetMapping("/user/album/artist_name/{artistName}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<AlbumGeneralInfoDTO> getSongByArtistName(@PathVariable String artistName) {
+        return albumService.getAlbumByArtistName(artistName);
+    }
+
+    @Override
+    @GetMapping("/user/album/{info}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<AlbumGeneralInfoDTO> getAlbumByAll(@PathVariable String info) {
+        return albumService.getAlbumByAllInfo(info);
     }
 
 }

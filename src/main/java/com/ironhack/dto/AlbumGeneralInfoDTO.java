@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -15,11 +16,18 @@ public class AlbumGeneralInfoDTO {
 
     private String artistName;
 
-    private List<Song> songs;
+    private List<String> songTitle;
 
     public AlbumGeneralInfoDTO(Album album){
         setTitle(album.getTitle());
         setArtistName(album.getArtist().getName());
-        setSongs(album.getSongs());
+        setSongsTitleFromSongsList(album.getSongs());
+    }
+
+    public void setSongsTitleFromSongsList(List<Song> songList){
+        songTitle = new ArrayList<>();
+        for (Song song : songList){
+            songTitle.add(song.getTitle());
+        }
     }
 }

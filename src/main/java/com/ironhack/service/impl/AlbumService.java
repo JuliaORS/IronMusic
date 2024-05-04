@@ -4,6 +4,7 @@ import com.ironhack.demosecurityjwt.security.models.Artist;
 import com.ironhack.demosecurityjwt.security.models.User;
 import com.ironhack.demosecurityjwt.security.repositories.UserRepository;
 import com.ironhack.dto.AlbumGeneralInfoDTO;
+import com.ironhack.dto.AudioGeneralInfoDTO;
 import com.ironhack.exceptions.ResourceNotFoundException;
 import com.ironhack.model.Album;
 import com.ironhack.model.Playlist;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -95,5 +97,58 @@ public class AlbumService implements AlbumServiceInterface {
         } else {
             throw new ResourceNotFoundException("Album with title \"" + albumTitle + "\" not found");
         }
+    }
+
+    @Override
+    public List<AlbumGeneralInfoDTO> getAllAlbums() {
+        List<AlbumGeneralInfoDTO> result = new ArrayList<>();
+        List<Album> albums = albumRepository.findAll();
+        for(Album album : albums){
+            result.add(new AlbumGeneralInfoDTO(album));
+        }
+        return result;
+    }
+
+
+    @Override
+    public List<AlbumGeneralInfoDTO> getAlbumByTitle(String title) {
+        List<Album> albums = albumRepository.findByTitleContaining(title);
+        List<AlbumGeneralInfoDTO> result = new ArrayList<>();
+        if (albums.isEmpty()){
+            throw new ResourceNotFoundException("No albums found with that title.");
+        } else {
+            for(Album album : albums){
+                result.add(new AlbumGeneralInfoDTO(album));
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public List<AlbumGeneralInfoDTO> getAlbumByArtistName(String artist) {
+        List<Album> albums = albumRepository.findByArtistNameContaining(artist);
+        List<AlbumGeneralInfoDTO> result = new ArrayList<>();
+        if (albums.isEmpty()){
+            throw new ResourceNotFoundException("No albums found with that artist name.");
+        } else {
+            for(Album album : albums){
+                result.add(new AlbumGeneralInfoDTO(album));
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public List<AlbumGeneralInfoDTO> getAlbumByAllInfo(String info) {
+        List<Album> albums = albumRepository.findByArtistNameContainingOrTitleContaining(info, info);
+        List<AlbumGeneralInfoDTO> result = new ArrayList<>();
+        if (albums.isEmpty()){
+            throw new ResourceNotFoundException("No albums found with that info.");
+        } else {
+            for(Album album : albums){
+                result.add(new AlbumGeneralInfoDTO(album));
+            }
+        }
+        return result;
     }
 }

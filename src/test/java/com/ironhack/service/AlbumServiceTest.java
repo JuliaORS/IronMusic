@@ -175,4 +175,74 @@ public class AlbumServiceTest {
         assertThrows(ResourceNotFoundException.class, () -> {albumService.removeSongFromAlbum(
                 "album title", "wrong song");});
     }
+
+
+    @Test
+    public void getAllAlbumsTest() throws Exception{
+        List<AlbumGeneralInfoDTO> albumGeneralInfoDTOS = new ArrayList<>();
+        List<Album> albumsList = albumRepository.findAll();
+        for(Album album : albumsList){
+            albumGeneralInfoDTOS.add(new AlbumGeneralInfoDTO(album));
+        }
+        String expectedJson = objectMapper.writeValueAsString(albumGeneralInfoDTOS);
+        String resultJson = objectMapper.writeValueAsString(albumService.getAllAlbums());
+        assertEquals(expectedJson, resultJson);
+    }
+
+    @Test
+    public void getAlbumByTitleExistingAlbumTest() throws Exception{
+        List<Album> albumList = new ArrayList<>();
+        albumList.add(album);
+        List<AlbumGeneralInfoDTO> albumGeneralInfoDTOS = new ArrayList<>();
+        for(Album album : albumList){
+            albumGeneralInfoDTOS.add(new AlbumGeneralInfoDTO(album));
+        }
+        String expectedJson = objectMapper.writeValueAsString(albumGeneralInfoDTOS);
+        String resultJson = objectMapper.writeValueAsString(albumService.getAlbumByTitle("album"));
+        assertEquals(expectedJson, resultJson);
+    }
+
+    @Test
+    public void getAlbumByTitleNotExistingAlbumTest() throws Exception{
+        assertThrows(ResourceNotFoundException.class, () -> {
+            albumService.getAlbumByTitle("wrong title");});
+    }
+
+    @Test
+    public void getAlbumByArtistNameExistingAlbumTest() throws Exception{
+        List<Album> albumList = new ArrayList<>();
+        albumList.add(album);
+        List<AlbumGeneralInfoDTO> albumGeneralInfoDTOS = new ArrayList<>();
+        for(Album album : albumList){
+            albumGeneralInfoDTOS.add(new AlbumGeneralInfoDTO(album));
+        }
+        String expectedJson = objectMapper.writeValueAsString(albumGeneralInfoDTOS);
+        String resultJson = objectMapper.writeValueAsString(albumService.getAlbumByArtistName("artist"));
+        assertEquals(expectedJson, resultJson);
+    }
+
+    @Test
+    public void getAlbumByArtistNameNotExistingAlbumTest() throws Exception{
+        assertThrows(ResourceNotFoundException.class, () -> {
+            albumService.getAlbumByArtistName("wrong artist");});
+    }
+
+    @Test
+    public void getAlbumByAllInfoExistingInfoTest() throws Exception{
+        List<Album> albumList = new ArrayList<>();
+        albumList.add(album);
+        List<AlbumGeneralInfoDTO> albumGeneralInfoDTOS = new ArrayList<>();
+        for(Album album : albumList){
+            albumGeneralInfoDTOS.add(new AlbumGeneralInfoDTO(album));
+        }
+        String expectedJson = objectMapper.writeValueAsString(albumGeneralInfoDTOS);
+        String resultJson = objectMapper.writeValueAsString(albumService.getAlbumByAllInfo("al"));
+        assertEquals(expectedJson, resultJson);
+    }
+
+    @Test
+    public void getAlbumByAllInfoNotExistingInfoTest() throws Exception{
+        assertThrows(ResourceNotFoundException.class, () -> {
+            albumService.getAlbumByAllInfo("wrong");});
+    }
 }

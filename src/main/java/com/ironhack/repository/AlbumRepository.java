@@ -13,6 +13,8 @@ import java.util.Optional;
 @Repository
 public interface AlbumRepository extends JpaRepository<Album,Long>{
     List<Album> findByTitle(String title);
-    @Query("SELECT a FROM Album a WHERE a.title = :title AND a.artist.username = :username")
-    List<Album> findByTitleAndArtistUsername(@Param("title") String title, @Param("username") String username);
+    List<Album> findByTitleAndArtistUsername(String title, String username);
+    List<Album> findByTitleContaining(String title);
+    List<Album> findByArtistNameContaining(String title);
+    List<Album> findByArtistNameContainingOrTitleContaining(String artistName, String title);
 }
