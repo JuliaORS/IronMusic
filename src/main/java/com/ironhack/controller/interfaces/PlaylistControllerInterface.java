@@ -1,14 +1,17 @@
 package com.ironhack.controller.interfaces;
 
+import com.ironhack.dto.AudioGeneralInfoDTO;
+import com.ironhack.dto.PlaylistGeneralInfoDTO;
 import com.ironhack.model.Playlist;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 public interface PlaylistControllerInterface {
-    //Playlist savePlaylist(Playlist playlist, UserDetails userDetails);
-  //  void deletePlaylistByTitle(String title);
-    void addAudioToPlaylist(Long playlistId, Long audioId);
-    void removeAudioFromPlaylist(Long playlistId, Long audioId);
+    PlaylistGeneralInfoDTO savePlaylist(Playlist playlist);
+    void deletePlaylistByTitle(@PathVariable String title);
+    AudioGeneralInfoDTO addAudioToPlaylistByTitleAudio(String playlistTitle, String audioTitle);
+    void removeAudioFromPlaylistByTitle(String playlistTitle, String audioTitle);
 }
