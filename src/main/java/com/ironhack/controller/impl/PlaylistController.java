@@ -20,21 +20,21 @@ public class PlaylistController implements PlaylistControllerInterface {
     PlaylistService playlistService;
 
     @Override
-    @PostMapping("/artist/playlist")
+    @PostMapping("/user/playlist")
     @ResponseStatus(HttpStatus.CREATED)
     public PlaylistGeneralInfoDTO savePlaylist(@Valid @RequestBody Playlist playlist) {
         return playlistService.savePlaylist(playlist);
     }
 
     @Override
-    @DeleteMapping("/artist/playlist/{name}")
+    @DeleteMapping("/user/playlist/{name}")
     @ResponseStatus(HttpStatus.OK)
     public void deletePlaylistByName(@PathVariable String name) {
         playlistService.deletePlaylistByName(name);
     }
 
     @Override
-    @PutMapping("/artist/playlist/{playlistName}/audio/{audioTitle}")
+    @PutMapping("/user/playlist/{playlistName}/audio/{audioTitle}")
     @ResponseStatus(HttpStatus.OK)
     public AudioGeneralInfoDTO addAudioToPlaylistByTitle(@PathVariable String playlistName,
                                                               @PathVariable String audioTitle) {
@@ -42,7 +42,7 @@ public class PlaylistController implements PlaylistControllerInterface {
     }
 
     @Override
-    @DeleteMapping("/artist/playlist/{playlistName}/audio/{audioTitle}")
+    @DeleteMapping("/user/playlist/{playlistName}/audio/{audioTitle}")
     @ResponseStatus(HttpStatus.OK)
     public void removeAudioFromPlaylistByTitle(@PathVariable String playlistName, @PathVariable String audioTitle)  {
         playlistService.removeAudioFromPlaylistByTitle(playlistName, audioTitle);
