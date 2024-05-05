@@ -45,10 +45,4 @@ public class User {
     )
     private List<Playlist> playlists = new ArrayList<>();
 
-    public void addOnePlaylist(Playlist playlist){
-        if (playlists == null) {
-            playlists = new ArrayList<>();
-        }
-        playlists.add(playlist);
-    }
 }

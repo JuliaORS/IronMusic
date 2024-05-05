@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 public interface PlaylistControllerInterface {
     PlaylistGeneralInfoDTO savePlaylist(Playlist playlist);
-    void deletePlaylistByName(@PathVariable String name);
+    void deletePlaylistByName(String name);
     AudioGeneralInfoDTO addAudioToPlaylistByTitle(String playlistName, String audioTitle);
     void removeAudioFromPlaylistByTitle(String playlistName, String audioTitle);
+    void addUserToPlaylistByUsername(String playlistName, String username);
+    void removeUserFromPlaylistByUsername(String playlistName, String username);
 }

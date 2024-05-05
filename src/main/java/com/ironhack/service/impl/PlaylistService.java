@@ -1,5 +1,6 @@
 package com.ironhack.service.impl;
 
+import com.ironhack.demosecurityjwt.security.exceptions.UserNotFoundException;
 import com.ironhack.demosecurityjwt.security.models.Artist;
 import com.ironhack.demosecurityjwt.security.models.User;
 import com.ironhack.demosecurityjwt.security.repositories.UserRepository;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,7 +45,7 @@ public class PlaylistService implements PlaylistServiceInterface {
     }
 
     @Override
-    public void deletePlaylistByName(String name){
+    public void deletePlaylistByName(String name) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user = userRepository.findByUsername(username).get();
@@ -60,7 +62,7 @@ public class PlaylistService implements PlaylistServiceInterface {
     }
 
     @Override
-    public AudioGeneralInfoDTO addAudioToPlaylistByTitle(String playlistTitle, String audioTitle){
+    public AudioGeneralInfoDTO addAudioToPlaylistByTitle(String playlistTitle, String audioTitle) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
 
@@ -70,7 +72,7 @@ public class PlaylistService implements PlaylistServiceInterface {
                 .toList();
         if (playlistListOfUserWithSpecificTitle.size() == 1) {
             List<Audio> audioList = audioRepository.findByTitle(audioTitle);
-            if (audioList.size() == 1){
+            if (audioList.size() == 1) {
                 playlistListOfUserWithSpecificTitle.get(0).getAudios().add(audioList.get(0));
                 playlistRepository.save(playlistListOfUserWithSpecificTitle.get(0));
                 return new AudioGeneralInfoDTO(audioList.get(0));
@@ -83,7 +85,7 @@ public class PlaylistService implements PlaylistServiceInterface {
     }
 
     @Override
-    public  void removeAudioFromPlaylistByTitle(String playlistTitle, String audioTitle){
+    public void removeAudioFromPlaylistByTitle(String playlistTitle, String audioTitle) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         List<Playlist> playlistListOfUserWithSpecificTitle = userRepository.findByUsername(username).get().getPlaylists()
@@ -95,7 +97,7 @@ public class PlaylistService implements PlaylistServiceInterface {
                     .stream()
                     .filter(audio -> audio.getTitle().equals(audioTitle))
                     .toList();
-            if (audioList.size() == 1){
+            if (audioList.size() == 1) {
                 playlistListOfUserWithSpecificTitle.get(0).getAudios().remove(audioList.get(0));
                 playlistRepository.save(playlistListOfUserWithSpecificTitle.get(0));
             } else {
@@ -104,5 +106,53 @@ public class PlaylistService implements PlaylistServiceInterface {
         } else {
             throw new ResourceNotFoundException("Playlist with title \"" + playlistTitle + "\" not found");
         }
+    }
+
+    @Override
+    public void addUserToPlaylistByUsername(String playlistName, String username) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String usernameUserAction = authentication.getName();
+
+        List<Playlist> playlistListOfUserWithSpecificTitle = userRepository.findByUsername(usernameUserAction).get()
+                .getPlaylists()
+                .stream()
+                .filter(playlist -> playlist.getName().equals(playlistName))
+                .toList();
+        if (playlistListOfUserWithSpecificTitle.size() == 1) {
+            Optional<User> optionalUser = userRepository.findByUsername(username);
+            if (optionalUser.isPresent()) {
+                System.out.println("entra");
+                User newUser = optionalUser.get();
+                newUser.getPlaylists().add(playlistListOfUserWithSpecificTitle.get(0));
+                userRepository.save(newUser);
+            } else {
+                throw new UserNotFoundException("User with username \"" + username + "\" not found");
+            }
+        } else {
+            throw new ResourceNotFoundException("Playlist with name \"" + playlistName + "\" not found");
+        }
+    }
+
+    @Override
+    public void removeUserFromPlaylistByUsername(String playlistName, String username) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String usernameUserAction = authentication.getName();
+
+        User user = userRepository.findByUsername(usernameUserAction).get();
+
+        Playlist playlist = user.getPlaylists()
+                .stream()
+                .filter(p -> p.getName().equals(playlistName))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Playlist with name \"" + playlistName + "\" not found"));
+
+        User userToRemove = playlist.getUsers()
+                .stream()
+                .filter(u -> u.getUsername().equals(username))
+                .findFirst()
+                .orElseThrow(() -> new UserNotFoundException("User with username \"" + username + "\" not found"));
+
+        userToRemove.getPlaylists().remove(playlist);
+        userRepository.save(userToRemove);
     }
 }

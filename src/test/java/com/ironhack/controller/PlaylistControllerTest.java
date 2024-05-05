@@ -8,11 +8,13 @@ import com.ironhack.demosecurityjwt.security.models.User;
 import com.ironhack.demosecurityjwt.security.repositories.ArtistRepository;
 import com.ironhack.demosecurityjwt.security.repositories.RoleRepository;
 import com.ironhack.demosecurityjwt.security.repositories.UserRepository;
+import com.ironhack.demosecurityjwt.security.services.impl.UserService;
 import com.ironhack.dto.PlaylistGeneralInfoDTO;
 import com.ironhack.model.Playlist;
 import com.ironhack.model.Audio;
 import com.ironhack.repository.PlaylistRepository;
 import com.ironhack.repository.AudioRepository;
+import com.ironhack.service.impl.PlaylistService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -49,13 +52,17 @@ public class PlaylistControllerTest {
     @Autowired
     private PlaylistRepository playlistRepository;
     @Autowired
+    private PlaylistService playlistService;
+    @Autowired
     private UserRepository userRepository;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private UserService userService;
     private MockMvc mockMvc;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private Artist artist;
-    private Playlist playlist;
+
     private User user;
 
     @BeforeEach
@@ -193,14 +200,14 @@ public class PlaylistControllerTest {
 
     @Test
     public void removeAudioFromPlaylistTest() throws Exception {
-        mockMvc.perform(put("/api/user/playlist/{playlistName}/audio/{audioTitle}", "summer_hits", "audio title 1")
+        mockMvc.perform(delete("/api/user/playlist/{playlistName}/audio/{audioTitle}", "summer_hits", "audio title 1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void removeAudioFromPlaylistWrongPlaylistTitleTest() throws Exception {
-        mockMvc.perform(put("/api/user/playlist/{playlistName}/audio/{audioTitle}", "wrong playlist", "audio title 1")
+        mockMvc.perform(delete("/api/user/playlist/{playlistName}/audio/{audioTitle}", "wrong playlist", "audio title 1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(content().string(Matchers.containsString("Playlist with title \"wrong playlist\" not found")));
@@ -208,9 +215,76 @@ public class PlaylistControllerTest {
 
     @Test
     public void removeAudioFromPlaylistWrongAudioTitleTest() throws Exception {
-        mockMvc.perform(put("/api/user/playlist/{playlistName}/audio/{audioTitle}", "summer_hits", "wrong audio")
+        mockMvc.perform(delete("/api/user/playlist/{playlistName}/audio/{audioTitle}", "summer_hits", "wrong audio")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(content().string(Matchers.containsString("Audio with title \"wrong audio\" not found")));
+    }
+
+    @Test
+    public void addUserToPlaylistByUserNameTest() throws Exception {
+        User user2 = new User(null, "user2", "username2", "1234",
+                true, ArtistStatus.INACTIVE, null, null);
+        userRepository.save(user2);
+
+        mockMvc.perform(put("/api/user/playlist/{playlistName}/user/{username}", "summer_hits", "username2")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        assertEquals(2, playlistRepository.findByName("summer_hits").get(0).getUsers().size());
+    }
+
+    @Test
+    public void addUserToPlaylistBytNameUserWrongPlaylistNameTest() throws Exception {
+        User user2 = new User(null, "user2", "username2", "1234",
+                true, ArtistStatus.INACTIVE, null, null);
+        userRepository.save(user2);
+
+        mockMvc.perform(put("/api/user/playlist/{playlistName}/user/{userName}", "wrong playlist", "username2")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(Matchers.containsString("Playlist with name \"wrong playlist\" not found")));
+    }
+
+    @Test
+    public void addUserToPlaylistBytNameUserWrongUserNameTest() throws Exception {
+        mockMvc.perform(put("/api/user/playlist/{playlistName}/user/{username}", "summer_hits", "wrong user")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(Matchers.containsString("User with username \"wrong user\" not found")));
+    }
+
+    @Test
+    public void removeUserFromPlaylistTest() throws Exception {
+        User user2 = new User(null, "user2", "username2", "1234",
+                true, ArtistStatus.INACTIVE, null, null);
+        userRepository.save(user2);
+        playlistService.addUserToPlaylistByUsername("summer_hits", "username2");
+        assertEquals(2, playlistRepository.findByName("summer_hits").get(0).getUsers().size());
+
+        mockMvc.perform(delete("/api/user/playlist/{playlistName}/user/{username}", "summer_hits", "username2")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        assertEquals(1, playlistRepository.findByName("summer_hits").get(0).getUsers().size());
+    }
+
+    @Test
+    public void removeUserFromPlaylistWrongPlaylistNameTest() throws Exception {
+        User user2 = new User(null, "user2", "username2", "1234",
+                true, ArtistStatus.INACTIVE, null, null);
+        userRepository.save(user2);
+        playlistService.addUserToPlaylistByUsername("summer_hits", "username2");
+
+        mockMvc.perform(delete("/api/user/playlist/{playlistName}/user/{username}", "wrong playlist", "username2")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(Matchers.containsString("Playlist with name \"wrong playlist\" not found")));
+    }
+
+    @Test
+    public void removeUserFromPlaylistWrongUserNameTest() throws Exception {
+        mockMvc.perform(delete("/api/user/playlist/{playlistName}/user/{username}", "summer_hits", "wrong user")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(Matchers.containsString("User with username \"wrong user\" not found")));
     }
 }

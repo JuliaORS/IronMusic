@@ -2,6 +2,7 @@ package com.ironhack.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ironhack.demosecurityjwt.security.Utils.ArtistStatus;
+import com.ironhack.demosecurityjwt.security.exceptions.UserNotFoundException;
 import com.ironhack.demosecurityjwt.security.models.Artist;
 import com.ironhack.demosecurityjwt.security.models.Role;
 import com.ironhack.demosecurityjwt.security.models.User;
@@ -68,10 +69,7 @@ public class PlaylistServiceTest {
 
         User user = new User(null, "user1", "username1", "1234",
                 true, ArtistStatus.INACTIVE, roles, null);
-        User user2 = new User(null, "user2", "username2", "1234",
-                true, ArtistStatus.INACTIVE, roles, null);
         userRepository.save(user);
-        userRepository.save(user2);
 
         List<User> userList = new ArrayList<>();
         userList.add(user);
@@ -175,5 +173,59 @@ public class PlaylistServiceTest {
     public void removeAudioFromPlaylistNotExistingAudioTest(){
     assertThrows(ResourceNotFoundException.class, () -> {playlistService.removeAudioFromPlaylistByTitle(
             "summer hits", "wrong");});
+    }
+
+    @Test
+    public void addUserToPlaylistTest(){
+        User user2 = new User(null, "user2", "username2", "1234",
+                true, ArtistStatus.INACTIVE, null, null);
+        userRepository.save(user2);
+
+        assertEquals(1, playlistRepository.findByName("summer hits").get(0).getUsers().size());
+        playlistService.addUserToPlaylistByUsername("summer hits", "username2");
+        assertEquals(2, playlistRepository.findByName("summer hits").get(0).getUsers().size());
+    }
+
+    @Test
+    public void addUserToPlaylistNotExistingPlaylistTest(){
+        User user2 = new User(null, "user2", "username2", "1234",
+                true, ArtistStatus.INACTIVE, null, null);
+        userRepository.save(user2);
+
+        assertThrows(ResourceNotFoundException.class, () -> {playlistService.addUserToPlaylistByUsername(
+                "wrong Playlist", "username2");});
+    }
+
+    @Test
+    public void addUserToPlaylistNotExistingUserTest(){
+        assertThrows(UserNotFoundException.class, () -> {playlistService.addUserToPlaylistByUsername(
+                "summer hits", "wrong name");});
+    }
+
+    @Test
+    public void removeUserFromPlaylistByNameTest(){
+        User user2 = new User(null, "user2", "username2", "1234",
+                true, ArtistStatus.INACTIVE, null, null);
+        userRepository.save(user2);
+        playlistService.addUserToPlaylistByUsername("summer hits", "username2");
+
+        assertEquals(2, playlistRepository.findByName("summer hits").get(0).getUsers().size());
+
+        playlistService.removeUserFromPlaylistByUsername("summer hits", "username2");
+
+        assertEquals(1, playlistRepository.findByName("summer hits").get(0).getUsers().size());
+        assertFalse(userRepository.findByUsername("username2").isEmpty()); //User still exists
+    }
+
+    @Test
+    public void removeUserFromPlaylistNotExistingPlaylistTest(){
+        assertThrows(ResourceNotFoundException.class, () -> {playlistService.removeUserFromPlaylistByUsername(
+                "wrong", "username1");});
+    }
+
+    @Test
+    public void removeUserFromPlaylistNotExistingUserTest(){
+        assertThrows(UserNotFoundException.class, () -> {playlistService.removeUserFromPlaylistByUsername(
+                "summer hits", "wrong");});
     }
 }

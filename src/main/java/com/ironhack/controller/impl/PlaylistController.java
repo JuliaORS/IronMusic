@@ -47,4 +47,19 @@ public class PlaylistController implements PlaylistControllerInterface {
     public void removeAudioFromPlaylistByTitle(@PathVariable String playlistName, @PathVariable String audioTitle)  {
         playlistService.removeAudioFromPlaylistByTitle(playlistName, audioTitle);
     }
+
+    @Override
+    @PutMapping("/user/playlist/{playlistName}/user/{username}")
+    @ResponseStatus(HttpStatus.OK)
+    public void addUserToPlaylistByUsername(@PathVariable String playlistName,
+                                                         @PathVariable String username) {
+        playlistService.addUserToPlaylistByUsername(playlistName, username);
+    }
+
+    @Override
+    @DeleteMapping("/user/playlist/{playlistName}/user/{username}")
+    @ResponseStatus(HttpStatus.OK)
+    public void removeUserFromPlaylistByUsername(@PathVariable String playlistName, @PathVariable String username)  {
+        playlistService.removeUserFromPlaylistByUsername(playlistName, username);
+    }
 }
