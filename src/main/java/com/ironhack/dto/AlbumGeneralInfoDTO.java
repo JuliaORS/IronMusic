@@ -1,10 +1,7 @@
 package com.ironhack.dto;
 
-import com.ironhack.demosecurityjwt.security.models.Artist;
 import com.ironhack.model.Album;
 import com.ironhack.model.Song;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 import java.util.ArrayList;

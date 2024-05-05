@@ -1,16 +1,16 @@
 package com.ironhack.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ironhack.demosecurityjwt.security.Utils.ArtistStatus;
-import com.ironhack.demosecurityjwt.security.exceptions.UserNotFoundException;
-import com.ironhack.demosecurityjwt.security.models.Artist;
-import com.ironhack.demosecurityjwt.security.models.Role;
-import com.ironhack.demosecurityjwt.security.models.User;
-import com.ironhack.demosecurityjwt.security.repositories.ArtistRepository;
-import com.ironhack.demosecurityjwt.security.repositories.RoleRepository;
-import com.ironhack.demosecurityjwt.security.repositories.UserRepository;
+import com.ironhack.security.utils.ArtistStatus;
+import com.ironhack.security.exception.UserNotFoundException;
+import com.ironhack.security.model.Artist;
+import com.ironhack.security.model.Role;
+import com.ironhack.security.model.User;
+import com.ironhack.security.repository.ArtistRepository;
+import com.ironhack.security.repository.RoleRepository;
+import com.ironhack.security.repository.UserRepository;
 import com.ironhack.dto.PlaylistGeneralInfoDTO;
-import com.ironhack.exceptions.ResourceNotFoundException;
+import com.ironhack.exception.ResourceNotFoundException;
 import com.ironhack.model.Playlist;
 import com.ironhack.model.Audio;
 import com.ironhack.repository.PlaylistRepository;
@@ -97,7 +97,7 @@ public class PlaylistServiceTest {
 
     @Test
     public void savePlaylistCorrectInfoTest() throws Exception {
-        Playlist newPlaylist =  new Playlist("new playlist title", null);
+        Playlist newPlaylist =  new Playlist("new playlist title", null, null);
 
         String expectedJson = objectMapper.writeValueAsString(new PlaylistGeneralInfoDTO(newPlaylist));
         PlaylistGeneralInfoDTO result = playlistService.savePlaylist(newPlaylist);
@@ -109,7 +109,7 @@ public class PlaylistServiceTest {
 
     @Test
     public void savePlaylistEmptyTitleTest() throws Exception {
-        Playlist newPlaylist =  new Playlist("", null);
+        Playlist newPlaylist =  new Playlist("", null, null);
         assertThrows(ConstraintViolationException.class, () -> {playlistService.savePlaylist(newPlaylist);});
     }
 

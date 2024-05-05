@@ -13,21 +13,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class AudioController implements AudioControllerInterface {
-
     @Autowired
     AudioService audioService;
 
     @Override
-    @DeleteMapping("/artist/audio/{title}")
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteAudioByTitle(@PathVariable String title) {
-        audioService.deleteAudioByTitle(title);
-    }
-
-    @Override
     @GetMapping("/user/audio/{info}")
     @ResponseStatus(HttpStatus.OK)
-    public List<AudioGeneralInfoDTO> getAudioByAll(@PathVariable String info) {
+    public List<AudioGeneralInfoDTO> getAudioByAllInfo(@PathVariable String info) {
         return audioService.getAudioByAllInfo(info);
     }
 }

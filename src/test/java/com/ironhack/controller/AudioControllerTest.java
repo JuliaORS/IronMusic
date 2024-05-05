@@ -2,12 +2,12 @@ package com.ironhack.controller;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ironhack.demosecurityjwt.security.Utils.ArtistStatus;
-import com.ironhack.demosecurityjwt.security.models.Artist;
-import com.ironhack.demosecurityjwt.security.models.Role;
-import com.ironhack.demosecurityjwt.security.models.User;
-import com.ironhack.demosecurityjwt.security.repositories.ArtistRepository;
-import com.ironhack.demosecurityjwt.security.repositories.RoleRepository;
+import com.ironhack.security.utils.ArtistStatus;
+import com.ironhack.security.model.Artist;
+import com.ironhack.security.model.Role;
+import com.ironhack.security.model.User;
+import com.ironhack.security.repository.ArtistRepository;
+import com.ironhack.security.repository.RoleRepository;
 import com.ironhack.dto.AudioGeneralInfoDTO;
 import com.ironhack.model.Audio;
 import com.ironhack.repository.AudioRepository;
@@ -20,7 +20,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -31,7 +30,6 @@ import java.util.List;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -76,21 +74,6 @@ public class AudioControllerTest {
     void tearDown() {
         audioRepository.deleteAll();
         artistRepository.deleteAll();
-    }
-    
-    @Test
-    public void deleteAudioByTitleTest() throws Exception{
-        mockMvc.perform(delete("/api/artist/audio/{title}", "audio title 1")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    public void deleteAudioByTitleWrongTitleTest() throws Exception{
-        mockMvc.perform(delete("/api/artist/audio/{title}", "wrong title")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound())
-                .andExpect(content().string(Matchers.containsString("Audio with title \"wrong title\" not found")));
     }
 
     @Test

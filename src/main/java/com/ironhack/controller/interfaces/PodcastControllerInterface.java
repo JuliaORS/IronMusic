@@ -2,8 +2,6 @@ package com.ironhack.controller.interfaces;
 
 import com.ironhack.dto.AudioGeneralInfoDTO;
 import com.ironhack.model.Podcast;
-import org.springframework.web.bind.annotation.PathVariable;
-
 import java.util.List;
 
 public interface PodcastControllerInterface {

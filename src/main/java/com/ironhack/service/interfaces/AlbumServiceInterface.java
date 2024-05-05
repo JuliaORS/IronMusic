@@ -1,12 +1,8 @@
 package com.ironhack.service.interfaces;
 
 import com.ironhack.dto.AlbumGeneralInfoDTO;
-import com.ironhack.exceptions.ResourceNotFoundException;
 import com.ironhack.model.Album;
-import com.ironhack.model.Song;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface AlbumServiceInterface {

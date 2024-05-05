@@ -1,16 +1,15 @@
 package com.ironhack.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ironhack.demosecurityjwt.security.Utils.ArtistStatus;
-import com.ironhack.demosecurityjwt.security.models.Artist;
-import com.ironhack.demosecurityjwt.security.models.Role;
-import com.ironhack.demosecurityjwt.security.models.User;
-import com.ironhack.demosecurityjwt.security.repositories.ArtistRepository;
-import com.ironhack.demosecurityjwt.security.repositories.RoleRepository;
+import com.ironhack.security.utils.ArtistStatus;
+import com.ironhack.security.model.Artist;
+import com.ironhack.security.model.Role;
+import com.ironhack.security.model.User;
+import com.ironhack.security.repository.ArtistRepository;
+import com.ironhack.security.repository.RoleRepository;
 import com.ironhack.dto.AudioGeneralInfoDTO;
-import com.ironhack.exceptions.BadRequestFormatException;
-import com.ironhack.exceptions.ResourceNotFoundException;
-import com.ironhack.model.Song;
+import com.ironhack.exception.BadRequestFormatException;
+import com.ironhack.exception.ResourceNotFoundException;
 import com.ironhack.model.Song;
 import com.ironhack.repository.SongRepository;
 import com.ironhack.service.impl.SongService;
@@ -22,19 +21,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class SongServiceTest {
-
     @Autowired
     private SongService songService;
     @Autowired

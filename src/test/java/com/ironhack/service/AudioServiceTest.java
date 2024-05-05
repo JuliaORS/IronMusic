@@ -1,18 +1,15 @@
 package com.ironhack.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ironhack.demosecurityjwt.security.Utils.ArtistStatus;
-import com.ironhack.demosecurityjwt.security.models.Artist;
-import com.ironhack.demosecurityjwt.security.models.User;
-import com.ironhack.demosecurityjwt.security.repositories.ArtistRepository;
+import com.ironhack.security.utils.ArtistStatus;
+import com.ironhack.security.model.Artist;
+import com.ironhack.security.model.User;
+import com.ironhack.security.repository.ArtistRepository;
 import com.ironhack.dto.AudioGeneralInfoDTO;
-import com.ironhack.exceptions.BadRequestFormatException;
-import com.ironhack.exceptions.ResourceNotFoundException;
-import com.ironhack.model.Audio;
+import com.ironhack.exception.ResourceNotFoundException;
 import com.ironhack.model.Audio;
 import com.ironhack.repository.AudioRepository;
 import com.ironhack.service.impl.AudioService;
-import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,14 +33,12 @@ public class AudioServiceTest {
     private AudioRepository audioRepository;
     @Autowired
     private ArtistRepository artistRepository;
-
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private Artist artist;
     private Audio audio;
 
     @BeforeEach
     void setUp(){
-        artist = new Artist(new User(null, "artist", "julia", "1234",
+        Artist artist = new Artist(new User(null, "artist", "julia", "1234",
                 true, ArtistStatus.ACTIVE, new ArrayList<>(), null));
         artistRepository.save(artist);
 
@@ -61,22 +56,8 @@ public class AudioServiceTest {
     }
 
     @Test
-    public void deleteAudioExistingTitleTest(){
-        assertFalse(audioRepository.findByTitle("audio title").isEmpty());
-        audioService.deleteAudioByTitle("audio title");
-        assertTrue(audioRepository.findByTitle("audio title").isEmpty());
-    }
-
-    @Test
-    public void deleteAudioNotExistingIdTest(){
-        assertThrows(ResourceNotFoundException.class, () -> {
-            audioService.deleteAudioByTitle("wrong title");});
-    }
-
-    @Test
     public void getAudioByAllInfoExistingInfoTest() throws Exception{
-        List<Audio> audios = new ArrayList<>();
-        audios.add(audio);
+        List<Audio> audios = new ArrayList<>(List.of(audio));
         List<AudioGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
         for(Audio audio : audios){
             audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(audio));
@@ -91,5 +72,4 @@ public class AudioServiceTest {
         assertThrows(ResourceNotFoundException.class, () -> {
             audioService.getAudioByAllInfo("wrong");});
     }
-
 }

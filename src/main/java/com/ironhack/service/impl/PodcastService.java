@@ -1,15 +1,12 @@
 package com.ironhack.service.impl;
 
-import com.ironhack.Utils.Validator;
-import com.ironhack.demosecurityjwt.security.models.Artist;
-import com.ironhack.demosecurityjwt.security.models.User;
-import com.ironhack.demosecurityjwt.security.repositories.UserRepository;
+import com.ironhack.utils.DurationAudioFormatValidator;
+import com.ironhack.security.model.Artist;
+import com.ironhack.security.model.User;
+import com.ironhack.security.repository.UserRepository;
 import com.ironhack.dto.AudioGeneralInfoDTO;
-import com.ironhack.exceptions.BadRequestFormatException;
-import com.ironhack.exceptions.ResourceNotFoundException;
-import com.ironhack.model.Audio;
+import com.ironhack.exception.ResourceNotFoundException;
 import com.ironhack.model.Podcast;
-import com.ironhack.model.Song;
 import com.ironhack.repository.PodcastRepository;
 import com.ironhack.service.interfaces.PodcastServiceInterface;
 import jakarta.validation.Valid;
@@ -17,10 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PodcastService implements PodcastServiceInterface {
@@ -30,9 +25,7 @@ public class PodcastService implements PodcastServiceInterface {
     private UserRepository userRepository;
     @Override
     public AudioGeneralInfoDTO savePodcast(@Valid Podcast podcast) {
-        if (!Validator.durationAudioValidator(podcast.getDuration())) {
-            throw new BadRequestFormatException("Bad request. Duration has not a correct format: HH:MM:SS or MM:SS or SS");
-        }
+        new DurationAudioFormatValidator(podcast.getDuration());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user = userRepository.findByUsername(username).get();
@@ -45,12 +38,11 @@ public class PodcastService implements PodcastServiceInterface {
     public void deletePodcastByTitle(String title){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        List<Podcast> podcastList = podcastRepository.findByTitleAndArtistUsername(title, username);
-        if (podcastList.size() == 1){
-            podcastRepository.delete(podcastList.get(0));
-        } else {
-            throw new ResourceNotFoundException("Podcast with title \"" + title + "\" not found");
-        }
+        Podcast podcast = podcastRepository.findByTitleAndArtistUsername(title, username)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Podcast with title \"" + title + "\" not found"));
+        podcastRepository.delete(podcast);
     }
 
     @Override
@@ -62,7 +54,6 @@ public class PodcastService implements PodcastServiceInterface {
         }
         return result;
     }
-
 
     @Override
     public List<AudioGeneralInfoDTO> getPodcastByTitle(String title) {

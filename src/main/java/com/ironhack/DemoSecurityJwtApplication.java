@@ -1,9 +1,9 @@
 package com.ironhack;
 
-import com.ironhack.demosecurityjwt.security.Utils.ArtistStatus;
-import com.ironhack.demosecurityjwt.security.models.Role;
-import com.ironhack.demosecurityjwt.security.models.User;
-import com.ironhack.demosecurityjwt.security.services.impl.UserService;
+import com.ironhack.security.utils.ArtistStatus;
+import com.ironhack.security.model.Role;
+import com.ironhack.security.model.User;
+import com.ironhack.security.service.impl.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

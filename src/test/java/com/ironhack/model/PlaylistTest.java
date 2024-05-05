@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class PlaylistTest {
-
     @Test
     public void playlistVoidConstructorTest(){
         Playlist playlist = new Playlist();

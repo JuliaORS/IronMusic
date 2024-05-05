@@ -1,6 +1,6 @@
 package com.ironhack.model;
 
-import com.ironhack.demosecurityjwt.security.models.Artist;
+import com.ironhack.security.model.Artist;
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import lombok.*;

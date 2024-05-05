@@ -1,12 +1,12 @@
 package com.ironhack.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ironhack.demosecurityjwt.security.Utils.ArtistStatus;
-import com.ironhack.demosecurityjwt.security.models.Artist;
-import com.ironhack.demosecurityjwt.security.models.Role;
-import com.ironhack.demosecurityjwt.security.models.User;
-import com.ironhack.demosecurityjwt.security.repositories.ArtistRepository;
-import com.ironhack.demosecurityjwt.security.repositories.RoleRepository;
+import com.ironhack.security.utils.ArtistStatus;
+import com.ironhack.security.model.Artist;
+import com.ironhack.security.model.Role;
+import com.ironhack.security.model.User;
+import com.ironhack.security.repository.ArtistRepository;
+import com.ironhack.security.repository.RoleRepository;
 import com.ironhack.dto.AudioGeneralInfoDTO;
 import com.ironhack.model.Song;
 import com.ironhack.repository.SongRepository;

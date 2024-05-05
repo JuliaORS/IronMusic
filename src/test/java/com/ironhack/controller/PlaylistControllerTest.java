@@ -1,14 +1,14 @@
 package com.ironhack.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ironhack.demosecurityjwt.security.Utils.ArtistStatus;
-import com.ironhack.demosecurityjwt.security.models.Artist;
-import com.ironhack.demosecurityjwt.security.models.Role;
-import com.ironhack.demosecurityjwt.security.models.User;
-import com.ironhack.demosecurityjwt.security.repositories.ArtistRepository;
-import com.ironhack.demosecurityjwt.security.repositories.RoleRepository;
-import com.ironhack.demosecurityjwt.security.repositories.UserRepository;
-import com.ironhack.demosecurityjwt.security.services.impl.UserService;
+import com.ironhack.security.utils.ArtistStatus;
+import com.ironhack.security.model.Artist;
+import com.ironhack.security.model.Role;
+import com.ironhack.security.model.User;
+import com.ironhack.security.repository.ArtistRepository;
+import com.ironhack.security.repository.RoleRepository;
+import com.ironhack.security.repository.UserRepository;
+import com.ironhack.security.service.impl.UserService;
 import com.ironhack.dto.PlaylistGeneralInfoDTO;
 import com.ironhack.model.Playlist;
 import com.ironhack.model.Audio;
@@ -187,7 +187,7 @@ public class PlaylistControllerTest {
         mockMvc.perform(put("/api/user/playlist/{playlistName}/audio/{audioTitle}", "wrong playlist", "audio title 3")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string(Matchers.containsString("Playlist with title \"wrong playlist\" not found")));
+                .andExpect(content().string(Matchers.containsString("Playlist with name \"wrong playlist\" not found")));
     }
 
     @Test
@@ -210,7 +210,7 @@ public class PlaylistControllerTest {
         mockMvc.perform(delete("/api/user/playlist/{playlistName}/audio/{audioTitle}", "wrong playlist", "audio title 1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string(Matchers.containsString("Playlist with title \"wrong playlist\" not found")));
+                .andExpect(content().string(Matchers.containsString("Playlist with name \"wrong playlist\" not found")));
     }
 
     @Test

@@ -4,13 +4,10 @@ import com.ironhack.controller.interfaces.PlaylistControllerInterface;
 import com.ironhack.dto.AudioGeneralInfoDTO;
 import com.ironhack.dto.PlaylistGeneralInfoDTO;
 import com.ironhack.model.Playlist;
-import com.ironhack.model.Playlist;
 import com.ironhack.service.impl.PlaylistService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

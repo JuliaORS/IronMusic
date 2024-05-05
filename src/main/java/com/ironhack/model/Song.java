@@ -1,6 +1,6 @@
 package com.ironhack.model;
 
-import com.ironhack.demosecurityjwt.security.models.Artist;
+import com.ironhack.security.model.Artist;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,7 +13,7 @@ import lombok.*;
 @PrimaryKeyJoinColumn(name="id")
 public class Song extends Audio{
 
-    @ManyToOne //(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "album_id")
     private Album album;
 

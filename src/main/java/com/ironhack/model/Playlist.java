@@ -1,12 +1,10 @@
 package com.ironhack.model;
 
-import com.ironhack.demosecurityjwt.security.models.Artist;
-import com.ironhack.demosecurityjwt.security.models.User;
+import com.ironhack.security.model.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 import java.util.ArrayList;
-
 import java.util.List;
 
 @Entity
@@ -25,9 +23,9 @@ public class Playlist {
 
     @ManyToMany (fetch = FetchType.EAGER)
     @JoinTable(
-            name = "playlist_audio", // Nombre de la tabla de unión
-            joinColumns = @JoinColumn(name = "playlist_id"), // Columna que hace referencia al ID del usuario
-            inverseJoinColumns = @JoinColumn(name = "audio_id") // Columna que hace referencia al ID de la lista de reproducción
+            name = "playlist_audio",
+            joinColumns = @JoinColumn(name = "playlist_id"),
+            inverseJoinColumns = @JoinColumn(name = "audio_id")
     )
     private List<Audio> audios;
 
@@ -38,9 +36,5 @@ public class Playlist {
         setName(name);
         setAudios(audios);
         setUsers(users);
-    }
-    public Playlist(String name, List<Audio> audios){
-        setName(name);
-        setAudios(audios);
     }
 }

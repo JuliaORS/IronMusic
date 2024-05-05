@@ -1,31 +1,21 @@
 package com.ironhack.service.impl;
 
-import com.ironhack.Utils.Validator;
-import com.ironhack.demosecurityjwt.security.models.Artist;
-import com.ironhack.demosecurityjwt.security.models.User;
-import com.ironhack.demosecurityjwt.security.repositories.UserRepository;
+import com.ironhack.utils.DurationAudioFormatValidator;
+import com.ironhack.security.model.Artist;
+import com.ironhack.security.model.User;
+import com.ironhack.security.repository.UserRepository;
 import com.ironhack.dto.AudioGeneralInfoDTO;
-import com.ironhack.exceptions.BadRequestFormatException;
-import com.ironhack.exceptions.ResourceNotFoundException;
-import com.ironhack.model.Playlist;
+import com.ironhack.exception.ResourceNotFoundException;
 import com.ironhack.model.Song;
 import com.ironhack.repository.SongRepository;
 import com.ironhack.service.interfaces.SongServiceInterface;
 import jakarta.validation.Valid;
-import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BeanPropertyBindingResult;
-import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
-import org.springframework.web.bind.annotation.PathVariable;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class SongService  implements SongServiceInterface {
@@ -36,9 +26,7 @@ public class SongService  implements SongServiceInterface {
     private UserRepository userRepository;
     @Override
     public AudioGeneralInfoDTO saveSong(@Valid Song song) {
-        if (!Validator.durationAudioValidator(song.getDuration())) {
-            throw new BadRequestFormatException("Bad request. Duration has not a correct format: HH:MM:SS or MM:SS or SS");
-        }
+        new DurationAudioFormatValidator(song.getDuration());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user = userRepository.findByUsername(username).get();
@@ -51,12 +39,12 @@ public class SongService  implements SongServiceInterface {
     public void deleteSongByTitle(String title){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        List<Song> songList = songRepository.findByTitleAndArtistUsername(title, username);
-        if (songList.size() == 1){
-            songRepository.delete(songList.get(0));
-        } else {
-            throw new ResourceNotFoundException("Song with title \"" + title + "\" not found");
-        }
+        Song song = songRepository.findByTitleAndArtistUsername(title, username)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Song with title \"" + title + "\" not found"));
+
+        songRepository.delete(song);
     }
 
     @Override

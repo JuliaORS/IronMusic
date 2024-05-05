@@ -2,15 +2,12 @@ package com.ironhack.controller.impl;
 
 import com.ironhack.controller.interfaces.AlbumControllerInterface;
 import com.ironhack.dto.AlbumGeneralInfoDTO;
-import com.ironhack.dto.AudioGeneralInfoDTO;
 import com.ironhack.model.Album;
-import com.ironhack.model.Song;
 import com.ironhack.service.impl.AlbumService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -74,7 +71,7 @@ public class AlbumController implements AlbumControllerInterface {
     @Override
     @GetMapping("/user/album/{info}")
     @ResponseStatus(HttpStatus.OK)
-    public List<AlbumGeneralInfoDTO> getAlbumByAll(@PathVariable String info) {
+    public List<AlbumGeneralInfoDTO> getAlbumByAllInfo(@PathVariable String info) {
         return albumService.getAlbumByAllInfo(info);
     }
 

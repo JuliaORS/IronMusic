@@ -1,11 +1,7 @@
 package com.ironhack.service.interfaces;
 
 import com.ironhack.dto.AudioGeneralInfoDTO;
-import com.ironhack.exceptions.ResourceNotFoundException;
 import com.ironhack.model.Song;
-import com.ironhack.service.impl.SongService;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 

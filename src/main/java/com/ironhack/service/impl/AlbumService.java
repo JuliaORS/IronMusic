@@ -1,31 +1,22 @@
 package com.ironhack.service.impl;
 
-import com.ironhack.demosecurityjwt.security.models.Artist;
-import com.ironhack.demosecurityjwt.security.models.User;
-import com.ironhack.demosecurityjwt.security.repositories.UserRepository;
+import com.ironhack.security.model.Artist;
+import com.ironhack.security.model.User;
+import com.ironhack.security.repository.UserRepository;
 import com.ironhack.dto.AlbumGeneralInfoDTO;
-import com.ironhack.dto.AudioGeneralInfoDTO;
-import com.ironhack.exceptions.ResourceNotFoundException;
+import com.ironhack.exception.ResourceNotFoundException;
 import com.ironhack.model.Album;
-import com.ironhack.model.Playlist;
 import com.ironhack.model.Song;
 import com.ironhack.repository.AlbumRepository;
 import com.ironhack.repository.SongRepository;
 import com.ironhack.service.interfaces.AlbumServiceInterface;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AlbumService implements AlbumServiceInterface {
@@ -50,53 +41,48 @@ public class AlbumService implements AlbumServiceInterface {
     public void deleteAlbumByTitle(String title){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        List<Album> albumList = albumRepository.findByTitleAndArtistUsername(title, username);
-        if (albumList.size() == 1){
-            albumRepository.delete(albumList.get(0));
-        } else {
-            throw new ResourceNotFoundException("Album with title \"" + title + "\" not found");
-        }
+        Album album = albumRepository.findByTitleAndArtistUsername(title, username)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Album with title \"" + title + "\" not found"));
+        albumRepository.delete(album);
     }
 
     @Override
     public  void addSongToAlbumByTitleSong(String albumTitle, String songTitle){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-
+        Album album = albumRepository.findByTitleAndArtistUsername(albumTitle, username)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Album with title \"" + albumTitle + "\" not found"));
+        Song song = songRepository.findByTitleAndArtistUsername(songTitle, username)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Song with title \"" + songTitle + "\" not found"));
         List<Album> albumList = albumRepository.findByTitleAndArtistUsername(albumTitle, username);
-        if (albumList.size() == 1) {
-            List<Song> songList = songRepository.findByTitleAndArtistUsername(songTitle, username);
-            if (songList.size() == 1){
-                songList.get(0).setAlbum(albumList.get(0));
-                songRepository.save(songList.get(0));
-                albumList.get(0).getSongs().add(songList.get(0));
-                albumRepository.save(albumList.get(0));
-            } else {
-                throw new ResourceNotFoundException("Song with title \"" + songTitle + "\" not found");
-            }
-        } else {
-            throw new ResourceNotFoundException("Album with title \"" + albumTitle + "\" not found");
-        }
+        song.setAlbum(album);
+        songRepository.save(song);
+        album.getSongs().add(song);
+        albumRepository.save(albumList.get(0));
     }
 
     @Override
     public  void removeSongFromAlbum(String albumTitle, String songTitle){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        List<Album> albumList = albumRepository.findByTitleAndArtistUsername(albumTitle, username);
-        if (albumList.size() == 1) {
-            List<Song> songList = songRepository.findByTitleAndAlbumTitleAndAlbumArtistUsername(songTitle, albumTitle, username);
-            if (songList.size() == 1){
-                albumList.get(0).getSongs().remove(songList.get(0));
-                albumRepository.save(albumList.get(0));
-                songList.get(0).setAlbum(null);
-                songRepository.save(songList.get(0));
-            } else {
-                throw new ResourceNotFoundException("Song with title \"" + songTitle + "\" not found");
-            }
-        } else {
-            throw new ResourceNotFoundException("Album with title \"" + albumTitle + "\" not found");
-        }
+        Album album = albumRepository.findByTitleAndArtistUsername(albumTitle, username)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Album with title \"" + albumTitle + "\" not found"));
+        Song song = songRepository.findByTitleAndAlbumTitleAndAlbumArtistUsername(songTitle, albumTitle, username)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Song with title \"" + songTitle + "\" not found"));
+        album.getSongs().remove(song);
+        albumRepository.save(album);
+        song.setAlbum(null);
+        songRepository.save(song);
     }
 
     @Override

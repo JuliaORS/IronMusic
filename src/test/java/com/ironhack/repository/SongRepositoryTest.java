@@ -1,9 +1,9 @@
 package com.ironhack.repository;
 
-import com.ironhack.demosecurityjwt.security.Utils.ArtistStatus;
-import com.ironhack.demosecurityjwt.security.models.Artist;
-import com.ironhack.demosecurityjwt.security.models.User;
-import com.ironhack.demosecurityjwt.security.repositories.ArtistRepository;
+import com.ironhack.security.utils.ArtistStatus;
+import com.ironhack.security.model.Artist;
+import com.ironhack.security.model.User;
+import com.ironhack.security.repository.ArtistRepository;
 import com.ironhack.model.Album;
 import com.ironhack.model.Song;
 import org.junit.jupiter.api.*;
@@ -16,7 +16,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class SongRepositoryTest {
-
     @Autowired
     SongRepository songRepository;
     @Autowired
@@ -72,7 +71,6 @@ public class SongRepositoryTest {
         assertTrue(songRepository.findByTitleContaining("title1").isEmpty());
         assertEquals(1, albumRepository.count());
         assertTrue(artistRepository.findByUsername("ju").isPresent());
-
     }
 
     @Test

@@ -1,9 +1,7 @@
 package com.ironhack.dto;
 
-import com.ironhack.model.Album;
 import com.ironhack.model.Audio;
 import com.ironhack.model.Playlist;
-import com.ironhack.model.Song;
 import lombok.Data;
 
 import java.util.ArrayList;

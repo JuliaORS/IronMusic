@@ -1,16 +1,13 @@
 package com.ironhack.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ironhack.demosecurityjwt.security.Utils.ArtistStatus;
-import com.ironhack.demosecurityjwt.security.models.Artist;
-import com.ironhack.demosecurityjwt.security.models.User;
-import com.ironhack.demosecurityjwt.security.repositories.ArtistRepository;
+import com.ironhack.security.utils.ArtistStatus;
+import com.ironhack.security.model.Artist;
+import com.ironhack.security.model.User;
+import com.ironhack.security.repository.ArtistRepository;
 import com.ironhack.dto.AlbumGeneralInfoDTO;
-import com.ironhack.dto.AudioGeneralInfoDTO;
-import com.ironhack.exceptions.BadRequestFormatException;
-import com.ironhack.exceptions.ResourceNotFoundException;
+import com.ironhack.exception.ResourceNotFoundException;
 import com.ironhack.model.Album;
-import com.ironhack.model.Podcast;
 import com.ironhack.model.Song;
 import com.ironhack.repository.AlbumRepository;
 import com.ironhack.repository.SongRepository;

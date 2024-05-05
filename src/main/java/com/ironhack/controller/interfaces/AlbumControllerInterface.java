@@ -1,14 +1,7 @@
 package com.ironhack.controller.interfaces;
 
 import com.ironhack.dto.AlbumGeneralInfoDTO;
-import com.ironhack.dto.AudioGeneralInfoDTO;
 import com.ironhack.model.Album;
-import com.ironhack.model.Song;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseStatus;
-
 import java.util.List;
 
 public interface AlbumControllerInterface {
@@ -19,5 +12,5 @@ public interface AlbumControllerInterface {
     List<AlbumGeneralInfoDTO> getAllAlbums();
     List<AlbumGeneralInfoDTO> getAlbumByTitle(String title);
     List<AlbumGeneralInfoDTO> getAlbumByArtistName(String artistName);
-    List<AlbumGeneralInfoDTO> getAlbumByAll(String info);
+    List<AlbumGeneralInfoDTO> getAlbumByAllInfo(String info);
 }

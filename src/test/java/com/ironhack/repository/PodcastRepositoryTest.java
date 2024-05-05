@@ -1,22 +1,17 @@
 package com.ironhack.repository;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ironhack.demosecurityjwt.security.Utils.ArtistStatus;
-import com.ironhack.demosecurityjwt.security.models.Artist;
-import com.ironhack.demosecurityjwt.security.models.User;
-import com.ironhack.demosecurityjwt.security.repositories.ArtistRepository;
+import com.ironhack.security.utils.ArtistStatus;
+import com.ironhack.security.model.Artist;
+import com.ironhack.security.model.User;
+import com.ironhack.security.repository.ArtistRepository;
 import com.ironhack.model.Podcast;
-import com.ironhack.model.Podcast;
-import com.ironhack.model.Song;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
@@ -82,5 +77,4 @@ public class PodcastRepositoryTest {
     void findByArtistNameContainingAnyPodcastTest(){
         assertEquals(0, podcastRepository.findByTitleContaining("to").size());
     }
-
 }

@@ -1,18 +1,13 @@
 package com.ironhack.controller.impl;
 
 import com.ironhack.controller.interfaces.SongControllerInterface;
-import com.ironhack.demosecurityjwt.security.models.User;
-import com.ironhack.demosecurityjwt.security.services.interfaces.UserServiceInterface;
 import com.ironhack.dto.AudioGeneralInfoDTO;
 import com.ironhack.model.Song;
-import com.ironhack.repository.SongRepository;
 import com.ironhack.service.impl.SongService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -21,10 +16,6 @@ public class SongController implements SongControllerInterface {
 
     @Autowired
     private SongService songService;
-    @Autowired
-    private SongRepository songRepository;
-    @Autowired
-    private UserServiceInterface userService;
 
     /*Actions only available for artists-Users*/
     @Override

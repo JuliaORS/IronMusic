@@ -1,10 +1,8 @@
 package com.ironhack.controller.impl;
 
 import com.ironhack.controller.interfaces.PodcastControllerInterface;
-import com.ironhack.demosecurityjwt.security.services.interfaces.UserServiceInterface;
 import com.ironhack.dto.AudioGeneralInfoDTO;
 import com.ironhack.model.Podcast;
-import com.ironhack.repository.PodcastRepository;
 import com.ironhack.service.impl.PodcastService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +14,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class PodcastController implements PodcastControllerInterface {
-
    @Autowired
     private PodcastService podcastService;
-    @Autowired
-    private PodcastRepository podcastRepository;
-    @Autowired
-    private UserServiceInterface userService;
 
     /*Actions only available to artists-Users*/
     @Override
@@ -65,7 +58,6 @@ public class PodcastController implements PodcastControllerInterface {
     @Override
     @GetMapping("/user/podcast/{info}")
     @ResponseStatus(HttpStatus.OK)
-    public List<AudioGeneralInfoDTO> getPodcastByAll(@PathVariable String info) {
-     return podcastService.getPodcastByAllInfo(info);
+    public List<AudioGeneralInfoDTO> getPodcastByAll(@PathVariable String info) {return podcastService.getPodcastByAllInfo(info);
     }
 }

@@ -1,7 +1,6 @@
 package com.ironhack.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ironhack.demosecurityjwt.security.models.Artist;
+import com.ironhack.security.model.Artist;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
@@ -24,9 +23,8 @@ public class Audio {
     @NotEmpty(message = "Bad request. Duration is required.")
     private String duration;
 
-    @ManyToOne //(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "artist_id")
-    //@JsonIgnore // Ignore recursive property
     private Artist artist;
 
     public Audio(String title, String duration, Artist artist){

@@ -1,6 +1,5 @@
 package com.ironhack.dto;
 
-import com.ironhack.model.Album;
 import com.ironhack.model.Audio;
 import lombok.Data;
 
