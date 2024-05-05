@@ -10,13 +10,9 @@ import java.util.List;
 
 @Repository
 public interface AudioRepository extends JpaRepository<Audio,Long> {
+    List<Audio> findByTitle(String title);
     List<Audio> findByTitleAndArtistUsername(String audioTitle, String artistUsername);
     List<Audio> findByTitleContaining(String title);
     List<Audio> findByArtistNameContainingOrTitleContaining(String artistName, String title);
-    List<Audio> findByTitle(String title);
-    @Query("SELECT a FROM Audio a JOIN a.playlist p JOIN p.users u WHERE a.title = " +
-            ":audioTitle AND p.name = :playlistTitle AND u.username = :username")
-    List<Audio> findByTitleAndPlaylistTitleAndUserUsername(@Param("audioTitle") String audioTitle,
-                                                           @Param("playlistTitle") String playlistTitle,
-                                                           @Param("username") String username);
+
 }

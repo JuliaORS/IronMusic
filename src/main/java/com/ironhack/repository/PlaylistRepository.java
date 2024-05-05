@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface PlaylistRepository extends JpaRepository<Playlist,Long> {
     List<Playlist> findByName(String name);
-    List<Playlist> findByTitleAndUsername(String title, String username); //pending to check!!!
+
 }

@@ -74,6 +74,11 @@ public class AudioRepositoryTest {
         assertEquals(1, audios.size());
         assertEquals(audio.getTitle(), audios.get(0).getTitle());
     }
+    @Test
+    void findByTitleContainingNotExistingTest(){
+        assertTrue(audioRepository.findByTitleContaining("wrong").isEmpty());
+    }
+
 }
 
 

@@ -67,7 +67,7 @@ public class AlbumController implements AlbumControllerInterface {
     @Override
     @GetMapping("/user/album/artist_name/{artistName}")
     @ResponseStatus(HttpStatus.OK)
-    public List<AlbumGeneralInfoDTO> getSongByArtistName(@PathVariable String artistName) {
+    public List<AlbumGeneralInfoDTO> getAlbumByArtistName(@PathVariable String artistName) {
         return albumService.getAlbumByArtistName(artistName);
     }
 

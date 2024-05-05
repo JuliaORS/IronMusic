@@ -17,7 +17,7 @@ public class Group {
     @Setter(AccessLevel.NONE)
     private Long id;
 
-    @NotEmpty(message = "Bad request. Group name is required.")
+  /*  @NotEmpty(message = "Bad request. Group name is required.")
     private String name;
 
     @ManyToMany
@@ -29,5 +29,5 @@ public class Group {
     private List<User> users;
 
     @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<Playlist> playlists;
+    private List<Playlist> playlists;*/
 }

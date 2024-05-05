@@ -1,9 +1,11 @@
 package com.ironhack.model;
 
 import com.ironhack.demosecurityjwt.security.models.Artist;
+import com.ironhack.demosecurityjwt.security.models.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
+import java.util.ArrayList;
 
 import java.util.List;
 
@@ -21,14 +23,22 @@ public class Playlist {
     @NotEmpty(message = "Bad request. Playlist name is required.")
     private String name;
 
-    @ManyToMany //(cascade = CascadeType.ALL)
+    @ManyToMany (fetch = FetchType.EAGER)
     @JoinTable(
-            name = "playlist_audio", //join table name
-            joinColumns = @JoinColumn(name = "playlist_id"), // ref column this entity
-            inverseJoinColumns = @JoinColumn(name = "audio_id") // audio ref column
+            name = "playlist_audio", // Nombre de la tabla de unión
+            joinColumns = @JoinColumn(name = "playlist_id"), // Columna que hace referencia al ID del usuario
+            inverseJoinColumns = @JoinColumn(name = "audio_id") // Columna que hace referencia al ID de la lista de reproducción
     )
     private List<Audio> audios;
 
+    @ManyToMany(mappedBy = "playlists", fetch = FetchType.EAGER)
+    private List<User> users = new ArrayList<>();
+
+    public Playlist(String name, List<Audio> audios, List<User> users){
+        setName(name);
+        setAudios(audios);
+        setUsers(users);
+    }
     public Playlist(String name, List<Audio> audios){
         setName(name);
         setAudios(audios);

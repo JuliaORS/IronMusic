@@ -15,7 +15,7 @@ import java.util.List;
 
 public interface PlaylistServiceInterface {
     PlaylistGeneralInfoDTO savePlaylist(Playlist playlist);
-    void deletePlaylistByTitle(String title);
-    AudioGeneralInfoDTO addAudioToPlaylistByTitleAudio(String playlistTitle, String audioTitle);
+    void deletePlaylistByName(String title);
+    AudioGeneralInfoDTO addAudioToPlaylistByTitle(String playlistTitle, String audioTitle);
     void removeAudioFromPlaylistByTitle(String playlistTitle, String audioTitle);
 }

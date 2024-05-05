@@ -39,9 +39,16 @@ public class User {
 
     @ManyToMany(fetch = EAGER, cascade = CascadeType.ALL)
     @JoinTable(
-            name = "playlist_user", //join table name
-            joinColumns = @JoinColumn(name = "playlist_id"), // ref column this entity
-            inverseJoinColumns = @JoinColumn(name = "user_id") // audio ref column
+            name = "user_playlist", // Nombre de la tabla de unión
+            joinColumns = @JoinColumn(name = "user_id"), // Columna que hace referencia al ID del usuario
+            inverseJoinColumns = @JoinColumn(name = "playlist_id") // Columna que hace referencia al ID de la lista de reproducción
     )
-    private List<Playlist> playlists;
+    private List<Playlist> playlists = new ArrayList<>();
+
+    public void addOnePlaylist(Playlist playlist){
+        if (playlists == null) {
+            playlists = new ArrayList<>();
+        }
+        playlists.add(playlist);
+    }
 }

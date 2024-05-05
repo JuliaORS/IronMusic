@@ -17,8 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class PlaylistRepositoryTest {
@@ -83,5 +82,17 @@ public class PlaylistRepositoryTest {
         assertEquals(0, playlistRepository.count());
         assertEquals(1, audioRepository.count()); //audio is still present
         assertEquals(1, artistRepository.count()); //artist is still present
+    }
+
+    @Test
+    void findByNameTest(){
+        List<Playlist> playlistList = playlistRepository.findByName("summer hits");
+        assertEquals(1, playlistList.size());
+        assertEquals(playlistList.get(0).getName(), "summer hits");
+    }
+
+    @Test
+    void findByNameNotExistingTest(){
+        assertTrue(playlistRepository.findByName("wrong").isEmpty());
     }
 }

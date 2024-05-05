@@ -13,11 +13,11 @@ import java.util.Optional;
 
 @Repository
 public interface SongRepository extends JpaRepository<Song,Long> {
-    List<Song> findByTitleContaining(String title);
     List<Song> findByTitle(String title);
+    List<Song> findByTitleContaining(String title); //check
     List<Song> findByTitleAndAlbumTitleAndAlbumArtistUsername(String songTitle, String albumTitle, String artistUsername);
     List<Song> findByTitleAndArtistUsername(String songTitle, String artistUsername);
-    List<Song> findByArtistNameContaining(String artist);
+    List<Song> findByArtistNameContaining(String artist); //check
     List<Song> findByArtistNameContainingOrTitleContainingOrAlbumTitleContaining(String artistName,
                                                                                  String title, String albumTitle);
     List<Song> findByGenreContaining(String genre);

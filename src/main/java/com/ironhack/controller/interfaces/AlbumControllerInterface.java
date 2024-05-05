@@ -18,6 +18,6 @@ public interface AlbumControllerInterface {
     void removeSongFromAlbum(String albumTitle, String songTitle);
     List<AlbumGeneralInfoDTO> getAllAlbums();
     List<AlbumGeneralInfoDTO> getAlbumByTitle(String title);
-    List<AlbumGeneralInfoDTO> getSongByArtistName(String artistName);
+    List<AlbumGeneralInfoDTO> getAlbumByArtistName(String artistName);
     List<AlbumGeneralInfoDTO> getAlbumByAll(String info);
 }

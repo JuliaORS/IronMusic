@@ -23,9 +23,13 @@ public class PlaylistGeneralInfoDTO {
     }
 
     public void setAudioArtistMapFromAudioList(List<Audio> audioList){
-        audioArtistList = new HashMap<>();
-        for (Audio audio : audioList){
-            audioArtistList.put(audio.getTitle(), audio.getArtist().getName());
+        if (audioList == null){
+            audioArtistList = null;
+        } else {
+            audioArtistList = new HashMap<>();
+            for (Audio audio : audioList){
+                audioArtistList.put(audio.getTitle(), audio.getArtist().getName());
+            }
         }
     }
 }

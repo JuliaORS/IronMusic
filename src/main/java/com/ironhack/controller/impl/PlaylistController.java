@@ -27,24 +27,24 @@ public class PlaylistController implements PlaylistControllerInterface {
     }
 
     @Override
-    @DeleteMapping("/artist/playlist/{title}")
+    @DeleteMapping("/artist/playlist/{name}")
     @ResponseStatus(HttpStatus.OK)
-    public void deletePlaylistByTitle(@PathVariable String title) {
-        playlistService.deletePlaylistByTitle(title);
+    public void deletePlaylistByName(@PathVariable String name) {
+        playlistService.deletePlaylistByName(name);
     }
 
     @Override
-    @PutMapping("/artist/playlist/{playlistTitle}/audio/{audioTitle}")
+    @PutMapping("/artist/playlist/{playlistName}/audio/{audioTitle}")
     @ResponseStatus(HttpStatus.OK)
-    public AudioGeneralInfoDTO addAudioToPlaylistByTitleAudio(@PathVariable String playlistTitle,
+    public AudioGeneralInfoDTO addAudioToPlaylistByTitle(@PathVariable String playlistName,
                                                               @PathVariable String audioTitle) {
-        return playlistService.addAudioToPlaylistByTitleAudio(playlistTitle, audioTitle);
+        return playlistService.addAudioToPlaylistByTitle(playlistName, audioTitle);
     }
 
     @Override
-    @DeleteMapping("/artist/playlist/{playlistTitle}/audio/{audioTitle}")
+    @DeleteMapping("/artist/playlist/{playlistName}/audio/{audioTitle}")
     @ResponseStatus(HttpStatus.OK)
-    public void removeAudioFromPlaylistByTitle(@PathVariable String playlistTitle, @PathVariable String audioTitle)  {
-        playlistService.removeAudioFromPlaylistByTitle(playlistTitle, audioTitle);
+    public void removeAudioFromPlaylistByTitle(@PathVariable String playlistName, @PathVariable String audioTitle)  {
+        playlistService.removeAudioFromPlaylistByTitle(playlistName, audioTitle);
     }
 }

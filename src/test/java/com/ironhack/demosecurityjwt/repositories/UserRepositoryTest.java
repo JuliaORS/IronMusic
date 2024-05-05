@@ -43,10 +43,11 @@ public class UserRepositoryTest {
     @Autowired
     private RoleRepository roleRepository;
 
+
     @BeforeEach
     public void setUp(){
         Artist artist = new Artist(new User(null, "artist", "ju", "1234",
-                false, ArtistStatus.ACTIVE,  new ArrayList<>(), null));
+                true, ArtistStatus.ACTIVE,  new ArrayList<>(), null));
         artistRepository.save(artist);
 
         Audio audio = new Audio("tile", "3:34", artist);
@@ -57,34 +58,32 @@ public class UserRepositoryTest {
         Collection<Role> roles = new ArrayList<>();
         roles.add(roleRepository.findByName("ROLE_USER").get());
 
-        Playlist playlist = new Playlist("summer hits", audiosList);
-        playlistRepository.save(playlist);
-        List<Playlist> playlistList = new ArrayList<>();
-        playlistList.add(playlist);
-
-        Playlist playlist2 = new Playlist("spring hits", audiosList);
-        playlistRepository.save(playlist2);
-        List<Playlist> playlistList2 = new ArrayList<>();
-        playlistList2.add(playlist2);
-
         User user = new User(null, "user1", "username1", "1234",
-                true, ArtistStatus.INACTIVE, null, null);
+                true, ArtistStatus.INACTIVE, roles, null);
         User user2 = new User(null, "user2", "username2", "1234",
-                true, ArtistStatus.INACTIVE, null, null);
+                true, ArtistStatus.INACTIVE, roles, null);
 
         userRepository.save(user);
         userRepository.save(user2);
+
+        List<User> userList = new ArrayList<>();
+        userList.add(user);
+
+        Playlist playlist = new Playlist("summer hits", null, userList);
+        playlistRepository.save(playlist);
+
+        List<Playlist> playlistList = new ArrayList<>();
+        playlistList.add(playlist);
         user.setPlaylists(playlistList);
-        user.setRoles(roles);
-        user2.setPlaylists(playlistList2);
-        user2.setRoles(roles);
+        userRepository.save(user);
     }
 
     @AfterEach
     public void tearsDown(){
-        playlistRepository.deleteAll();
-        audioRepository.deleteAll();
         userRepository.deleteAll();
+        artistRepository.deleteAll();
+        audioRepository.deleteAll();
+        playlistRepository.deleteAll();
     }
 
     @Test
@@ -99,7 +98,6 @@ public class UserRepositoryTest {
     @Test
     public void deleteUserTest(){
         long actualResources = userRepository.count();
-
         User user = new User(null, "userNew", "usernameNew", "1234",
                 true, ArtistStatus.INACTIVE, null, null);
         userRepository.save(user);
@@ -140,6 +138,16 @@ public class UserRepositoryTest {
     @Test
     public void findByIsActiveFalseTest(){
         List<User> userList = userRepository.findByIsActiveFalse();
-        assertEquals(0, userList.size());
+        for (User user : userList){
+            assertTrue(user.isActive());
+        }
+    }
+
+    @Test
+    public void findByArtistStatusTest(){
+        List<User> userList = userRepository.findByArtistStatus(ArtistStatus.ACTIVE);
+        for (User user : userList){
+            assertEquals(ArtistStatus.ACTIVE, user.getArtistStatus());
+        }
     }
 }

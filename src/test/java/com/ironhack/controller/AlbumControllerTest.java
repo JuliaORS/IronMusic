@@ -208,4 +208,89 @@ public class AlbumControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(content().string(Matchers.containsString("Song with title \"wrong song\" not found")));
     }
+
+    @Test
+    void getAllAlbumsTest() throws Exception {
+        List<Album> albums = albumRepository.findAll();
+        List<AlbumGeneralInfoDTO> albumGeneralInfoDTOS = new ArrayList<>();
+        for(Album album : albums){
+            albumGeneralInfoDTOS.add(new AlbumGeneralInfoDTO(album));
+        }
+        String expectedJson = objectMapper.writeValueAsString(albumGeneralInfoDTOS);
+
+        mockMvc.perform(get("/api/user/albums").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(expectedJson));
+    }
+
+    @Test
+    void getAlbumsByTitleTest() throws Exception {
+        List<Album> albums = albumRepository.findByTitleContaining("title");
+        List<AlbumGeneralInfoDTO> albumGeneralInfoDTOS = new ArrayList<>();
+        for(Album album : albums){
+            albumGeneralInfoDTOS.add(new AlbumGeneralInfoDTO(album));
+        }
+        String expectedJson = objectMapper.writeValueAsString(albumGeneralInfoDTOS);
+        mockMvc.perform(get("/api/user/album/title/{title}", "title")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(expectedJson));
+    }
+
+    @Test
+    void getAlbumsByTitleNotExistingTitleTest() throws Exception {
+        mockMvc.perform(get("/api/user/album/title/{title}", "wrong")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(Matchers.containsString("No albums found with that title.")));
+    }
+
+    @Test
+    void getAlbumsByArtistNameTest() throws Exception {
+        List<Album> albums = albumRepository.findByArtistNameContaining("artist");
+        List<AlbumGeneralInfoDTO> albumGeneralInfoDTOS = new ArrayList<>();
+        for(Album album : albums){
+            albumGeneralInfoDTOS.add(new AlbumGeneralInfoDTO(album));
+        }
+        String expectedJson = objectMapper.writeValueAsString(albumGeneralInfoDTOS);
+        mockMvc.perform(get("/api/user/album/artist_name/{artistName}", "artist")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(expectedJson));
+    }
+
+    @Test
+    void getAlbumsByArtistNameNotExistingArtistTest() throws Exception {
+        mockMvc.perform(get("/api/user/album/artist_name/{artistName}", "wrong")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(Matchers.containsString("No albums found with that artist name.")));
+    }
+
+
+    @Test
+    void getAlbumsByAllInfoTest() throws Exception {
+        List<AlbumGeneralInfoDTO> albumGeneralInfoDTOS = new ArrayList<>();
+        List<Album> albums = albumRepository.findAll();
+        for(Album album : albums){
+            albumGeneralInfoDTOS.add(new AlbumGeneralInfoDTO(album));
+        }
+        String expectedJson = objectMapper.writeValueAsString(albumGeneralInfoDTOS);
+        mockMvc.perform(get("/api/user/album/{info}", "album")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(expectedJson));
+    }
+
+    @Test
+    void getAlbumsByAllInfoWrongInfoTest() throws Exception {
+        mockMvc.perform(get("/api/user/album/{info}", "wrong info")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(Matchers.containsString("No albums found with that info.")));
+    }
 }

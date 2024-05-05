@@ -33,7 +33,7 @@ public class AlbumRepositoryTest {
 
     @BeforeEach
     void setUp(){
-        Artist artist = new Artist(new User(null, "artist", "ju", "1234",
+        Artist artist = new Artist(new User(null, "artist", "artist", "1234",
                 false, ArtistStatus.ACTIVE,  new ArrayList<>(), null));
         Artist artistSaved = artistRepository.save(artist);
 
@@ -71,14 +71,14 @@ public class AlbumRepositoryTest {
     void deleteAlbumTest(){
         assertFalse(songRepository.findByTitleContaining("title1").isEmpty());
         assertEquals(1, albumRepository.count());
-        assertTrue(artistRepository.findByUsername("ju").isPresent());
+        assertTrue(artistRepository.findByUsername("artist").isPresent());
 
         Album albumToDelete = albumRepository.findByTitle("album").get(0);
         albumRepository.delete(albumToDelete);
 
         assertEquals(0, albumRepository.count());
         assertTrue(songRepository.findByTitleContaining("title1").isEmpty()); //check delete song
-        assertTrue(artistRepository.findByUsername("ju").isPresent()); //check artist is still present
+        assertTrue(artistRepository.findByUsername("artist").isPresent()); //check artist is still present
     }
 
     @Test
@@ -95,20 +95,57 @@ public class AlbumRepositoryTest {
 
     @Test
     void findByTitleAndArtistUsernameTest(){
-        List<Album> albumList = albumRepository.findByTitleAndArtistUsername("album", "ju");
+        List<Album> albumList = albumRepository.findByTitleAndArtistUsername("album", "artist");
         assertEquals(1, albumList.size());
         assertEquals("album", albumList.get(0).getTitle());
     }
 
     @Test
     void findByTitleAndArtistUsernameWrongTitleTest(){
-        List<Album> albumList = albumRepository.findByTitleAndArtistUsername("albu", "ju");
+        List<Album> albumList = albumRepository.findByTitleAndArtistUsername("wrong", "ju");
         assertEquals(0, albumList.size());
     }
 
     @Test
     void findByTitleAndArtistUsernameWrongUsernameTest(){
-        List<Album> albumList = albumRepository.findByTitleAndArtistUsername("album", "julia");
+        List<Album> albumList = albumRepository.findByTitleAndArtistUsername("album", "wrong");
         assertEquals(0, albumList.size());
     }
+
+    @Test
+    void findByTitleContainingTest(){
+        List<Album> albums = albumRepository.findByTitleContaining("al");
+        assertEquals(1, albums.size());
+        assertEquals("album", albums.get(0).getTitle());
+    }
+
+    @Test
+    void findByTitleContainingAnyAlbumTest(){
+        assertEquals(0, albumRepository.findByTitleContaining("wrong").size());
+    }
+
+    @Test
+    void findByArtistNameContainingTest(){
+        List<Album> albums = albumRepository.findByArtistNameContaining("artist");
+        assertEquals(1, albums.size());
+        assertEquals("album", albums.get(0).getTitle());
+    }
+
+    @Test
+    void findByArtistNameContainingAnyAlbumTest(){
+        assertEquals(0, albumRepository.findByTitleContaining("wrong").size());
+    }
+
+    @Test
+    void findByArtistNameContainingOrTitleContainingTest(){
+        List<Album> Albums = albumRepository.findByArtistNameContaining("art");
+        assertEquals(1, Albums.size());
+        assertEquals("album", Albums.get(0).getTitle());
+    }
+
+    @Test
+    void findByArtistNameContainingOrTitleContainingNotExistingTest(){
+        assertEquals(0, albumRepository.findByTitleContaining("wrong").size());
+    }
+
 }
