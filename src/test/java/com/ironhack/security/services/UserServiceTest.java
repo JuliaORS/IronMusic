@@ -167,6 +167,11 @@ public class UserServiceTest {
         String resultJson = objectMapper.writeValueAsString(userService.activeAllArtists());
         assertEquals(expectedJson, resultJson);
         assertEquals(ArtistStatus.ACTIVE, userRepository.findByUsername("username").get().getArtistStatus());
+        assertEquals(ArtistStatus.ACTIVE, artistRepository.findByUsername("username").get().getArtistStatus());
+        assertTrue(artistRepository.findByUsername("username").get().isActive());
+        assertTrue(userRepository.findByUsername("username").get().isActive());
+        assertEquals(2, userRepository.findByUsername("username").get().getRoles().size());
+        assertEquals(2, artistRepository.findByUsername("username").get().getRoles().size());
     }
 
     @Test

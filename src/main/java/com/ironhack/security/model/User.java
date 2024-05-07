@@ -15,7 +15,7 @@ import static jakarta.persistence.FetchType.EAGER;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy=InheritanceType.JOINED)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

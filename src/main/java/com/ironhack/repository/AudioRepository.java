@@ -8,8 +8,6 @@ import java.util.List;
 @Repository
 public interface AudioRepository extends JpaRepository<Audio,Long> {
     List<Audio> findByTitle(String title);
-    List<Audio> findByTitleAndArtistUsername(String audioTitle, String artistUsername);
     List<Audio> findByTitleContaining(String title);
-    List<Audio> findByArtistNameContainingOrTitleContaining(String artistName, String title);
-
+    List<Audio> findByArtistUsernameContainingOrTitleContaining(String artistUsername, String title);
 }

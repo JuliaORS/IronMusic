@@ -14,10 +14,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.ArrayList;
 
 @SpringBootApplication
-public class DemoSecurityJwtApplication {
+public class IronMusicApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(DemoSecurityJwtApplication.class, args);
+        SpringApplication.run(IronMusicApplication.class, args);
     }
 
     @Bean

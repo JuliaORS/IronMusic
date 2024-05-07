@@ -61,6 +61,7 @@ public class UserService implements UserServiceInterface, UserDetailsService {
     public User saveUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setActive(false);
+        user.setArtistStatus(ArtistStatus.INACTIVE);
         return userRepository.save(user);
     }
 
@@ -126,10 +127,12 @@ public class UserService implements UserServiceInterface, UserDetailsService {
         if (!pendingArtistList.isEmpty()){
             List<String> usernamesModified = new ArrayList<>();
             for (User user : pendingArtistList){
-                addRoleToUser(user.getUsername(), "ROLE_ARTIST");
                 Artist artist = new Artist(user);
-                artistRepository.save(artist);
                 userRepository.delete(user);
+                artistRepository.save(artist);
+                addRoleToUser(artist.getUsername(), "ROLE_ARTIST");
+                addRoleToUser(artist.getUsername(), "ROLE_USER");
+                artistRepository.save(artist);
                 usernamesModified.add(artist.getUsername());
             }
             return usernamesModified;

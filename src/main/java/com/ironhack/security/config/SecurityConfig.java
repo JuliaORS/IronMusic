@@ -80,14 +80,14 @@ public class SecurityConfig {
         http.sessionManagement().sessionCreationPolicy(STATELESS);
         // set up authorization for different request matchers and user roles
         http.authorizeHttpRequests((requests) -> requests
+                .requestMatchers("/api-docs/**").permitAll()
+                .requestMatchers("/api-docs").permitAll()
+                .requestMatchers("/swagger-ui/**").permitAll()
                 .requestMatchers("/api/login/**").permitAll()
                 .requestMatchers("/api/signup").permitAll()
                 .requestMatchers("/api/admin/**").hasAnyAuthority("ROLE_ADMIN")
                 .requestMatchers("/api/artist/**").hasAnyAuthority("ROLE_ARTIST", "ROLE_ADMIN")
                 .requestMatchers( "/api/user/**").hasAnyAuthority("ROLE_USER", "ROLE_ARTIST", "ROLE_ADMIN")
-
-                //.requestMatchers( "/api/users").hasAnyAuthority("ROLE_ADMIN")
-
                 .anyRequest().authenticated());
         // add the custom authentication filter to the http security object
         http.addFilter(customAuthenticationFilter);

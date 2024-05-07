@@ -65,6 +65,17 @@ public class AudioRepositoryTest {
     }
 
     @Test
+    void findByTitleTest(){
+        List<Audio> audios = audioRepository.findByTitle("YELLOW111");
+        assertEquals(1, audios.size());
+        assertEquals(audio.getTitle(), audios.get(0).getTitle());
+    }
+    @Test
+    void findByTitleNotExistingTest(){
+        assertTrue(audioRepository.findByTitle("wrong").isEmpty());
+    }
+
+    @Test
     void findByTitleContainingTest(){
         List<Audio> audios = audioRepository.findByTitleContaining("111");
         assertEquals(1, audios.size());
@@ -72,6 +83,16 @@ public class AudioRepositoryTest {
     }
     @Test
     void findByTitleContainingNotExistingTest(){
+        assertTrue(audioRepository.findByTitleContaining("wrong").isEmpty());
+    }
+
+    @Test
+    void findByArtistUsernameContainingOrTitleContainingTest(){
+        List<Audio> audios = audioRepository.findByArtistUsernameContainingOrTitleContaining("artist", "wrong");
+        assertEquals(2, audios.size());
+    }
+    @Test
+    void findByArtistUsernameContainingOrTitleContainingNotExistingTest(){
         assertTrue(audioRepository.findByTitleContaining("wrong").isEmpty());
     }
 }

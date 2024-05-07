@@ -18,7 +18,7 @@ public class AudioService implements AudioServiceInterface {
 
     @Override
     public List<AudioGeneralInfoDTO> getAudioByAllInfo(String info) {
-        List<Audio> audios = audioRepository.findByArtistNameContainingOrTitleContaining(info, info);
+        List<Audio> audios = audioRepository.findByArtistUsernameContainingOrTitleContaining(info, info);
         List<AudioGeneralInfoDTO> result = new ArrayList<>();
         if (audios.isEmpty()){
             throw new ResourceNotFoundException("No audios found with that info.");

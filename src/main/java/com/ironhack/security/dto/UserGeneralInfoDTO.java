@@ -1,5 +1,6 @@
 package com.ironhack.security.dto;
 
+import com.ironhack.security.utils.ArtistStatus;
 import com.ironhack.security.utils.Status;
 import com.ironhack.security.model.User;
 import lombok.Data;
@@ -11,6 +12,8 @@ public class UserGeneralInfoDTO {
     private String username;
 
     private Status status;
+
+    private ArtistStatus artistStatus;
     public UserGeneralInfoDTO(User user){
         setName(user.getName());
         setUsername(user.getUsername());
@@ -18,5 +21,6 @@ public class UserGeneralInfoDTO {
             setStatus(Status.ACTIVE);
         else
             setStatus(Status.INACTIVE);
+        setArtistStatus(user.getArtistStatus());
     }
 }
