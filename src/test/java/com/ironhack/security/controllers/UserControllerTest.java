@@ -229,4 +229,17 @@ public class UserControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(content().string(Matchers.containsString("User with username \"wrong\" not found")));
     }
+
+    @Test
+    public void getOwnProfileTest() throws Exception{
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.getName()).thenReturn(user.getUsername());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String expectedJson = objectMapper.writeValueAsString(new UserGeneralInfoDTO(user));
+        mockMvc.perform(get("/api/user/profile")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(expectedJson));
+    }
 }

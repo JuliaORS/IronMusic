@@ -1,5 +1,6 @@
 package com.ironhack.service.impl;
 
+import com.ironhack.model.Song;
 import com.ironhack.security.exception.UserNotFoundException;
 import com.ironhack.security.model.User;
 import com.ironhack.security.repository.UserRepository;
@@ -16,6 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class PlaylistService implements PlaylistServiceInterface {
@@ -134,5 +138,25 @@ public class PlaylistService implements PlaylistServiceInterface {
 
         userToRemove.getPlaylists().remove(playlist);
         userRepository.save(userToRemove);
+    }
+    @Override
+    public List<AudioGeneralInfoDTO> getAllAudiosFromPlaylist(String playlistName) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userRepository.findByUsername(username).get();
+
+        Playlist playlist = user.getPlaylists()
+                .stream()
+                .filter(p -> p.getName().equals(playlistName))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Playlist with name \"" + playlistName + "\" not found"));
+        if (playlist.getAudios().isEmpty()){
+            throw new ResourceNotFoundException("Playlist with name \"" + playlistName + "\" is empty");
+        }
+        List<AudioGeneralInfoDTO> result = new ArrayList<>();
+        for(Audio audio : playlist.getAudios()){
+            result.add(new AudioGeneralInfoDTO(audio));
+        }
+        return result;
     }
 }

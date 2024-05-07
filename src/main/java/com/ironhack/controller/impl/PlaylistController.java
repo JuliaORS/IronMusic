@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api")
 public class PlaylistController implements PlaylistControllerInterface {
@@ -58,5 +60,12 @@ public class PlaylistController implements PlaylistControllerInterface {
     @ResponseStatus(HttpStatus.OK)
     public void removeUserFromPlaylistByUsername(@PathVariable String playlistName, @PathVariable String username)  {
         playlistService.removeUserFromPlaylistByUsername(playlistName, username);
+    }
+
+    @Override
+    @GetMapping("/user/playlist/{playlistName}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<AudioGeneralInfoDTO> getAllAudiosFromPlaylist(@PathVariable String playlistName)  {
+        return playlistService.getAllAudiosFromPlaylist(playlistName);
     }
 }

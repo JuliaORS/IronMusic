@@ -1,6 +1,8 @@
 package com.ironhack.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ironhack.dto.AudioGeneralInfoDTO;
+import com.ironhack.model.Song;
 import com.ironhack.security.utils.ArtistStatus;
 import com.ironhack.security.exception.UserNotFoundException;
 import com.ironhack.security.model.Artist;
@@ -227,5 +229,33 @@ public class PlaylistServiceTest {
     public void removeUserFromPlaylistNotExistingUserTest(){
         assertThrows(UserNotFoundException.class, () -> {playlistService.removeUserFromPlaylistByUsername(
                 "summer hits", "wrong");});
+    }
+
+    @Test
+    public void getAllAudiosFromPlaylistTest() throws Exception{
+        List<Audio> audioList = new ArrayList<>();
+        audioList.add(audioRepository.findByTitle("audio title").get(0));
+
+        List<AudioGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
+        for(Audio audio : audioList){
+            audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(audio));
+        }
+        String expectedJson = objectMapper.writeValueAsString(audioGeneralInfoDTOS);
+        String resultJson = objectMapper.writeValueAsString(playlistService.getAllAudiosFromPlaylist("summer hits"));
+        assertEquals(expectedJson, resultJson);
+    }
+
+    @Test
+    public void getAllAudiosFromPlaylistNotExistingTest() throws Exception{
+        assertThrows(ResourceNotFoundException.class, () -> {playlistService.getAllAudiosFromPlaylist(
+                "wrong");});
+    }
+
+    @Test
+    public void getAllAudiosFromPlaylistEmptyPlaylistTest() throws Exception{
+        Playlist newPlaylist =  new Playlist("new playlist title", null, null);
+        playlistRepository.save(newPlaylist);
+        assertThrows(ResourceNotFoundException.class, () -> {playlistService.getAllAudiosFromPlaylist(
+                "new playlist title");});
     }
 }

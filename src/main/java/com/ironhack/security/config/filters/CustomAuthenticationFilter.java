@@ -15,36 +15,21 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
-
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Slf4j
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
 
-    /**
-     * Constructor for CustomAuthenticationFilter
-     *
-     * @param authenticationManager
-     */
     public CustomAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
 
-    /**
-     * Attempts to authenticate the user with given credentials
-     *
-     * @param request  HttpServletRequest
-     * @param response HttpServletResponse
-     * @return Authentication object if successful, otherwise throws an exception
-     * @throws AuthenticationException
-     */
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         String username = request.getParameter("username");
@@ -57,16 +42,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         return authenticationManager.authenticate(authenticationToken);
     }
 
-    /**
-     * Method is called if the user is successfully authenticated
-     *
-     * @param request        HttpServletRequest
-     * @param response       HttpServletResponse
-     * @param chain          FilterChain
-     * @param authentication Authentication
-     * @throws IOException
-     * @throws ServletException
-     */
+     //Method is called if the user is successfully authenticated
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
         // Cast the authentication principal to User object
@@ -88,5 +64,4 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         // Writing the token as response
         new ObjectMapper().writeValue(response.getOutputStream(), tokens);
     }
-
 }

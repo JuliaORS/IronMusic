@@ -1,5 +1,7 @@
 package com.ironhack.security.service.impl;
 
+import com.ironhack.dto.AudioGeneralInfoDTO;
+import com.ironhack.model.Audio;
 import com.ironhack.security.dto.UserGeneralInfoDTO;
 import com.ironhack.security.exception.ArtistActivationException;
 import com.ironhack.security.utils.ArtistStatus;
@@ -110,9 +112,11 @@ public class UserService implements UserServiceInterface, UserDetailsService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException("User with username \"" + username + "\" not found"));
         if (user.getArtistStatus() == ArtistStatus.PENDING_ACTIVATION){
-            addRoleToUser(user.getUsername(), "ROLE_ARTIST");
             Artist artist = new Artist(user);
             userRepository.delete(user);
+            artistRepository.save(artist);
+            addRoleToUser(artist.getUsername(), "ROLE_ARTIST");
+            addRoleToUser(artist.getUsername(), "ROLE_USER");
             artistRepository.save(artist);
         } else if (user.getArtistStatus() == ArtistStatus.ACTIVE) {
             throw new ArtistActivationException("Artist is already ACTIVE");
@@ -157,7 +161,6 @@ public class UserService implements UserServiceInterface, UserDetailsService {
 
     @Override
     public List<UserGeneralInfoDTO> getAllUsers() {
-        log.info("Fetching all users");
         List<User> users = userRepository.findAll();
         List<UserGeneralInfoDTO> userGeneralInfoDTOS = new ArrayList<>();
         for(User user : users){
@@ -168,12 +171,15 @@ public class UserService implements UserServiceInterface, UserDetailsService {
 
     @Override
     public UserGeneralInfoDTO getUserByUsername(String username) {
-        log.info("Fetching user {}", username);
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (optionalUser.isPresent()){
-            return new UserGeneralInfoDTO(optionalUser.get());
-        } else {
-            throw new UserNotFoundException("User with username \"" + username + "\" not found");
-        }
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User with username \"" + username + "\" not found"));
+        return new UserGeneralInfoDTO(user);
+    }
+
+    @Override
+    public UserGeneralInfoDTO getOwnProfile() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return new UserGeneralInfoDTO(userRepository.findByUsername(username).get());
     }
 }

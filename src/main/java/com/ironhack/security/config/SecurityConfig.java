@@ -17,57 +17,29 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
-/**
- * This is the main configuration class for security in the application. It enables web security,
- * sets up the password encoder, and sets up the security filter chain.
- */
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    // UserDetailsService is an interface provided by Spring Security that defines a way to retrieve user information
     @Autowired
     private UserDetailsService userDetailsService;
-
-    // Autowired instance of the AuthenticationManagerBuilder
     @Autowired
     private AuthenticationManagerBuilder authManagerBuilder;
-
     @Autowired
     private UserRepository userRepository;
-
-    /**
-     * Bean definition for PasswordEncoder
-     *
-     * @return an instance of the DelegatingPasswordEncoder
-     */
+    //Bean definition for PasswordEncode @return an instance of the DelegatingPasswordEncoder
     @Bean
     public PasswordEncoder encoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-    /**
-     * Bean definition for AuthenticationManager
-     *
-     * @param authenticationConfiguration the instance of AuthenticationConfiguration
-     * @return an instance of the AuthenticationManager
-     * @throws Exception if there is an issue getting the instance of the AuthenticationManager
-     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-    /**
-     * Bean definition for SecurityFilterChain
-     *
-     * @param http the instance of HttpSecurity
-     * @return an instance of the SecurityFilterChain
-     * @throws Exception if there is an issue building the SecurityFilterChain
-     */
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // CustomAuthenticationFilter instance created
@@ -96,6 +68,5 @@ public class SecurityConfig {
 
         // Build the security filter chain to be returned.
         return http.build();
-
     }
 }

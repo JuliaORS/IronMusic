@@ -27,28 +27,28 @@ public class UserController implements UserControllerInterface {
     /*Actions only available for admin-User*/
     @Override
     @PutMapping("/admin/user/{username}")
-    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseStatus(HttpStatus.OK)
     public void activeUserByUsername(@PathVariable String username) {
         userService.activeUserByUsername(username);
     }
 
     @Override
     @PutMapping("/admin/user/active")
-    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseStatus(HttpStatus.OK)
     public List<String> activeAllUsers() {
         return userService.activeAllUsers();
     }
 
     @Override
     @PutMapping("/admin/artist/{username}")
-    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseStatus(HttpStatus.OK)
     public void activeArtistByUsername(@PathVariable String username) {
         userService.activeArtistByUsername(username);
     }
 
     @Override
     @PutMapping("/admin/artist/active")
-    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseStatus(HttpStatus.OK)
     public List<String> activeAllArtists() {
         return userService.activeAllArtists();
     }
@@ -75,4 +75,10 @@ public class UserController implements UserControllerInterface {
         return userService.getUserByUsername(username);
     }
 
+    @Override
+    @GetMapping("/user/profile")
+    @ResponseStatus(HttpStatus.OK)
+    public UserGeneralInfoDTO getOwnProfile() {
+        return userService.getOwnProfile();
+    }
 }

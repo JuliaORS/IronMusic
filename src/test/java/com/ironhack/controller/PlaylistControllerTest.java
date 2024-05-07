@@ -1,6 +1,8 @@
 package com.ironhack.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ironhack.dto.AudioGeneralInfoDTO;
+import com.ironhack.exception.ResourceNotFoundException;
 import com.ironhack.security.utils.ArtistStatus;
 import com.ironhack.security.model.Artist;
 import com.ironhack.security.model.Role;
@@ -32,7 +34,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -286,5 +288,52 @@ public class PlaylistControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(content().string(Matchers.containsString("User with username \"wrong user\" not found")));
+    }
+
+    @Test
+    public void getAllAudiosFromPlaylistTest() throws Exception{
+        List<Audio> audioList = new ArrayList<>();
+        audioList.add(audioRepository.findByTitle("audio title 1").get(0));
+        List<AudioGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
+        for(Audio audio : audioList){
+            audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(audio));
+        }
+        String expectedJson = objectMapper.writeValueAsString(audioGeneralInfoDTOS);
+
+        mockMvc.perform(get("/api/user/playlist/{playlistName}", "summer_hits")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(expectedJson));
+    }
+
+    /*        List<Song> Songs = songRepository.findAll();
+        List<AudioGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
+        for(Song song : Songs){
+            audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(song));
+        }
+        String expectedJson = objectMapper.writeValueAsString(audioGeneralInfoDTOS);
+
+        mockMvc.perform(get("/api/user/songs").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(expectedJson));*/
+
+
+    @Test
+    public void getAllAudiosFromPlaylistNotExistingTest() throws Exception{
+        mockMvc.perform(get("/api/user/playlist/{playlistName}", "wrong")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(Matchers.containsString("Playlist with name \"wrong\" not found")));
+    }
+
+    @Test
+    public void getAllAudiosFromPlaylistEmptyPlaylistTest() throws Exception{
+        playlistService.removeAudioFromPlaylistByTitle("summer_hits", "audio title 1");
+        mockMvc.perform(get("/api/user/playlist/{playlistName}", "summer_hits")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(Matchers.containsString("Playlist with name \"summer_hits\" is empty")));
     }
 }

@@ -18,36 +18,19 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import java.io.IOException;
 import java.util.*;
-
 import static java.util.Arrays.stream;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
-/**
- * CustomAuthorizationFilter is an implementation of OncePerRequestFilter to handle
- * authorization of a user to access the API endpoints.
- */
 @Slf4j
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
-    /**
-     * The method doFilterInternal will handle the authorization of a user to access the API endpoints.
-     *
-     * @param request     HttpServletRequest
-     * @param response    HttpServletResponse
-     * @param filterChain FilterChain
-     * @throws ServletException if there is a servlet related error
-     * @throws IOException      if there is an Input/Output error
-     */
     private UserRepository userRepository;
     public CustomAuthorizationFilter(UserRepository userRepository){
         this.userRepository = userRepository;
     }
-
-
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -65,20 +48,19 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                     JWTVerifier verifier = JWT.require(algorithm).build();
                     DecodedJWT decodedJWT = verifier.verify(token);
                     String username = decodedJWT.getSubject();
-
                     //check if user is active
-                   Optional<User> optionalUser = userRepository.findByUsername(username);
-                   if (optionalUser.isEmpty())
-                       return;
-                   User user = optionalUser.get();
-                   if (!user.isActive()) {
+                    Optional<User> optionalUser = userRepository.findByUsername(username);
+                    if (optionalUser.isEmpty())
+                        return;
+                    User user = optionalUser.get();
+                    if (!user.isActive()) {
                         response.setStatus(HttpStatus.FORBIDDEN.value());
                         Map<String, String> error = new HashMap<>();
                         error.put("error_message", "User is not active.");
                         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                         new ObjectMapper().writeValue(response.getOutputStream(), error);
                         return;
-                   }
+                    }
 
                     String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
                     Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();

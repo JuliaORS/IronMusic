@@ -1,5 +1,6 @@
 package com.ironhack.repository;
 
+import com.ironhack.model.Song;
 import com.ironhack.security.utils.ArtistStatus;
 import com.ironhack.security.model.Artist;
 import com.ironhack.security.model.User;
@@ -94,6 +95,17 @@ public class AudioRepositoryTest {
     @Test
     void findByArtistUsernameContainingOrTitleContainingNotExistingTest(){
         assertTrue(audioRepository.findByTitleContaining("wrong").isEmpty());
+    }
+
+    @Test
+    void findByArtistUsernameTest(){
+        List<Audio> audioList = audioRepository.findByArtistUsername("artist");
+        assertEquals(2, audioList.size());
+    }
+
+    @Test
+    void findByArtistUsernameAnySongTest(){
+        assertTrue(audioRepository.findByArtistUsername("wrong").isEmpty());
     }
 }
 

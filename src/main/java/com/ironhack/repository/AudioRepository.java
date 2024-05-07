@@ -9,5 +9,6 @@ import java.util.List;
 public interface AudioRepository extends JpaRepository<Audio,Long> {
     List<Audio> findByTitle(String title);
     List<Audio> findByTitleContaining(String title);
+    List<Audio> findByArtistUsername(String artistUsername);
     List<Audio> findByArtistUsernameContainingOrTitleContaining(String artistUsername, String title);
 }

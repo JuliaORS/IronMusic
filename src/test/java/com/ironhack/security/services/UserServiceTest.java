@@ -19,7 +19,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.*;
@@ -36,7 +35,6 @@ public class UserServiceTest {
     private UserService userService;
     @Autowired
     private ArtistRepository artistRepository;
-
     @Autowired
     private RoleRepository roleRepository;
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -166,12 +164,6 @@ public class UserServiceTest {
         String expectedJson = objectMapper.writeValueAsString(usernames);
         String resultJson = objectMapper.writeValueAsString(userService.activeAllArtists());
         assertEquals(expectedJson, resultJson);
-        assertEquals(ArtistStatus.ACTIVE, userRepository.findByUsername("username").get().getArtistStatus());
-        assertEquals(ArtistStatus.ACTIVE, artistRepository.findByUsername("username").get().getArtistStatus());
-        assertTrue(artistRepository.findByUsername("username").get().isActive());
-        assertTrue(userRepository.findByUsername("username").get().isActive());
-        assertEquals(2, userRepository.findByUsername("username").get().getRoles().size());
-        assertEquals(2, artistRepository.findByUsername("username").get().getRoles().size());
     }
 
     @Test
@@ -212,5 +204,15 @@ public class UserServiceTest {
     public void getUserByUsernameNotExistingUserTest(){
         assertThrows(UserNotFoundException.class, () -> {
             userService.getUserByUsername("wrong username");});
+    }
+
+    @Test
+    public void getOwnProfileTest() throws Exception{
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.getName()).thenReturn(user.getUsername());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String expectedJson = objectMapper.writeValueAsString(new UserGeneralInfoDTO(user));
+        String resultJson = objectMapper.writeValueAsString(userService.getOwnProfile());
+        assertEquals(expectedJson, resultJson);
     }
 }

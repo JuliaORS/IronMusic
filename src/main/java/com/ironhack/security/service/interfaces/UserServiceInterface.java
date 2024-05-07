@@ -1,5 +1,6 @@
 package com.ironhack.security.service.interfaces;
 
+import com.ironhack.dto.AudioGeneralInfoDTO;
 import com.ironhack.security.dto.UserGeneralInfoDTO;
 import com.ironhack.security.model.Role;
 import com.ironhack.security.model.User;
@@ -17,7 +18,5 @@ public interface UserServiceInterface {
     void requestToBeAnArtist();
     List<UserGeneralInfoDTO> getAllUsers();
     UserGeneralInfoDTO getUserByUsername(String username);
-
-
-
+    UserGeneralInfoDTO getOwnProfile();
 }
