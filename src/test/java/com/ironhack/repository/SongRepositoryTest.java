@@ -46,6 +46,7 @@ public class SongRepositoryTest {
 
     @AfterEach
     void tearsDown(){
+        albumRepository.deleteAll();
         songRepository.deleteAll();
         artistRepository.deleteAll();
     }
@@ -64,9 +65,9 @@ public class SongRepositoryTest {
         assertFalse(songRepository.findByTitleContaining("title1").isEmpty());
         assertEquals(1, albumRepository.count());
         assertTrue(artistRepository.findByUsername("ju").isPresent());
-
-        List<Song> songs = songRepository.findByTitleContaining("title");
-        songRepository.delete(songs.get(0));
+        List<Song> songs = songRepository.findByTitleContaining("title1");
+        Long id = songs.get(0).getId();
+        songRepository.deleteById(id);
 
         assertTrue(songRepository.findByTitleContaining("title1").isEmpty());
         assertEquals(1, albumRepository.count());

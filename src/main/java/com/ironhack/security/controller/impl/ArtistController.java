@@ -16,7 +16,7 @@ public class ArtistController implements ArtistControllerInterface {
     ArtistService artistService;
 
     @Override
-    @GetMapping("/artist/profile")
+    @GetMapping("/artist/audio")
     @ResponseStatus(HttpStatus.OK)
     public List<AudioGeneralInfoDTO> getOwnAudios() {
         return artistService.getOwnAudios();

@@ -34,6 +34,13 @@ public class AlbumService implements AlbumServiceInterface {
         User user = userRepository.findByUsername(username).get();
         album.setArtist((Artist) user);
         albumRepository.save(album);
+        if (!album.getSongs().isEmpty()){
+            for (Song song : album.getSongs()){
+                song.setArtist((Artist) user);
+                song.setAlbum(album);
+                songRepository.save(song);
+            }
+        }
         return new AlbumGeneralInfoDTO(album);
     }
 

@@ -77,7 +77,7 @@ public class ArtistControllerTest {
             audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(audio));
         }
         String expectedJson = objectMapper.writeValueAsString(audioGeneralInfoDTOS);
-        mockMvc.perform(get("/api/artist/profile")
+        mockMvc.perform(get("/api/artist/audio")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))

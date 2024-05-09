@@ -13,7 +13,6 @@ public class UserGeneralInfoDTO {
 
     private Status status;
 
-    private ArtistStatus artistStatus;
     public UserGeneralInfoDTO(User user){
         setName(user.getName());
         setUsername(user.getUsername());
@@ -21,6 +20,5 @@ public class UserGeneralInfoDTO {
             setStatus(Status.ACTIVE);
         else
             setStatus(Status.INACTIVE);
-        setArtistStatus(user.getArtistStatus());
     }
 }

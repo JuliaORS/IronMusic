@@ -35,6 +35,7 @@ public class IronMusicApplication {
             User user = userService.saveUser(new User(null, "admin", "admin", "1234",
                     true, ArtistStatus.ACTIVE, new ArrayList<>(), null));
             userService.activeAllUsers();
+            userService.activeAllArtists();
             userService.addRoleToUser("admin", "ROLE_ADMIN");
             userService.addRoleToUser("admin", "ROLE_USER");
             userService.addRoleToUser("admin", "ROLE_ARTIST");
