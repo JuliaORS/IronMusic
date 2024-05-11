@@ -12,7 +12,7 @@ The application have two classes of audio(inherited classes): songs and podcasts
   - Artist: This refers to the artist who added the audio to the platform.
   - Title: The title of the audio piece.
   - Duration: The length of the audio.
-  - 
+    
 In addition to these shared attributes, songs have a genre and can be associated with an album. Albums, in turn, are collections of songs.
 
 On the other hand, podcasts have a season and episode number and an attribute of genre.
