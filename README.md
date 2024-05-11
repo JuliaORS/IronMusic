@@ -3,9 +3,10 @@
 ## Description of the porject
 It's a backend RESTful API application built with Java and Spring Boot, designed to create a database for a platform that stores audio files.
 Spring Security has been implemented in the application to manage permissions for different types of users. There are three types of users:
-  Admins: They accept new users and activate new artists.
-  Artists: They can add and remove content.
-  Standard users: They can browse the platform's content and create their own playlists. They can also share their playlists with other users.
+  - Admins: They accept new users and activate new artists.
+  - Artists: They can add and remove content.
+  - Standard users: They can browse the platform's content and create their own playlists. They can also share their playlists with other users.
+    
 The application handles two classes of audio: songs and podcasts, and songs can be grouped into albums.
 
 ## Class diagram 
@@ -29,14 +30,15 @@ The application handles two classes of audio: songs and podcasts, and songs can 
   - IntelliJ IDEA: Integrated development environment (IDE) used to develop the application.
   - Postman:  Used for testing and making HTTP requests to application's API.
   - MySQL Workbench: Used for managing and querying the MySQL database.
+  - Swagger: Used to generate interactive API documentation for testing and utilizing the provided APIs.
 
 ## Controllers and Routes structure
 
 ![user_controller](https://github.com/JuliaORS/IronMusic/assets/128370372/6fcaa8cb-3453-4edc-b3b8-d0c324105622)
 
 ## Extra links
-  - Canva: https://www.canva.com/design/DAGClVOlTxA/YxPZe_Un7bHsZYI5ikFenQ/edit
-  - Trello: https://trello.com/b/zafobhol/ihfinalproject
+  - Canva: https://www.canva.com/design/DAGClVOlTxA/YxPZe_Un7bHsZYI5ikFenQ/edit?utm_content=DAGClVOlTxA&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
+  - Trello: https://trello.com/invite/b/zafobhol/ATTIfc0d130811c3c3ae09fa51690df352ffA47B32D2/ihfinalproject
   - Presentation: ***PENDING
     
 ## Future work
