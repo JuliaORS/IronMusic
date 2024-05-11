@@ -307,19 +307,6 @@ public class PlaylistControllerTest {
                 .andExpect(content().json(expectedJson));
     }
 
-    /*        List<Song> Songs = songRepository.findAll();
-        List<AudioGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
-        for(Song song : Songs){
-            audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(song));
-        }
-        String expectedJson = objectMapper.writeValueAsString(audioGeneralInfoDTOS);
-
-        mockMvc.perform(get("/api/user/songs").contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(expectedJson));*/
-
-
     @Test
     public void getAllAudiosFromPlaylistNotExistingTest() throws Exception{
         mockMvc.perform(get("/api/user/playlist/{playlistName}", "wrong")
@@ -335,5 +322,81 @@ public class PlaylistControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(content().string(Matchers.containsString("Playlist with name \"summer_hits\" is empty")));
+    }
+
+    @Test
+    public void getAllAudiosFromPublicPlaylistTest() throws Exception{
+        User user2 = new User(null, "user2", "username2", "1234",
+                true, ArtistStatus.INACTIVE, null, null);
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.getName()).thenReturn(user2.getUsername());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        Playlist playlist = playlistRepository.findByName("summer_hits").get(0);
+        playlist.setPrivate(false);
+        playlistRepository.save(playlist);
+        assertFalse(playlistRepository.findByName("summer_hits").get(0).isPrivate());
+        List<Audio> audioList = new ArrayList<>();
+        audioList.add(audioRepository.findByTitle("audio title 1").get(0));
+        List<AudioGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
+        for(Audio audio : audioList){
+            audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(audio));
+        }
+        String expectedJson = objectMapper.writeValueAsString(audioGeneralInfoDTOS);
+
+        mockMvc.perform(get("/api/user/public_playlist/{playlistName}", "summer_hits")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(expectedJson));
+    }
+
+    @Test
+    public void getAllAudiosFromPublicPlaylistNotExistingTest() throws Exception{
+        User user2 = new User(null, "user2", "username2", "1234",
+                true, ArtistStatus.INACTIVE, null, null);
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.getName()).thenReturn(user2.getUsername());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        mockMvc.perform(get("/api/user/public_playlist/{playlistName}", "wrong")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(Matchers.containsString("Playlist with name \"wrong\" not found")));
+    }
+
+    @Test
+    public void getAllAudiosFromPublicPlaylistEmptyPlaylistTest() throws Exception{
+        playlistService.removeAudioFromPlaylistByTitle("summer_hits", "audio title 1");
+        playlistService.makePlaylistPublic("summer_hits");
+        mockMvc.perform(get("/api/user/public_playlist/{playlistName}", "summer_hits")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(Matchers.containsString("Playlist with name \"summer_hits\" is empty")));
+    }
+
+    @Test
+    public void makePlaylistPublicTest() throws Exception{
+        assertTrue(playlistRepository.findByName("summer_hits").get(0).isPrivate());
+        mockMvc.perform(put("/api/user/playlist/{playlistName}", "summer_hits")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        assertFalse(playlistRepository.findByName("summer_hits").get(0).isPrivate());
+    }
+
+    @Test
+    public void makePlaylistPublicNotExistingTest() throws Exception{
+        mockMvc.perform(put("/api/user/playlist/{playlistName}", "wrong")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(Matchers.containsString("Playlist with name \"wrong\" not found")));
+    }
+
+    @Test
+    public void makePlaylistPublicAlreadyPublicTest() throws Exception{
+        playlistService.makePlaylistPublic("summer_hits");
+        mockMvc.perform(put("/api/user/playlist/{playlistName}", "summer_hits")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(Matchers.containsString("Playlist is already public")));
     }
 }

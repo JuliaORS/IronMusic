@@ -68,4 +68,18 @@ public class PlaylistController implements PlaylistControllerInterface {
     public List<AudioGeneralInfoDTO> getAllAudiosFromPlaylist(@PathVariable String playlistName)  {
         return playlistService.getAllAudiosFromPlaylist(playlistName);
     }
+
+    @Override
+    @GetMapping("/user/public_playlist/{playlistName}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<AudioGeneralInfoDTO> getAllAudiosFromPublicPlaylist(@PathVariable String playlistName) {
+        return playlistService.getAllAudiosFromPublicPlaylist(playlistName);
+    }
+
+    @Override
+    @PutMapping("/user/playlist/{playlistName}")
+    @ResponseStatus(HttpStatus.OK)
+    public void makePlaylistPublic(@PathVariable String playlistName)  {
+        playlistService.makePlaylistPublic(playlistName);
+    }
 }

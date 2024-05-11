@@ -88,4 +88,25 @@ public class PlaylistRepositoryTest {
     void findByNameNotExistingTest(){
         assertTrue(playlistRepository.findByName("wrong").isEmpty());
     }
+
+    @Test
+    void findByTitleAndIsPrivateFalseTest(){
+        playlist.setPrivate(false);
+        playlistRepository.save(playlist);
+        List<Playlist> playlistList = playlistRepository.findByNameAndIsPrivateFalse("summer hits");
+        assertEquals(1, playlistList.size());
+        assertEquals(playlistList.get(0).getName(), "summer hits");
+    }
+
+    @Test
+    void findByTitleAndIsPrivateFalseNotFalseTest(){
+        playlist.setPrivate(true);
+        playlistRepository.save(playlist);
+        assertTrue(playlistRepository.findByNameAndIsPrivateFalse("summer hits").isEmpty());
+    }
+
+    @Test
+    void findByTitleAndIsPrivateFalseNotExistingTest(){
+        assertTrue(playlistRepository.findByName("wrong").isEmpty());
+    }
 }

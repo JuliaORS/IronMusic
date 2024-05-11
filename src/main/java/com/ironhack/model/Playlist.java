@@ -21,6 +21,8 @@ public class Playlist {
     @NotEmpty(message = "Bad request. Playlist name is required.")
     private String name;
 
+    private boolean isPrivate = true;
+
     @ManyToMany (fetch = FetchType.EAGER)
     @JoinTable(
             name = "playlist_audio",
@@ -36,5 +38,6 @@ public class Playlist {
         setName(name);
         setAudios(audios);
         setUsers(users);
+        setPrivate(true);
     }
 }

@@ -19,5 +19,7 @@ public interface PlaylistServiceInterface {
     void addUserToPlaylistByUsername(String playlistName, String username);
     void removeUserFromPlaylistByUsername(String playlistName, String username);
     List<AudioGeneralInfoDTO> getAllAudiosFromPlaylist(String playlistName);
+    List<AudioGeneralInfoDTO> getAllAudiosFromPublicPlaylist(String playlistName);
+    void makePlaylistPublic(String playlistName);
 
 }

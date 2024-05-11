@@ -1,5 +1,6 @@
 package com.ironhack.service.impl;
 
+import com.ironhack.exception.MakePlaylistPublicException;
 import com.ironhack.model.Song;
 import com.ironhack.security.exception.UserNotFoundException;
 import com.ironhack.security.model.User;
@@ -158,5 +159,39 @@ public class PlaylistService implements PlaylistServiceInterface {
             result.add(new AudioGeneralInfoDTO(audio));
         }
         return result;
+    }
+
+    @Override
+    public List<AudioGeneralInfoDTO> getAllAudiosFromPublicPlaylist(String playlistName) {
+        Playlist playlist = playlistRepository.findByNameAndIsPrivateFalse(playlistName)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Playlist with name \"" + playlistName + "\" not found"));
+        if (playlist.getAudios().isEmpty()){
+            throw new ResourceNotFoundException("Playlist with name \"" + playlistName + "\" is empty");
+        }
+        List<AudioGeneralInfoDTO> result = new ArrayList<>();
+        for(Audio audio : playlist.getAudios()){
+            result.add(new AudioGeneralInfoDTO(audio));
+        }
+        return result;
+    }
+
+    @Override
+    public void makePlaylistPublic(String playlistName){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userRepository.findByUsername(username).get();
+
+        Playlist playlist = user.getPlaylists()
+                .stream()
+                .filter(p -> p.getName().equals(playlistName))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Playlist with name \"" + playlistName + "\" not found"));
+        if (!playlist.isPrivate()){
+            throw new MakePlaylistPublicException("Playlist is already public");
+        }
+        playlist.setPrivate(false);
+        playlistRepository.save(playlist);
     }
 }

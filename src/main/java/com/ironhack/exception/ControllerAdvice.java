@@ -15,23 +15,28 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Validated
 public class ControllerAdvice {
     @ExceptionHandler(BadRequestFormatException.class)
-    public ResponseEntity<Object> handleBadRequestFormatException(BadRequestFormatException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Object> handleBadRequestFormatException(BadRequestFormatException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
+    @ExceptionHandler(MakePlaylistPublicException.class)
+    public ResponseEntity<Object> handleMakePlaylistPublicException(MakePlaylistPublicException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handleValidationException(MethodArgumentNotValidException ex) {
-        return ex.getBindingResult().getAllErrors().get(0).getDefaultMessage();
+    public String handleValidationException(MethodArgumentNotValidException e) {
+        return e.getBindingResult().getAllErrors().get(0).getDefaultMessage();
     }
 
     @ExceptionHandler(BindException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handleValidationException(BindException ex) {
-        return ex.getBindingResult().getAllErrors().get(0).getDefaultMessage();
+    public String handleValidationException(BindException e) {
+        return e.getBindingResult().getAllErrors().get(0).getDefaultMessage();
     }
 }

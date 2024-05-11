@@ -2,6 +2,7 @@ package com.ironhack.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ironhack.dto.AudioGeneralInfoDTO;
+import com.ironhack.exception.MakePlaylistPublicException;
 import com.ironhack.model.Song;
 import com.ironhack.security.utils.ArtistStatus;
 import com.ironhack.security.exception.UserNotFoundException;
@@ -53,7 +54,6 @@ public class PlaylistServiceTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private User user;
     private Artist artist;
-
 
     @BeforeEach
     void setUp(){
@@ -258,4 +258,69 @@ public class PlaylistServiceTest {
         assertThrows(ResourceNotFoundException.class, () -> {playlistService.getAllAudiosFromPlaylist(
                 "new playlist title");});
     }
+
+    @Test
+    public void getAllAudiosFromPublicPlaylistTest() throws Exception{
+        Playlist playlist = playlistRepository.findByName("summer hits").get(0);
+        playlist.setPrivate(false);
+        playlistRepository.save(playlist);
+
+        List<Audio> audioList = new ArrayList<>();
+        audioList.add(audioRepository.findByTitle("audio title").get(0));
+
+        List<AudioGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
+        for(Audio audio : audioList){
+            audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(audio));
+        }
+        String expectedJson = objectMapper.writeValueAsString(audioGeneralInfoDTOS);
+        String resultJson = objectMapper.writeValueAsString(playlistService
+                .getAllAudiosFromPublicPlaylist("summer hits"));
+        assertEquals(expectedJson, resultJson);
+    }
+
+    @Test
+    public void getAllAudiosFromPublicPlaylistNotExistingTest() throws Exception{
+        User user2 = new User(null, "user2", "username2", "1234",
+                true, ArtistStatus.INACTIVE, null, null);
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.getName()).thenReturn(user2.getUsername());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        assertThrows(ResourceNotFoundException.class, () -> {playlistService.getAllAudiosFromPublicPlaylist(
+                "summer hits");});
+    }
+
+    @Test
+    public void getAllAudiosFromPublicPlaylistEmptyPlaylistTest() throws Exception{
+        Playlist newPlaylist =  new Playlist("new playlist title", null, null);
+        newPlaylist.setPrivate(false);
+        playlistRepository.save(newPlaylist);
+        assertThrows(ResourceNotFoundException.class, () -> {playlistService.getAllAudiosFromPlaylist(
+                "new playlist title");});
+    }
+
+    @Test
+    public void makePlaylistPublicTest() throws Exception{
+        assertTrue(playlistRepository.findByName("summer hits").get(0).isPrivate());
+        playlistService.makePlaylistPublic("summer hits");
+        assertFalse(playlistRepository.findByName("summer hits").get(0).isPrivate());
+    }
+
+    @Test
+    public void makePlaylistPublicNotExistingTest() throws Exception{
+        playlistRepository.findByName("summer hits").get(0).setPrivate(false);
+        playlistRepository.save(playlistRepository.findByName("summer hits").get(0));
+        assertThrows(ResourceNotFoundException.class, () -> {playlistService.makePlaylistPublic(
+                "wrong");});
+    }
+
+    @Test
+    public void makePlaylistPublicAlreadyPublicTest() throws Exception{
+        Playlist playlist = playlistRepository.findByName("summer hits").get(0);
+        playlist.setPrivate(false);
+        playlistRepository.save(playlist);
+        assertFalse(playlistRepository.findByName("summer hits").get(0).isPrivate());
+        assertThrows(MakePlaylistPublicException.class, () -> {playlistService.makePlaylistPublic(
+                "summer hits");});
+    }
+
 }
