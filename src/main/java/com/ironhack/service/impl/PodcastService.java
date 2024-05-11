@@ -1,10 +1,10 @@
 package com.ironhack.service.impl;
 
+import com.ironhack.dto.PodcastGeneralInfoDTO;
 import com.ironhack.utils.DurationAudioFormatValidator;
 import com.ironhack.security.model.Artist;
 import com.ironhack.security.model.User;
 import com.ironhack.security.repository.UserRepository;
-import com.ironhack.dto.AudioGeneralInfoDTO;
 import com.ironhack.exception.ResourceNotFoundException;
 import com.ironhack.model.Podcast;
 import com.ironhack.repository.PodcastRepository;
@@ -24,14 +24,14 @@ public class PodcastService implements PodcastServiceInterface {
     @Autowired
     private UserRepository userRepository;
     @Override
-    public AudioGeneralInfoDTO savePodcast(@Valid Podcast podcast) {
+    public PodcastGeneralInfoDTO savePodcast(@Valid Podcast podcast) {
         new DurationAudioFormatValidator(podcast.getDuration());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user = userRepository.findByUsername(username).get();
         podcast.setArtist((Artist) user);
         podcastRepository.save(podcast);
-        return new AudioGeneralInfoDTO(podcast);
+        return new PodcastGeneralInfoDTO(podcast);
     }
 
     @Override
@@ -46,52 +46,52 @@ public class PodcastService implements PodcastServiceInterface {
     }
 
     @Override
-    public List<AudioGeneralInfoDTO> getAllPodcasts() {
-        List<AudioGeneralInfoDTO> result = new ArrayList<>();
+    public List<PodcastGeneralInfoDTO> getAllPodcasts() {
+        List<PodcastGeneralInfoDTO> result = new ArrayList<>();
         List<Podcast> podcasts = podcastRepository.findAll();
         for(Podcast podcast : podcasts){
-            result.add(new AudioGeneralInfoDTO(podcast));
+            result.add(new PodcastGeneralInfoDTO(podcast));
         }
         return result;
     }
 
     @Override
-    public List<AudioGeneralInfoDTO> getPodcastByTitle(String title) {
+    public List<PodcastGeneralInfoDTO> getPodcastByTitle(String title) {
         List<Podcast> podcasts = podcastRepository.findByTitleContaining(title);
-        List<AudioGeneralInfoDTO> result = new ArrayList<>();
+        List<PodcastGeneralInfoDTO> result = new ArrayList<>();
         if (podcasts.isEmpty()){
             throw new ResourceNotFoundException("No podcasts found with that title.");
         } else {
             for(Podcast podcast : podcasts){
-                result.add(new AudioGeneralInfoDTO(podcast));
+                result.add(new PodcastGeneralInfoDTO(podcast));
             }
         }
         return result;
     }
 
     @Override
-    public List<AudioGeneralInfoDTO> getPodcastByArtistName(String artist) {
+    public List<PodcastGeneralInfoDTO> getPodcastByArtistName(String artist) {
         List<Podcast> podcasts = podcastRepository.findByArtistNameContaining(artist);
-        List<AudioGeneralInfoDTO> result = new ArrayList<>();
+        List<PodcastGeneralInfoDTO> result = new ArrayList<>();
         if (podcasts.isEmpty()){
             throw new ResourceNotFoundException("No podcasts found with that artist name.");
         } else {
             for(Podcast podcast : podcasts){
-                result.add(new AudioGeneralInfoDTO(podcast));
+                result.add(new PodcastGeneralInfoDTO(podcast));
             }
         }
         return result;
     }
 
     @Override
-    public List<AudioGeneralInfoDTO> getPodcastByAllInfo(String info) {
+    public List<PodcastGeneralInfoDTO> getPodcastByAllInfo(String info) {
         List<Podcast> podcasts = podcastRepository.findByArtistNameContainingOrTitleContaining(info, info);
-        List<AudioGeneralInfoDTO> result = new ArrayList<>();
+        List<PodcastGeneralInfoDTO> result = new ArrayList<>();
         if (podcasts.isEmpty()){
             throw new ResourceNotFoundException("No podcasts found with that info.");
         } else {
             for(Podcast podcast : podcasts){
-                result.add(new AudioGeneralInfoDTO(podcast));
+                result.add(new PodcastGeneralInfoDTO(podcast));
             }
         }
         return result;

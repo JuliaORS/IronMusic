@@ -1,6 +1,7 @@
 package com.ironhack.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ironhack.dto.SongGeneralInfoDTO;
 import com.ironhack.security.utils.ArtistStatus;
 import com.ironhack.security.model.Artist;
 import com.ironhack.security.model.Role;
@@ -77,7 +78,7 @@ public class SongControllerTest {
     public void saveSongCorrectInfoTest() throws Exception{
         Song song3 =  new Song("song title 3", "3:14", artist, null, "culture");
         String songJson = objectMapper.writeValueAsString(song3);
-        String expectedJson = objectMapper.writeValueAsString(new AudioGeneralInfoDTO(song3));
+        String expectedJson = objectMapper.writeValueAsString(new SongGeneralInfoDTO(song3));
 
         mockMvc.perform(post("/api/artist/song")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -90,7 +91,7 @@ public class SongControllerTest {
     public void saveSongWrongDurationFormatTest() throws Exception{
         Song song3 =  new Song("song title 3", "3:::14", artist, null, "culture");
         String songJson = objectMapper.writeValueAsString(song3);
-        String expectedJson = objectMapper.writeValueAsString(new AudioGeneralInfoDTO(song3));
+        String expectedJson = objectMapper.writeValueAsString(new SongGeneralInfoDTO(song3));
 
         mockMvc.perform(post("/api/artist/song")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -104,7 +105,7 @@ public class SongControllerTest {
     public void saveSongEmptyTitleTest() throws Exception{
         Song Song3 =  new Song("", "3:14", artist, null, "comedy");
         String songJson = objectMapper.writeValueAsString(Song3);
-        String expectedJson = objectMapper.writeValueAsString(new AudioGeneralInfoDTO(Song3));
+        String expectedJson = objectMapper.writeValueAsString(new SongGeneralInfoDTO(Song3));
 
         mockMvc.perform(post("/api/artist/song")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -131,9 +132,9 @@ public class SongControllerTest {
     @Test
     void getAllSongsTest() throws Exception {
         List<Song> Songs = songRepository.findAll();
-        List<AudioGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
+        List<SongGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
         for(Song song : Songs){
-            audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(song));
+            audioGeneralInfoDTOS.add(new SongGeneralInfoDTO(song));
         }
         String expectedJson = objectMapper.writeValueAsString(audioGeneralInfoDTOS);
 
@@ -145,9 +146,9 @@ public class SongControllerTest {
     @Test
     void getSongsByTitleTest() throws Exception {
         List<Song> songs = songRepository.findByTitleContaining("title");
-        List<AudioGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
+        List<SongGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
         for(Song song : songs){
-            audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(song));
+            audioGeneralInfoDTOS.add(new SongGeneralInfoDTO(song));
         }
         String expectedJson = objectMapper.writeValueAsString(audioGeneralInfoDTOS);
         mockMvc.perform(get("/api/user/song/title/{title}", "title")
@@ -168,9 +169,9 @@ public class SongControllerTest {
     @Test
     void getSongsByArtistNameTest() throws Exception {
         List<Song> songs = songRepository.findByArtistNameContaining("artist");
-        List<AudioGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
+        List<SongGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
         for(Song song : songs){
-            audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(song));
+            audioGeneralInfoDTOS.add(new SongGeneralInfoDTO(song));
         }
         String expectedJson = objectMapper.writeValueAsString(audioGeneralInfoDTOS);
         mockMvc.perform(get("/api/user/song/artist_name/{artistName}", "artist")
@@ -191,9 +192,9 @@ public class SongControllerTest {
     @Test
     void getSongsByGenreTest() throws Exception {
         List<Song> songs = songRepository.findByGenreContaining("pop");
-        List<AudioGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
+        List<SongGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
         for(Song song : songs){
-            audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(song));
+            audioGeneralInfoDTOS.add(new SongGeneralInfoDTO(song));
         }
         String expectedJson = objectMapper.writeValueAsString(audioGeneralInfoDTOS);
         mockMvc.perform(get("/api/user/song/genre/{genre}", "pop")
@@ -213,10 +214,10 @@ public class SongControllerTest {
 
     @Test
     void getSongsByAllInfoTest() throws Exception {
-        List<AudioGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
+        List<SongGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
         List<Song> songs = songRepository.findAll();
         for(Song song : songs){
-            audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(song));
+            audioGeneralInfoDTOS.add(new SongGeneralInfoDTO(song));
         }
         String expectedJson = objectMapper.writeValueAsString(audioGeneralInfoDTOS);
         mockMvc.perform(get("/api/user/song/{info}", "song")

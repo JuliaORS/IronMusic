@@ -2,6 +2,7 @@ package com.ironhack.controller.impl;
 
 import com.ironhack.controller.interfaces.PodcastControllerInterface;
 import com.ironhack.dto.AudioGeneralInfoDTO;
+import com.ironhack.dto.PodcastGeneralInfoDTO;
 import com.ironhack.model.Podcast;
 import com.ironhack.service.impl.PodcastService;
 import jakarta.validation.Valid;
@@ -21,7 +22,7 @@ public class PodcastController implements PodcastControllerInterface {
     @Override
     @PostMapping("/artist/podcast")
     @ResponseStatus(HttpStatus.CREATED)
-    public AudioGeneralInfoDTO savePodcast(@Valid @RequestBody Podcast podcast) {
+    public PodcastGeneralInfoDTO savePodcast(@Valid @RequestBody Podcast podcast) {
         return podcastService.savePodcast(podcast);
     }
 
@@ -37,27 +38,27 @@ public class PodcastController implements PodcastControllerInterface {
     @Override
     @GetMapping("/user/podcasts")
     @ResponseStatus(HttpStatus.OK)
-    public List<AudioGeneralInfoDTO> getAllPodcasts() {
+    public List<PodcastGeneralInfoDTO> getAllPodcasts() {
         return podcastService.getAllPodcasts();
     }
 
     @Override
     @GetMapping("/user/podcast/title/{title}")
     @ResponseStatus(HttpStatus.OK)
-    public List<AudioGeneralInfoDTO> getPodcastByTitle(@PathVariable String title) {
+    public List<PodcastGeneralInfoDTO> getPodcastByTitle(@PathVariable String title) {
         return podcastService.getPodcastByTitle(title);
     }
 
     @Override
     @GetMapping("/user/podcast/artist_name/{artistName}")
     @ResponseStatus(HttpStatus.OK)
-    public List<AudioGeneralInfoDTO> getPodcastByArtistName(@PathVariable String artistName) {
+    public List<PodcastGeneralInfoDTO> getPodcastByArtistName(@PathVariable String artistName) {
         return podcastService.getPodcastByArtistName(artistName);
     }
 
     @Override
     @GetMapping("/user/podcast/{info}")
     @ResponseStatus(HttpStatus.OK)
-    public List<AudioGeneralInfoDTO> getPodcastByAll(@PathVariable String info) {return podcastService.getPodcastByAllInfo(info);
+    public List<PodcastGeneralInfoDTO> getPodcastByAll(@PathVariable String info) {return podcastService.getPodcastByAllInfo(info);
     }
 }

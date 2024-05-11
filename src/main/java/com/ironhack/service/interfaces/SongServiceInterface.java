@@ -1,20 +1,20 @@
 package com.ironhack.service.interfaces;
 
-import com.ironhack.dto.AudioGeneralInfoDTO;
+import com.ironhack.dto.SongGeneralInfoDTO;
 import com.ironhack.model.Song;
 
 import java.util.List;
 
 public interface SongServiceInterface {
-    AudioGeneralInfoDTO saveSong(Song song);
+    SongGeneralInfoDTO saveSong(Song song);
 
-    List<AudioGeneralInfoDTO> getAllSongs();
+    List<SongGeneralInfoDTO> getAllSongs();
 
     void deleteSongByTitle(String title);
-    List<AudioGeneralInfoDTO> getSongByTitle(String title);
+    List<SongGeneralInfoDTO> getSongByTitle(String title);
 
-    List<AudioGeneralInfoDTO> getSongByArtistName(String artist);
+    List<SongGeneralInfoDTO> getSongByArtistName(String artist);
 
-    List<AudioGeneralInfoDTO> getSongByGenre(String genre);
-    List<AudioGeneralInfoDTO> getSongByAllInfo(String info);
+    List<SongGeneralInfoDTO> getSongByGenre(String genre);
+    List<SongGeneralInfoDTO> getSongByAllInfo(String info);
 }

@@ -4,7 +4,7 @@ import com.ironhack.utils.DurationAudioFormatValidator;
 import com.ironhack.security.model.Artist;
 import com.ironhack.security.model.User;
 import com.ironhack.security.repository.UserRepository;
-import com.ironhack.dto.AudioGeneralInfoDTO;
+import com.ironhack.dto.SongGeneralInfoDTO;
 import com.ironhack.exception.ResourceNotFoundException;
 import com.ironhack.model.Song;
 import com.ironhack.repository.SongRepository;
@@ -25,14 +25,14 @@ public class SongService  implements SongServiceInterface {
     @Autowired
     private UserRepository userRepository;
     @Override
-    public AudioGeneralInfoDTO saveSong(@Valid Song song) {
+    public SongGeneralInfoDTO saveSong(@Valid Song song) {
         new DurationAudioFormatValidator(song.getDuration());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user = userRepository.findByUsername(username).get();
         song.setArtist((Artist) user);
         songRepository.save(song);
-        return new AudioGeneralInfoDTO(song);
+        return new SongGeneralInfoDTO(song);
     }
 
     @Override
@@ -48,67 +48,67 @@ public class SongService  implements SongServiceInterface {
     }
 
     @Override
-    public List<AudioGeneralInfoDTO> getAllSongs() {
-        List<AudioGeneralInfoDTO> result = new ArrayList<>();
+    public List<SongGeneralInfoDTO> getAllSongs() {
+        List<SongGeneralInfoDTO> result = new ArrayList<>();
         List<Song> songs = songRepository.findAll();
         for(Song song : songs){
-            result.add(new AudioGeneralInfoDTO(song));
+            result.add(new SongGeneralInfoDTO(song));
         }
         return result;
     }
 
 
     @Override
-    public List<AudioGeneralInfoDTO> getSongByTitle(String title) {
+    public List<SongGeneralInfoDTO> getSongByTitle(String title) {
         List<Song> songs = songRepository.findByTitleContaining(title);
-        List<AudioGeneralInfoDTO> result = new ArrayList<>();
+        List<SongGeneralInfoDTO> result = new ArrayList<>();
         if (songs.isEmpty()){
             throw new ResourceNotFoundException("No songs found with that title.");
         } else {
             for(Song song : songs){
-                result.add(new AudioGeneralInfoDTO(song));
+                result.add(new SongGeneralInfoDTO(song));
             }
         }
         return result;
     }
 
     @Override
-    public List<AudioGeneralInfoDTO> getSongByArtistName(String artist) {
+    public List<SongGeneralInfoDTO> getSongByArtistName(String artist) {
         List<Song> songs = songRepository.findByArtistNameContaining(artist);
-        List<AudioGeneralInfoDTO> result = new ArrayList<>();
+        List<SongGeneralInfoDTO> result = new ArrayList<>();
         if (songs.isEmpty()){
             throw new ResourceNotFoundException("No songs found with that artist name.");
         } else {
             for(Song song : songs){
-                result.add(new AudioGeneralInfoDTO(song));
+                result.add(new SongGeneralInfoDTO(song));
             }
         }
         return result;
     }
 
     @Override
-    public List<AudioGeneralInfoDTO> getSongByGenre(String genre) {
+    public List<SongGeneralInfoDTO> getSongByGenre(String genre) {
         List<Song> songs = songRepository.findByGenreContaining(genre);
-        List<AudioGeneralInfoDTO> result = new ArrayList<>();
+        List<SongGeneralInfoDTO> result = new ArrayList<>();
         if (songs.isEmpty()){
             throw new ResourceNotFoundException("No songs found with that genre.");
         } else {
             for(Song song : songs){
-                result.add(new AudioGeneralInfoDTO(song));
+                result.add(new SongGeneralInfoDTO(song));
             }
         }
         return result;
     }
 
     @Override
-    public List<AudioGeneralInfoDTO> getSongByAllInfo(String info) {
+    public List<SongGeneralInfoDTO> getSongByAllInfo(String info) {
         List<Song> songs = songRepository.findByArtistNameContainingOrTitleContainingOrAlbumTitleContaining(info, info, info);
-        List<AudioGeneralInfoDTO> result = new ArrayList<>();
+        List<SongGeneralInfoDTO> result = new ArrayList<>();
         if (songs.isEmpty()){
             throw new ResourceNotFoundException("No songs found with that info.");
         } else {
             for(Song song : songs){
-                result.add(new AudioGeneralInfoDTO(song));
+                result.add(new SongGeneralInfoDTO(song));
             }
         }
         return result;

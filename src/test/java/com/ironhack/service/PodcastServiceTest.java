@@ -1,6 +1,7 @@
 package com.ironhack.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ironhack.dto.PodcastGeneralInfoDTO;
 import com.ironhack.security.utils.ArtistStatus;
 import com.ironhack.security.model.Artist;
 import com.ironhack.security.model.Role;
@@ -88,8 +89,8 @@ public class PodcastServiceTest {
         artistRepository.save(newArtist);
         podcast.setArtist(newArtist);
 
-        String expectedJson = objectMapper.writeValueAsString(new AudioGeneralInfoDTO(podcast));
-        AudioGeneralInfoDTO result = podcastService.savePodcast(podcast);
+        String expectedJson = objectMapper.writeValueAsString(new PodcastGeneralInfoDTO(podcast));
+        PodcastGeneralInfoDTO result = podcastService.savePodcast(podcast);
         String resultJson = objectMapper.writeValueAsString(result);
 
         assertEquals(3, podcastRepository.count());
@@ -149,9 +150,9 @@ public class PodcastServiceTest {
 
     @Test
     public void getAllPodcastsTest() throws Exception{
-        List<AudioGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
+        List<PodcastGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
         for(Podcast podcast : podcastsList){
-            audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(podcast));
+            audioGeneralInfoDTOS.add(new PodcastGeneralInfoDTO(podcast));
         }
         String expectedJson = objectMapper.writeValueAsString(audioGeneralInfoDTOS);
         String resultJson = objectMapper.writeValueAsString(podcastService.getAllPodcasts());
@@ -162,9 +163,9 @@ public class PodcastServiceTest {
     public void getPodcastByTitleExistingPodcastTest() throws Exception{
         List<Podcast> podcasts = new ArrayList<>();
         podcasts.add(podcast2);
-        List<AudioGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
+        List<PodcastGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
         for(Podcast podcast : podcasts){
-            audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(podcast));
+            audioGeneralInfoDTOS.add(new PodcastGeneralInfoDTO(podcast));
         }
         String expectedJson = objectMapper.writeValueAsString(audioGeneralInfoDTOS);
         String resultJson = objectMapper.writeValueAsString(podcastService.getPodcastByTitle("2"));
@@ -179,9 +180,9 @@ public class PodcastServiceTest {
 
     @Test
     public void getPodcastByArtistNameExistingPodcastTest() throws Exception{
-        List<AudioGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
-        audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(podcast1));
-        audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(podcast2));
+        List<PodcastGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
+        audioGeneralInfoDTOS.add(new PodcastGeneralInfoDTO(podcast1));
+        audioGeneralInfoDTOS.add(new PodcastGeneralInfoDTO(podcast2));
         String expectedJson = objectMapper.writeValueAsString(audioGeneralInfoDTOS);
         String resultJson = objectMapper.writeValueAsString(podcastService.getPodcastByArtistName("podcaster"));
         assertEquals(expectedJson, resultJson);
@@ -195,8 +196,8 @@ public class PodcastServiceTest {
 
     @Test
     public void getPodcastByAllInfoExistingInfoTest() throws Exception{
-        List<AudioGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
-        audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(podcast2));
+        List<PodcastGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
+        audioGeneralInfoDTOS.add(new PodcastGeneralInfoDTO(podcast2));
 
         String expectedJson = objectMapper.writeValueAsString(audioGeneralInfoDTOS);
         String resultJson = objectMapper.writeValueAsString(podcastService.getPodcastByAllInfo("2"));

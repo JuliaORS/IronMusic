@@ -1,6 +1,7 @@
 package com.ironhack.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ironhack.dto.PodcastGeneralInfoDTO;
 import com.ironhack.security.utils.ArtistStatus;
 import com.ironhack.security.model.Artist;
 import com.ironhack.security.model.Role;
@@ -93,7 +94,7 @@ public class PodcastControllerTest {
     public void savePodcastWrongDurationFormatTest() throws Exception{
         Podcast podcast3 =  new Podcast("podcast title 3", "3:::14", artist, 4, 5, "culture");
         String podcastJson = objectMapper.writeValueAsString(podcast3);
-        String expectedJson = objectMapper.writeValueAsString(new AudioGeneralInfoDTO(podcast3));
+        String expectedJson = objectMapper.writeValueAsString(new PodcastGeneralInfoDTO(podcast3));
 
         mockMvc.perform(post("/api/artist/podcast")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -106,7 +107,7 @@ public class PodcastControllerTest {
     public void savePodcastEmptyTitleTest() throws Exception{
         Podcast podcast3 =  new Podcast("", "3:14", artist, 3, 5, "comedy");
         String podcastJson = objectMapper.writeValueAsString(podcast3);
-        String expectedJson = objectMapper.writeValueAsString(new AudioGeneralInfoDTO(podcast3));
+        String expectedJson = objectMapper.writeValueAsString(new PodcastGeneralInfoDTO(podcast3));
 
         mockMvc.perform(post("/api/artist/podcast")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -132,9 +133,9 @@ public class PodcastControllerTest {
     @Test
     void getAllPodcastsTest() throws Exception {
         List<Podcast> podcasts = podcastRepository.findAll();
-        List<AudioGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
+        List<PodcastGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
         for(Podcast podcast : podcasts){
-            audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(podcast));
+            audioGeneralInfoDTOS.add(new PodcastGeneralInfoDTO(podcast));
         }
         String expectedJson = objectMapper.writeValueAsString(audioGeneralInfoDTOS);
 
@@ -146,9 +147,9 @@ public class PodcastControllerTest {
     @Test
     void getPodcastsByTitleTest() throws Exception {
         List<Podcast> podcasts = podcastRepository.findByTitleContaining("title");
-        List<AudioGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
+        List<PodcastGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
         for(Podcast podcast : podcasts){
-            audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(podcast));
+            audioGeneralInfoDTOS.add(new PodcastGeneralInfoDTO(podcast));
         }
         String expectedJson = objectMapper.writeValueAsString(audioGeneralInfoDTOS);
         mockMvc.perform(get("/api/user/podcast/title/{title}", "title")
@@ -169,9 +170,9 @@ public class PodcastControllerTest {
     @Test
     void getPodcastsByArtistNameTest() throws Exception {
         List<Podcast> podcasts= podcastRepository.findByArtistNameContaining("artist");
-        List<AudioGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
+        List<PodcastGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
         for(Podcast podcast : podcasts){
-            audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(podcast));
+            audioGeneralInfoDTOS.add(new PodcastGeneralInfoDTO(podcast));
         }
         String expectedJson = objectMapper.writeValueAsString(audioGeneralInfoDTOS);
         mockMvc.perform(get("/api/user/podcast/artist_name/{artistName}", "artist")
@@ -191,10 +192,10 @@ public class PodcastControllerTest {
 
     @Test
     void getPodcastsByAllInfoTest() throws Exception {
-        List<AudioGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
+        List<PodcastGeneralInfoDTO> audioGeneralInfoDTOS = new ArrayList<>();
         List<Podcast> podcasts = podcastRepository.findAll();
         for(Podcast podcast : podcasts){
-            audioGeneralInfoDTOS.add(new AudioGeneralInfoDTO(podcast));
+            audioGeneralInfoDTOS.add(new PodcastGeneralInfoDTO(podcast));
         }
         String expectedJson = objectMapper.writeValueAsString(audioGeneralInfoDTOS);
         mockMvc.perform(get("/api/user/podcast/{info}", "pod")

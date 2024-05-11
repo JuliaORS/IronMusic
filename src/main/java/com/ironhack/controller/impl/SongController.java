@@ -1,7 +1,7 @@
 package com.ironhack.controller.impl;
 
 import com.ironhack.controller.interfaces.SongControllerInterface;
-import com.ironhack.dto.AudioGeneralInfoDTO;
+import com.ironhack.dto.SongGeneralInfoDTO;
 import com.ironhack.model.Song;
 import com.ironhack.service.impl.SongService;
 import jakarta.validation.Valid;
@@ -21,7 +21,7 @@ public class SongController implements SongControllerInterface {
     @Override
     @PostMapping("/artist/song")
     @ResponseStatus(HttpStatus.CREATED)
-    public AudioGeneralInfoDTO saveSong(@Valid @RequestBody Song song) {
+    public SongGeneralInfoDTO saveSong(@Valid @RequestBody Song song) {
         return songService.saveSong(song);
     }
 
@@ -36,35 +36,35 @@ public class SongController implements SongControllerInterface {
     @Override
     @GetMapping("/user/songs")
     @ResponseStatus(HttpStatus.OK)
-    public List<AudioGeneralInfoDTO> getAllSongs() {
+    public List<SongGeneralInfoDTO> getAllSongs() {
         return songService.getAllSongs();
     }
 
     @Override
     @GetMapping("/user/song/title/{title}")
     @ResponseStatus(HttpStatus.OK)
-    public List<AudioGeneralInfoDTO> getSongByTitle(@PathVariable String title) {
+    public List<SongGeneralInfoDTO> getSongByTitle(@PathVariable String title) {
         return songService.getSongByTitle(title);
     }
 
     @Override
     @GetMapping("/user/song/artist_name/{artistName}")
     @ResponseStatus(HttpStatus.OK)
-    public List<AudioGeneralInfoDTO> getSongByArtistName(@PathVariable String artistName) {
+    public List<SongGeneralInfoDTO> getSongByArtistName(@PathVariable String artistName) {
         return songService.getSongByArtistName(artistName);
     }
 
     @Override
     @GetMapping("/user/song/genre/{genre}")
     @ResponseStatus(HttpStatus.OK)
-    public List<AudioGeneralInfoDTO> getSongByGenre(@PathVariable String genre) {
+    public List<SongGeneralInfoDTO> getSongByGenre(@PathVariable String genre) {
         return songService.getSongByGenre(genre);
     }
 
     @Override
     @GetMapping("/user/song/{info}")
     @ResponseStatus(HttpStatus.OK)
-    public List<AudioGeneralInfoDTO> getSongByAll(@PathVariable String info) {
+    public List<SongGeneralInfoDTO> getSongByAll(@PathVariable String info) {
         return songService.getSongByAllInfo(info);
     }
 }
