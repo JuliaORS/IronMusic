@@ -2,13 +2,21 @@
 
 ## Description of the porject
 It's a backend RESTful API application built with Java and Spring Boot, designed to create a database for a platform that stores audio files.
-Spring Security has been implemented in the application to manage permissions for different types of users. There are three types of users:
+Spring Security has been implemented in the application to manage permissions for different types of users. There are three roles for users:
   - Admins: They accept new users and activate new artists.
   - Artists: They can add and remove content.
   - Standard users: They can browse the platform's content and create their own playlists. They can also share their playlists with other users.
-    
-The application handles two classes of audio: songs and podcasts, and songs can be grouped into albums.
 
+The application have two classes of audio(inherited classes): songs and podcasts. Each audio has the following attributes:
+
+  - Artist: This refers to the artist who added the audio to the platform.
+  - Title: The title of the audio piece.
+  - Duration: The length of the audio.
+  - 
+In addition to these shared attributes, songs have a genre and can be associated with an album. Albums, in turn, are collections of songs.
+
+On the other hand, podcasts have a season and episode number and an attribute of genre.
+    
 ## Class diagram 
 ![Entity-Relationship Model](https://raw.githubusercontent.com/JuliaORS/IronMusic/master/assets/Entity-Relationship%20Model.png)
 
@@ -31,6 +39,7 @@ The application handles two classes of audio: songs and podcasts, and songs can 
   - Postman:  Used for testing and making HTTP requests to application's API.
   - MySQL Workbench: Used for managing and querying the MySQL database.
   - Swagger: Used to generate interactive API documentation for testing and utilizing the provided APIs.
+    http://localhost:8080/swagger-ui/index.html
 
 ## Controllers and Routes structure
 
@@ -39,7 +48,7 @@ The application handles two classes of audio: songs and podcasts, and songs can 
 ## Extra links
   - Canva: https://www.canva.com/design/DAGClVOlTxA/YxPZe_Un7bHsZYI5ikFenQ/edit?utm_content=DAGClVOlTxA&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
   - Trello: https://trello.com/invite/b/zafobhol/ATTIfc0d130811c3c3ae09fa51690df352ffA47B32D2/ihfinalproject
-  - Presentation: ***PENDING
+  - Presentation: (https://www.canva.com/design/DAGE6j70Ajo/eiBoWcGcLc5vi6VkmezEXw/edit?utm_content=DAGE6j70Ajo&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
     
 ## Future work
   - Improve the content search functionality of my application.
