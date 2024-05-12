@@ -22,8 +22,8 @@ On the other hand, podcasts have a season and episode number and an attribute of
 
 ## Setup
 ### 1 - Prerequisites
-- IntelliJ IDEA [https://www.jetbrains.com/es-es/idea/download/?section=windows](https://java.tutorials24x7.com/blog/how-to-install-java-17-on-windows)
-- Maven https://maven.apache.org/download.cgi
+- IntelliJ IDEA [Download IntelliJ IDEA](https://java.tutorials24x7.com/blog/how-to-install-java-17-on-windows)
+- Maven [Download Maven](https://maven.apache.org/download.cgi)
 - Postman or other client-rest.
 
 ### 2 - Clone repo
@@ -39,16 +39,61 @@ On the other hand, podcasts have a season and episode number and an attribute of
   - Postman:  Used for testing and making HTTP requests to application's API.
   - MySQL Workbench: Used for managing and querying the MySQL database.
   - Swagger: Used to generate interactive API documentation for testing and utilizing the provided APIs.
-    http://localhost:8080/swagger-ui/index.html
+    
+    [Link to API documentation](http://localhost:8080/swagger-ui/index.html) (while application is running)
 
 ## Controllers and Routes structure
+Our backend serves as the backbone, handling incoming requests, processing data, and interacting with our database through defined endpoints.
 
-![user_controller](https://github.com/JuliaORS/IronMusic/assets/128370372/6fcaa8cb-3453-4edc-b3b8-d0c324105622)
+### Architecture of application
+At the core of backend lies the concept of controllers, services, and repositories, orchestrated to deliver seamless communication between application and external entities such as Postman or any other client.
+
+Controllers: These act as intermediaries, receiving HTTP requests, processing them, and delegating the appropriate actions to the corresponding service.
+
+Services: They encapsulate the business logic of the application, orchestrating various operations to fulfill the requests received from the controllers.
+
+Repositories: Responsible for interacting with the database, repositories provide an abstraction layer enabling seamless data manipulation.
+
+### Endpoints
+The application exposes several endpoints, each serving a distinct purpose and catering to specific functionalities. 
+These endpoints are defined to ensure proper authorization based on user roles:
+  - api/admin: Endpoints that start with 'admin' are exclusively available to users with the ADMIN role.
+  - api/artist: Endpoints that start with 'artist' are accessible only to users with the ARTIST role.
+  - api/user: Endpoints that start with 'user' are available to all STANDARD users, including artists.
+This structure ensures that sensitive functionalities are appropriately secured, enhancing the overall security of our application.
+
+#### User controller
+Manages the registration (sign up) of new users, login functionality, as well as the activation of users and artists by the administrator.
+![user2](https://github.com/JuliaORS/IronMusic/assets/128370372/3215b44f-42d9-44e8-9978-cd5bb55131e9)
+
+#### Audio controller
+Manages the search for audio files by the users.
+![audio controller](https://github.com/JuliaORS/IronMusic/assets/128370372/b5ff24f6-f666-49f4-8b92-7e779af35ab5)
+
+#### Song controller
+Manages the creation of new songs by artists and allows users to search for songs.
+![song controller](https://github.com/JuliaORS/IronMusic/assets/128370372/3a26b2db-9997-401d-821b-1b60e97b0148)
+
+#### Podcast controller
+Manages the creation of new podcast by artists and allows users to search for podcasts.
+![podcast controller](https://github.com/JuliaORS/IronMusic/assets/128370372/1ac55803-566c-47f9-954b-964152797767)
+
+##### Album controller
+Manages the creation of new albums, addition and removal of songs to albums by artists, and album search made by users.
+![album controller](https://github.com/JuliaORS/IronMusic/assets/128370372/7ba91ca3-ca92-4383-b066-e3c5d88ddc5d)
+
+#### Artist controller
+Manages the search for the audio files owned by the artist.
+![artist controller](https://github.com/JuliaORS/IronMusic/assets/128370372/491f04cf-c634-42a8-81d8-f51afcd2f03f)
+
+#### Playlist controller
+Manages the creation and deletion of playlists, addition and removal of songs in playlists, the ability to make playlists public for access by all users, and the addition of new users to private playlists for sharing audios.
+![playlist controller](https://github.com/JuliaORS/IronMusic/assets/128370372/18a9d193-26e7-4929-af32-66372eb300fc)
 
 ## Extra links
-  - Canva: https://www.canva.com/design/DAGClVOlTxA/YxPZe_Un7bHsZYI5ikFenQ/edit?utm_content=DAGClVOlTxA&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
-  - Trello: https://trello.com/invite/b/zafobhol/ATTIfc0d130811c3c3ae09fa51690df352ffA47B32D2/ihfinalproject
-  - Presentation: (https://www.canva.com/design/DAGE6j70Ajo/eiBoWcGcLc5vi6VkmezEXw/edit?utm_content=DAGE6j70Ajo&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+  - [Diagram Gantt](https://www.canva.com/design/DAGClVOlTxA/YxPZe_Un7bHsZYI5ikFenQ/edit?utm_content=DAGClVOlTxA&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+  - [Trello](https://trello.com/invite/b/zafobhol/ATTIfc0d130811c3c3ae09fa51690df352ffA47B32D2/ihfinalproject)
+  - [Presentation](https://www.canva.com/design/DAGE6j70Ajo/eiBoWcGcLc5vi6VkmezEXw/edit?utm_content=DAGE6j70Ajo&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
     
 ## Future work
   - Improve the content search functionality of my application.
@@ -56,6 +101,6 @@ On the other hand, podcasts have a season and episode number and an attribute of
   - Add a new model that consists of user groups where multiple playlists can be shared.
 
 ## Resources
-  - https://www.baeldung.com/spring-rest-openapi-documentation - open api
-  - https://www.baeldung.com/spring-data-rest-relationships - relationships in Spring Data REST between models
+  - [Open api documentation](https://www.baeldung.com/spring-rest-openapi-documentation)
+  - [Relationships in Spring Data REST](https://www.baeldung.com/spring-data-rest-relationships)
 
