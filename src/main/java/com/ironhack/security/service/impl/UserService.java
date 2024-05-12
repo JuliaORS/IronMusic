@@ -1,7 +1,5 @@
 package com.ironhack.security.service.impl;
 
-import com.ironhack.dto.AudioGeneralInfoDTO;
-import com.ironhack.model.Audio;
 import com.ironhack.security.dto.UserGeneralInfoDTO;
 import com.ironhack.security.exception.ArtistActivationException;
 import com.ironhack.security.exception.UsernameIsPresentException;
@@ -25,7 +23,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import com.ironhack.security.exception.UserNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

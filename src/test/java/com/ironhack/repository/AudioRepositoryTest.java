@@ -1,6 +1,5 @@
 package com.ironhack.repository;
 
-import com.ironhack.model.Song;
 import com.ironhack.security.utils.ArtistStatus;
 import com.ironhack.security.model.Artist;
 import com.ironhack.security.model.User;

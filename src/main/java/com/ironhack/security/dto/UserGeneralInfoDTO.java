@@ -1,6 +1,5 @@
 package com.ironhack.security.dto;
 
-import com.ironhack.security.utils.ArtistStatus;
 import com.ironhack.security.utils.Status;
 import com.ironhack.security.model.User;
 import lombok.Data;

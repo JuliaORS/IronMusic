@@ -2,7 +2,6 @@ package com.ironhack.service.interfaces;
 
 import com.ironhack.dto.AlbumGeneralInfoDTO;
 import com.ironhack.model.Album;
-
 import java.util.List;
 
 public interface AlbumServiceInterface {

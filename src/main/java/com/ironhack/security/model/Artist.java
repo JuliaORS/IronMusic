@@ -5,8 +5,6 @@ import com.ironhack.model.Album;
 import com.ironhack.model.Audio;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.Collection;
 import java.util.List;
 
 @Entity

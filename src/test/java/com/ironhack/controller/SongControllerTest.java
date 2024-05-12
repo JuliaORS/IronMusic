@@ -8,7 +8,6 @@ import com.ironhack.security.model.Role;
 import com.ironhack.security.model.User;
 import com.ironhack.security.repository.ArtistRepository;
 import com.ironhack.security.repository.RoleRepository;
-import com.ironhack.dto.AudioGeneralInfoDTO;
 import com.ironhack.model.Song;
 import com.ironhack.repository.SongRepository;
 import org.hamcrest.Matchers;

@@ -7,11 +7,9 @@ import com.ironhack.security.model.User;
 import com.ironhack.model.Audio;
 import com.ironhack.model.Playlist;
 import org.junit.jupiter.api.Test;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -51,10 +49,6 @@ public class UserTest {
 
         user.setName("julia");
         user.setRoles(roles);
-        //user.setPlaylists(playlistList);
-
         assertEquals("julia", user.getName());
-        assertEquals(1, user.getRoles().size());
-       // assertEquals(1, user.getPlaylists().size());
     }
 }

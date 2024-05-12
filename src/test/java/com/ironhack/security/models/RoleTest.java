@@ -3,10 +3,8 @@ package com.ironhack.security.models;
 import com.ironhack.security.model.Role;
 import com.ironhack.model.Audio;
 import org.junit.jupiter.api.Test;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
