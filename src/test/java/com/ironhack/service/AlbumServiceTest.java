@@ -75,8 +75,8 @@ public class AlbumServiceTest {
 
     @Test
     public void saveAlbumCorrectInfoTest() throws Exception {
-        Artist newArtist = new Artist();
-        newArtist.setUsername("julia");
+        Artist newArtist = new Artist(new User(null, "artist1", "artist1", "1234",
+                true, ArtistStatus.ACTIVE, new ArrayList<>(), null));
         artistRepository.save(newArtist);
 
         Song song =  new Song("title", "3:14", newArtist, null, "pop");
@@ -102,8 +102,8 @@ public class AlbumServiceTest {
     @Test
     public void saveAlbumEmptyTitleTest() throws Exception {
         Album newAlbum =  new Album("", null, null);
-        Artist newArtist = new Artist();
-        newArtist.setUsername("julia");
+        Artist newArtist = new Artist(new User(null, "artist1", "artist1", "1234",
+                true, ArtistStatus.ACTIVE, new ArrayList<>(), null));
         artistRepository.save(newArtist);
         Authentication authentication = mock(Authentication.class);
         when(authentication.getName()).thenReturn(newArtist.getUsername());

@@ -1,14 +1,11 @@
 package com.ironhack.controller.interfaces;
 
 import com.ironhack.dto.AudioGeneralInfoDTO;
-import com.ironhack.dto.PlaylistGeneralInfoDTO;
 import com.ironhack.model.Playlist;
-import org.springframework.web.bind.annotation.PathVariable;
-
 import java.util.List;
 
 public interface PlaylistControllerInterface {
-    PlaylistGeneralInfoDTO savePlaylist(Playlist playlist);
+    String savePlaylist(Playlist playlist);
     void deletePlaylistByName(String name);
     AudioGeneralInfoDTO addAudioToPlaylistByTitle(String playlistName, String audioTitle);
     void removeAudioFromPlaylistByTitle(String playlistName, String audioTitle);

@@ -33,14 +33,14 @@ public class PodcastTest {
         podcast.setDuration("47:42");
         podcast.setArtist(artist);
         podcast.setSeason(4);
-        podcast.setChapter(5);
+        podcast.setEpisode(5);
         podcast.setCategory("comedy");
 
         assertEquals("new title", podcast.getTitle());
         assertEquals("47:42", podcast.getDuration());
         assertEquals("artist", podcast.getArtist().getName());
         assertEquals(4, podcast.getSeason());
-        assertEquals(5, podcast.getChapter());
+        assertEquals(5, podcast.getEpisode());
         assertEquals("comedy", podcast.getCategory());
     }
 }

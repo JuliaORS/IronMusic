@@ -9,7 +9,7 @@ public class PodcastGeneralInfoDTO {
     private String duration;
     private String artistName;
     private int season;
-    private int chapter;
+    private int episode;
     private String category;
 
     public PodcastGeneralInfoDTO(Podcast podcast){
@@ -17,7 +17,7 @@ public class PodcastGeneralInfoDTO {
         setDuration(podcast.getDuration());
         setArtistName(podcast.getArtist().getName());
         setSeason(podcast.getSeason());
-        setChapter(podcast.getChapter());
+        setEpisode(podcast.getEpisode());
         setCategory(podcast.getCategory());
     }
 }

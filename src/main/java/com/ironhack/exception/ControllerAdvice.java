@@ -1,7 +1,5 @@
 package com.ironhack.exception;
 
-import com.ironhack.security.exception.ArtistActivationException;
-import com.ironhack.security.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;

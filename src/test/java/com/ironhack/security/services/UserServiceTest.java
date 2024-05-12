@@ -1,6 +1,7 @@
 package com.ironhack.security.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ironhack.security.exception.UsernameIsPresentException;
 import com.ironhack.security.utils.ArtistStatus;
 import com.ironhack.security.dto.UserGeneralInfoDTO;
 import com.ironhack.security.exception.ArtistActivationException;
@@ -11,6 +12,7 @@ import com.ironhack.security.repository.ArtistRepository;
 import com.ironhack.security.repository.RoleRepository;
 import com.ironhack.security.repository.UserRepository;
 import com.ironhack.security.service.impl.UserService;
+import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -74,6 +76,22 @@ public class UserServiceTest {
                 false, ArtistStatus.INACTIVE, null, null);
         userService.saveUser(newUser);
         assertEquals(currentUsers + 1, userRepository.count());
+    }
+
+    @Test
+    public void saveUserEmptyNameTest(){
+        User newUser = new User(null, "userNew", "", "1234",
+                false, ArtistStatus.INACTIVE, null, null);
+        assertThrows(ConstraintViolationException.class, () -> {
+            userService.saveUser(newUser);});
+    }
+
+    @Test
+    public void saveUserExistingUsernameTest(){
+        User newUser = new User(null, "userNew", "username", "1234",
+                false, ArtistStatus.INACTIVE, null, null);
+        assertThrows(UsernameIsPresentException.class, () -> {
+            userService.saveUser(newUser);});
     }
 
     @Test

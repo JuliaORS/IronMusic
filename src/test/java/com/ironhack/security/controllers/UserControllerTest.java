@@ -80,6 +80,32 @@ public class UserControllerTest {
     }
 
     @Test
+    public void signUpEmptyUsernameTest() throws Exception{
+        User newUser = new User(null, "userNew", "", "1234",
+                false, ArtistStatus.INACTIVE, null, null);
+        String userJson = objectMapper.writeValueAsString(newUser);
+
+        mockMvc.perform(post("/api/signup")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(userJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(Matchers.containsString("Bad request. Username is required.")));
+    }
+
+    @Test
+    public void signUpExistingUsernameTest() throws Exception{
+        User newUser = new User(null, "userNew", "username", "1234",
+                false, ArtistStatus.INACTIVE, null, null);
+        String userJson = objectMapper.writeValueAsString(newUser);
+
+        mockMvc.perform(post("/api/signup")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(userJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(Matchers.containsString("Username already exists.")));
+    }
+
+    @Test
     public void activeUserByUsernameTest() throws Exception{
         mockMvc.perform(put("/api/admin/user/{username}", "username")
                         .contentType(MediaType.APPLICATION_JSON))

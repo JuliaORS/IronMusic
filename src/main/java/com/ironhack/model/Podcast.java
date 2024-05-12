@@ -16,14 +16,14 @@ import lombok.*;
 public class Podcast extends Audio{
 
     private int season;
-    private int chapter;
+    private int episode;
     @NotEmpty(message = "Bad request. Category is required.")
     private String category;
 
-    public Podcast(String title, String duration, Artist artist, int season, int chapter, String category){
+    public Podcast(String title, String duration, Artist artist, int season, int episode, String category){
         super(title, duration, artist);
         setSeason(season);
-        setChapter(chapter);
+        setEpisode(episode);
         setCategory(category);
     }
 }

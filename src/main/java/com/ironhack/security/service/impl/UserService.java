@@ -64,7 +64,7 @@ public class UserService implements UserServiceInterface, UserDetailsService {
     @Override
     public User saveUser(@Valid User user) {
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
-            throw new UsernameIsPresentException("Username already exists");
+            throw new UsernameIsPresentException("Username already exists.");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setActive(false);

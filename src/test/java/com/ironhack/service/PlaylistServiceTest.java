@@ -3,7 +3,6 @@ package com.ironhack.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ironhack.dto.AudioGeneralInfoDTO;
 import com.ironhack.exception.MakePlaylistPublicException;
-import com.ironhack.model.Song;
 import com.ironhack.security.utils.ArtistStatus;
 import com.ironhack.security.exception.UserNotFoundException;
 import com.ironhack.security.model.Artist;
@@ -12,7 +11,6 @@ import com.ironhack.security.model.User;
 import com.ironhack.security.repository.ArtistRepository;
 import com.ironhack.security.repository.RoleRepository;
 import com.ironhack.security.repository.UserRepository;
-import com.ironhack.dto.PlaylistGeneralInfoDTO;
 import com.ironhack.exception.ResourceNotFoundException;
 import com.ironhack.model.Playlist;
 import com.ironhack.model.Audio;
@@ -101,8 +99,8 @@ public class PlaylistServiceTest {
     public void savePlaylistCorrectInfoTest() throws Exception {
         Playlist newPlaylist =  new Playlist("new playlist title", null, null);
 
-        String expectedJson = objectMapper.writeValueAsString(new PlaylistGeneralInfoDTO(newPlaylist));
-        PlaylistGeneralInfoDTO result = playlistService.savePlaylist(newPlaylist);
+        String expectedJson = objectMapper.writeValueAsString(newPlaylist.getName());
+        String result = playlistService.savePlaylist(newPlaylist);
         String resultJson = objectMapper.writeValueAsString(result);
 
         assertEquals(2, playlistRepository.count());

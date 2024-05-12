@@ -2,7 +2,6 @@ package com.ironhack.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ironhack.dto.AudioGeneralInfoDTO;
-import com.ironhack.exception.ResourceNotFoundException;
 import com.ironhack.security.utils.ArtistStatus;
 import com.ironhack.security.model.Artist;
 import com.ironhack.security.model.Role;
@@ -11,7 +10,6 @@ import com.ironhack.security.repository.ArtistRepository;
 import com.ironhack.security.repository.RoleRepository;
 import com.ironhack.security.repository.UserRepository;
 import com.ironhack.security.service.impl.UserService;
-import com.ironhack.dto.PlaylistGeneralInfoDTO;
 import com.ironhack.model.Playlist;
 import com.ironhack.model.Audio;
 import com.ironhack.repository.PlaylistRepository;
@@ -124,13 +122,13 @@ public class PlaylistControllerTest {
         when(authentication.getName()).thenReturn(newUser.getUsername());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String expectedJson = objectMapper.writeValueAsString(new PlaylistGeneralInfoDTO(newPlaylist));
+        String expectedJson = objectMapper.writeValueAsString(newPlaylist.getName());
 
         mockMvc.perform(post("/api/user/playlist")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(PlaylistJson))
                 .andExpect(status().isCreated())
-                .andExpect(content().json(expectedJson));
+                .andExpect(content().string("new Playlist title"));
     }
 
     @Test
@@ -149,7 +147,7 @@ public class PlaylistControllerTest {
         when(authentication.getName()).thenReturn(user.getUsername());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String expectedJson = objectMapper.writeValueAsString(new PlaylistGeneralInfoDTO(newPlaylist));
+        String expectedJson = objectMapper.writeValueAsString(newPlaylist.getName());
 
         mockMvc.perform(post("/api/user/playlist")
                         .contentType(MediaType.APPLICATION_JSON)

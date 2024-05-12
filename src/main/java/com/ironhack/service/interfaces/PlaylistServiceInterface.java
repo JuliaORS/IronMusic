@@ -1,14 +1,12 @@
 package com.ironhack.service.interfaces;
 
 import com.ironhack.dto.AudioGeneralInfoDTO;
-import com.ironhack.dto.PlaylistGeneralInfoDTO;
 import com.ironhack.model.Playlist;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
 public interface PlaylistServiceInterface {
-    PlaylistGeneralInfoDTO savePlaylist(Playlist playlist);
+    String savePlaylist(Playlist playlist);
 
     void deletePlaylistByName(String title);
 

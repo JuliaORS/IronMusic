@@ -1,12 +1,10 @@
 package com.ironhack.service.impl;
 
 import com.ironhack.exception.MakePlaylistPublicException;
-import com.ironhack.model.Song;
 import com.ironhack.security.exception.UserNotFoundException;
 import com.ironhack.security.model.User;
 import com.ironhack.security.repository.UserRepository;
 import com.ironhack.dto.AudioGeneralInfoDTO;
-import com.ironhack.dto.PlaylistGeneralInfoDTO;
 import com.ironhack.exception.ResourceNotFoundException;
 import com.ironhack.model.Playlist;
 import com.ironhack.model.Audio;
@@ -32,13 +30,13 @@ public class PlaylistService implements PlaylistServiceInterface {
     private UserRepository userRepository;
 
     @Override
-    public PlaylistGeneralInfoDTO savePlaylist(@Valid Playlist playlist) {
+    public String savePlaylist(@Valid Playlist playlist) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user = userRepository.findByUsername(username).get();
         user.getPlaylists().add(playlist);
         userRepository.save(user);
-        return new PlaylistGeneralInfoDTO(playlist);
+        return playlist.getName();
     }
 
     @Override

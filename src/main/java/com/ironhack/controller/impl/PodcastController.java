@@ -1,7 +1,6 @@
 package com.ironhack.controller.impl;
 
 import com.ironhack.controller.interfaces.PodcastControllerInterface;
-import com.ironhack.dto.AudioGeneralInfoDTO;
 import com.ironhack.dto.PodcastGeneralInfoDTO;
 import com.ironhack.model.Podcast;
 import com.ironhack.service.impl.PodcastService;
