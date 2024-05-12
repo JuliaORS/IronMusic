@@ -80,6 +80,7 @@ Manages the creation of new podcast by artists and allows users to search for po
 
 ##### Album controller
 Manages the creation of new albums, addition and removal of songs to albums by artists, and album search made by users.
+
 ![album controller](https://github.com/JuliaORS/IronMusic/assets/128370372/7ba91ca3-ca92-4383-b066-e3c5d88ddc5d)
 
 #### Artist controller
