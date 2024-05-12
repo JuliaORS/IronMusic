@@ -16,4 +16,9 @@ public class ControllerAdviceSecurity {
     public ResponseEntity<Object> handleArtistActivationException(ArtistActivationException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
+
+    @ExceptionHandler(UsernameIsPresentException .class)
+    public ResponseEntity<Object> handleUsernameIsPresentException (UsernameIsPresentException  e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
 }

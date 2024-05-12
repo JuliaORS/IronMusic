@@ -3,6 +3,8 @@ package com.ironhack.security.model;
 import com.ironhack.security.utils.ArtistStatus;
 import com.ironhack.model.Playlist;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,10 +23,14 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotEmpty(message = "Bad request. Name is required.")
+    @Size(min = 4, max = 25)
     private String name;
 
+    @NotEmpty(message = "Bad request. Username is required.")
     private String username;
 
+    @NotEmpty(message = "Bad request. Password is required.")
     private String password;
 
     private boolean isActive;
@@ -42,5 +48,4 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "playlist_id")
     )
     private List<Playlist> playlists = new ArrayList<>();
-
 }

@@ -4,6 +4,7 @@ import com.ironhack.security.controller.interfaces.UserControllerInterface;
 import com.ironhack.security.dto.UserGeneralInfoDTO;
 import com.ironhack.security.model.User;
 import com.ironhack.security.service.interfaces.UserServiceInterface;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class UserController implements UserControllerInterface {
     @Override
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
-    public void signUpUser(@RequestBody User user) {
+    public void signUpUser(@Valid @RequestBody User user) {
         userService.saveUser(user);
     }
 

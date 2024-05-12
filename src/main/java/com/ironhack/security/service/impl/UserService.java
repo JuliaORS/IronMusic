@@ -4,6 +4,7 @@ import com.ironhack.dto.AudioGeneralInfoDTO;
 import com.ironhack.model.Audio;
 import com.ironhack.security.dto.UserGeneralInfoDTO;
 import com.ironhack.security.exception.ArtistActivationException;
+import com.ironhack.security.exception.UsernameIsPresentException;
 import com.ironhack.security.utils.ArtistStatus;
 import com.ironhack.security.model.Artist;
 import com.ironhack.security.model.User;
@@ -12,6 +13,7 @@ import com.ironhack.security.repository.ArtistRepository;
 import com.ironhack.security.repository.RoleRepository;
 import com.ironhack.security.repository.UserRepository;
 import com.ironhack.security.service.interfaces.UserServiceInterface;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +62,10 @@ public class UserService implements UserServiceInterface, UserDetailsService {
     }
 
     @Override
-    public User saveUser(User user) {
+    public User saveUser(@Valid User user) {
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+            throw new UsernameIsPresentException("Username already exists");
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setActive(false);
         user.setArtistStatus(ArtistStatus.INACTIVE);
