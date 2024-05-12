@@ -105,4 +105,4 @@ Manages the creation and deletion of playlists, addition and removal of songs in
   - [Open api documentation](https://www.baeldung.com/spring-rest-openapi-documentation)
   - [Relationships in Spring Data REST documentation](https://www.baeldung.com/spring-data-rest-relationships)
   - [Validation request params documentation](https://www.baeldung.com/spring-validate-requestparam-pathvariable)
-
+  - [Jakarta validation constraints documentation](jakarta.validation.constraints)
