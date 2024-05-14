@@ -15,7 +15,7 @@ The application have two classes of audio(inherited classes): songs and podcasts
     
 In addition to these shared attributes, songs have a genre and can be associated with an album. Albums, in turn, are collections of songs.
 
-On the other hand, podcasts have a season and episode number and an attribute of genre.
+On the other hand, podcasts have a season and episode number and an attribute of category.
     
 ## Class diagram 
 ![Entity-Relationship Model](https://raw.githubusercontent.com/JuliaORS/IronMusic/master/assets/Entity-Relationship%20Model.png)
